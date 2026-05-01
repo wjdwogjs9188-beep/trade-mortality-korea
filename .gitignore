@@ -1,0 +1,54 @@
+# Derived data — 재생성 가능, git에 넣지 않음
+3_derived/*.parquet
+3_derived/*.csv
+3_derived/cache/
+
+# Logs — 큰 파이프라인 로그는 제외 (decisions/ 는 commit)
+5_logs/pipeline_runs/*.log
+
+# Raw data — 매우 큼, 별도 zip 로 보관 (git에 넣지 않음)
+0_raw/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.mypy_cache/
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Latex
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+# Temp
+*.tmp
+*.bak
+
+# API keys (절대 commit X)
+.env
+
+# Claude Code local settings (per-machine)
+.claude/settings.local.json
