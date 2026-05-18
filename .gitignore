@@ -105,7 +105,7 @@ desktop.ini
 .env.*
 !.env.example
 
-# Claude Code local settings (per-machine)
+# Local IDE/agent settings (per-machine)
 .claude/settings.local.json
 .claude/
 
