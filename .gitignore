@@ -130,3 +130,15 @@ _cleanup_for_git.ps1
 _push_to_github.ps1
 _remove_*.ps1
 _remove_*.py
+
+# ============================================================
+# Additional AI-created / external files (untracked)
+# ============================================================
+2_scripts/build_panel/2A_mortality_panel_2010.py
+2_scripts/identification/21_phase_bx_preflight_explore.py
+2_scripts/published_packages/
+5_logs/README.md
+5_logs/decisions/2026-05-01_sigungu_h_code_definition.md
+5_logs/integrity_checks/2026-05-01_0743_integrity_check.md
+5_logs/integrity_checks/2026-05-04_phase_bx_preflight.md
+_delete_remaining.ps1
