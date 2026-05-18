@@ -60,7 +60,7 @@ sj = df[(df["sido_name"].str.contains("세종", na=False)) | (df["sigungu_name"]
 w(sj.to_markdown(index=False))
 w("**해석:** 충남 연기군 (1981-2011) → 세종특별자치시 (2012-) 직접 승계. "
  "raw_code 변경: 충남(34) 연기군 → 세종(29) 세종시. "
- "Phase 1-A 합의: 연기군과 세종시는 같은 h_code 매핑 (시간연속성).")
+ "합의: 연기군과 세종시는 같은 h_code 매핑 (시간연속성).")
 w("")
 
 w("## (f) 시도 17개 — 모던 코드 사용 (retroactive)")

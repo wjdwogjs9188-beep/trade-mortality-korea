@@ -188,4 +188,4 @@ next_steps:
  - "1. ✅ 104 코드북 추출 완료 (mortality_104_classification.csv)"
  - "2. 사망 raw 28년치(1997-2024) 적재 시 outcome 카테고리 mapping 적용"
  - "3. Phase 2 panel build: deaths_of_despair / cardiovascular / cancer outcome 별 사망률 계산"
- - "4. Phase 1-A: 시군구 admin crosswalk (1997-2022 3-digit, 2023 5-digit) 작성으로 진행"
+ - "4. 시군구 admin crosswalk (1997-2022 3-digit, 2023 5-digit) 작성으로 진행"

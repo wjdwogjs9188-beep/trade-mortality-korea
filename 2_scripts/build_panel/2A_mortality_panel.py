@@ -1,4 +1,4 @@
-"""Stage 2-A — Mortality panel build (v3, mutually exclusive outcomes).
+"""Mortality panel build (v3, mutually exclusive outcomes).
 
 Pipeline
 --------
@@ -437,7 +437,7 @@ def main -> None:
 
  # ============================== REPORT ==============================
  lines: list[str] = 
- lines.append("# Stage 2-A — Mortality Panel Validation (v4, cancer narrowed to 027-047 + 2023 full file)")
+ lines.append("# Mortality Panel Validation (v4, cancer narrowed to 027-047 + 2023 full file)")
  lines.append("")
  lines.append(f"- Generated: 2026-05-03")
  lines.append(f"- v4 changes vs v3:")

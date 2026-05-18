@@ -13,8 +13,7 @@ Outputs:
 Notes vs prompt spec:
 - prompt assumes a 147-intersection cumulative commit (220001 -> 23090 crosswalk fix).
  Current panel has 146 intersection (167 MATCH crosswalk). We proceed with the
- actual 146 sample and column `in_intersection_146` and report the gap as a P1
- issue at end.
+ actual 146 sample and column `in_intersection_146` and report the gap as a issue at end.
 """
 import io
 import os
@@ -273,7 +272,7 @@ def step7_verify(wide_out, delta_out, fs_out, pca_evar, fs_stats):
  # 5. PCA explained variance
  print(f" [5] PCA 1st explained variance: {pca_evar:.3f} (expected > 0.60)")
  if pca_evar < 0.60:
- print(" [5] WARNING: PCA explained variance below 0.60 -- P3 issue")
+ print(" [5] WARNING: PCA explained variance below 0.60 -- issue")
 
  # 6. First-stage F
  print(

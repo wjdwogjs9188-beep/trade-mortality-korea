@@ -1,5 +1,5 @@
 """
-Phase 2-A — Population join fix v3 — incremental log + merge diagnostic.
+Population join fix v3 — incremental log + merge diagnostic.
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ if hasattr(sys.stdout, "reconfigure"):
  sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 LOG_PATH = LOGS / f"{TODAY}_population_join_fix.md"
-log_buf: list[str] = [f"# Phase 2-A — Population join fix v3 (incremental)\n_{TODAY}_\n"]
+log_buf: list[str] = [f"# Population join fix v3 (incremental)\n_{TODAY}_\n"]
 
 def flush:
  LOG_PATH.write_text("\n".join(log_buf), encoding="utf-8")

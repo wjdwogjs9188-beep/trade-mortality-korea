@@ -161,7 +161,7 @@ def step6_verify(long_out, wide):
  nan_rate = long_out["prescription_rate_per_100k"].isna.mean
  print(f" [3] prescription_rate_per_100k NaN ratio: {nan_rate:.4f} (threshold 0.10)")
  if nan_rate >= 0.10:
- print(" [3] WARNING: NaN ratio exceeds 10% -- P2 issue")
+ print(" [3] WARNING: NaN ratio exceeds 10% -- issue")
 
  # 4. Intersection sample row count
  intersect_rows = long_out[long_out["in_intersection_146"]]

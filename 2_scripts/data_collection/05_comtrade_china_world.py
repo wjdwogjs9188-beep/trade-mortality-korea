@@ -1,6 +1,6 @@
 """UN Comtrade China → World HS6 export (alternative IV).
 
-배경: v3.8 paper 의 China-World instrument 는 "중국 supply 확장이 한국이 제3시장에서
+배경: earlier paper version 의 China-World instrument 는 "중국 supply 확장이 한국이 제3시장에서
 share 잃게 하는" adverse force 를 측정. Korea-China bilateral 와 다른 mechanism.
 
 출력: 0_raw/comtrade_china_world/CN_exp_world_{year}.csv

@@ -1,4 +1,4 @@
-"""Phase 1-A Step 1 표준화: KOSTAT 코드집 → long format.
+"""Step 1 표준화: KOSTAT 코드집 → long format.
 
 입력: 0_raw/mortality_kostat/usrcnfrm/시군구코드집(공공용)_..._1999.xlsx
  (1997/1998/1999 SHA256 동일 — 캐논 historical 코드집, 1981-2021 wide)

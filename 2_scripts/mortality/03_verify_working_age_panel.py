@@ -1,5 +1,5 @@
 """
-Verify v02_wa panel = working-age (P1.B reviewer critique).
+Verify v02_wa panel = working-age (reviewer critique).
 
 Spot-check: 종로구 11010 2020 pop_wa 가 WA 범위 (80-90k both sex) 인지.
 - All-age both sex 종로구 2020 ≈ 140k
@@ -19,14 +19,14 @@ PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 PANEL = PROJ / "3_derived" / "mortality" / "sigungu_mortality_panel_v02_wa.parquet"
 LOG = PROJ / "5_logs" / "integrity_checks" / "2026-05-05_v02_wa_verification.md"
 
-log = ["# v02_wa panel verification (P1.B clear)\n_2026-05-05_\n"]
+log = ["# v02_wa panel verification (clear)\n_2026-05-05_\n"]
 
 df = pd.read_parquet(PANEL)
 log.append(f"## panel\n- shape: {df.shape}, cols: {list(df.columns)}\n")
 
 # spot-check: 종로구 11010 in 2020 (or most recent)
 jongno = df[(df["h_code"] == "11010") & (df["year"] == 2020)]
-log.append(f"## 종로구 (11010) 2020 spot-check (P1.B reviewer)")
+log.append(f"## 종로구 (11010) 2020 spot-check (reviewer)")
 if len(jongno) > 0:
  pop_wa = jongno["pop_wa"].iloc[0]
  log.append(f"- pop_wa: **{pop_wa:,.0f}**")

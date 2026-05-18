@@ -27,7 +27,7 @@ print(f' columns: {raw.columns.tolist}')
 print(f' diagYm distinct: {raw["diagYm"].nunique}')
 print(f' year distribution:')
 print(raw['year'].value_counts.sort_index.to_string) # Year × Month grid
-print(f'\n Year × Month grid (P1 root cause):')
+print(f'\n Year × Month grid (root cause):')
 raw['month'] = raw['diagYm'].astype(str).str[4:6].astype(int)
 print(raw.groupby(['year','month']).size.unstack(fill_value=0).to_string) # 2010 vs 2019 long-difference
 print(f'\n=== 2. 2010 vs 2019 long-difference (substantive finding) ===')
