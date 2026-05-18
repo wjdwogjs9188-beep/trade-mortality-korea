@@ -1,5 +1,5 @@
 # ============================================================================
-# identification diagnostic diagnostics -- single-shot runner
+# identification diagnostics -- single-shot runner
 # § 2.2 Tests 1, 1 v2, 1b, 3 + first-stage F
 # usage: powershell -ExecutionPolicy Bypass -File run_phase_bx_all.ps1
 # ============================================================================
@@ -19,7 +19,7 @@ $ts = Get-Date -Format "yyyy-MM-ddTHH:mm:ss"
 
 Write-Host ""
 Write-Host "================================================================" -ForegroundColor Cyan
-Write-Host " identification diagnostic diagnostics ($ts)" -ForegroundColor Cyan
+Write-Host " identification diagnostics ($ts)" -ForegroundColor Cyan
 Write-Host "================================================================" -ForegroundColor Cyan
 
 $scripts = @(

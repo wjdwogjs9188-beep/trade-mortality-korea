@@ -38,7 +38,7 @@ bartik:
 	$(PYTHON) $(SCRIPTS)/bartik/03b_kiet60_mapping_v2_robust.py
 	$(PYTHON) $(SCRIPTS)/bartik/04_bartik_iv_build.py
 
-# Phase 4 — reduced-form regressions + identification diagnostic diagnostics
+# Phase 4 — reduced-form regressions + identification diagnostics
 # (see 2_scripts/identification/ for full diagnostic suite)
 regress:
 	$(PYTHON) $(SCRIPTS)/identification/reduced_form_5layer.py
