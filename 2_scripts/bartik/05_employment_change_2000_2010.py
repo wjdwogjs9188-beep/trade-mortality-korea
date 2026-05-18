@@ -1,170 +1,19 @@
 """
 Phase 2-B Step 6 — d_log_employment 2000→2010 build (LHS for first-stage F)
-============================================================================
-
-목표: h_code 별 제조업 종사자의 2000→2010 log 변화 — first-stage F 의 LHS.
-
-Year-specific schema (probe 결과):
+============================================================================ 목표: h_code 별 제조업 종사자의 2000→2010 log 변화 — first-stage F 의 LHS. Year-specific schema (probe 결과):
 - 2000: header=True, sido=col0(행정구역(시도)), sgg=col1, KSIC=col2(D), emp=col27(7.종사자수합계_계)
-- 2010: header=True, sido=col1(행정구역시도코드), sgg=col2, KSIC=col3(C), emp=col37(종사자수_광업제조업부문_총계)
-
-Filter: KSIC 8차 D (2000) → 9차 C (2010), 제조업만.
-
-Output:
-  3_derived/exposure/d5_log_employment_2000_2010.parquet (h_code × E_2000, E_2010, d_log)
-
-Author: R-A
-Date  : 2026-05-04 (v2 — schema-aware)
+- 2010: header=True, sido=col1(행정구역시도코드), sgg=col2, KSIC=col3(C), emp=col37(종사자수_광업제조업부문_총계) Filter: KSIC 8차 D (2000) → 9차 C (2010), 제조업만. Output: 3_derived/exposure/d5_log_employment_2000_2010.parquet (h_code × E_2000, E_2010, d_log) Author: Date : 2026-05-04 (v2 — schema-aware)
 """
-from __future__ import annotations
-
-import sys
+from __future__ import annotations import sys
 from datetime import date
-from pathlib import Path
-
-import numpy as np
-import pandas as pd
-
-PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+from pathlib import Path import numpy as np
+import pandas as pd PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 RAW = PROJ / "0_raw" / "kosis_business_survey" / "microdata_1994_2024"
 CW = PROJ / "1_codebooks" / "sigungu_crosswalk.csv"
 EXPOSURE = PROJ / "3_derived" / "exposure"
 LOGS = PROJ / "5_logs" / "integrity_checks"
 EXPOSURE.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
-TODAY = date.today().isoformat()
-
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-# Year-specific schema (cols are HEADER NAMES, not indexes — robust to col reorder)
-SCHEMA = {
-    2000: {
-        "sido_col": "행정구역(시도)",
-        "sgg_col": "행정구역(구시군)",
-        "ksic_col": "산업분류(대)",
-        "emp_col": "7.종사자수합계_계(①+…+④)",
-        "ksic_letter": "D",  # 8차
-    },
-    2010: {
-        "sido_col": "행정구역시도코드",
-        "sgg_col": "행정구역시군구코드",
-        "ksic_col": "주사업_산업대분류코드",
-        "emp_col": "종사자수_광업제조업부문_총계",
-        "ksic_letter": "C",  # 9차
-    },
-}
-
-
-def load_year(year: int, log: list) -> pd.DataFrame | None:
-    files = sorted(RAW.glob(f"{year}*.csv"))
-    if not files:
-        log.append(f"- ❌ {year} csv not found")
-        return None
-    f = files[0]
-    df = pd.read_csv(f, encoding="cp949", dtype=str, low_memory=False)
-    log.append(f"- {year}: `{f.name}`, rows={len(df):,}, cols={df.shape[1]}")
-    return df
-
-
-def aggregate_year(df: pd.DataFrame, year: int, cw_year_df: pd.DataFrame, log: list) -> pd.DataFrame:
-    sch = SCHEMA[year]
-    # verify columns exist
-    for k, col in sch.items():
-        if k.endswith("_col") and col not in df.columns:
-            log.append(f"  - ⚠️ column `{col}` not in df. fallback search by partial match.")
-            matches = [c for c in df.columns if col[:6] in str(c)]
-            log.append(f"    candidates: {matches[:3]}")
-            if matches:
-                sch[k] = matches[0]
-
-    # build keys
-    df["sido_v"] = df[sch["sido_col"]].astype(str).str.zfill(2)
-    df["sgg_v"] = df[sch["sgg_col"]].astype(str).str.zfill(3)
-    df["raw_code"] = df["sido_v"] + df["sgg_v"]
-    df["ksic_letter_v"] = df[sch["ksic_col"]].astype(str).str.strip()
-    df["emp_v"] = pd.to_numeric(df[sch["emp_col"]], errors="coerce")
-
-    # filter manufacturing
-    log.append(f"  - KSIC letter distribution: {df['ksic_letter_v'].value_counts().head(8).to_dict()}")
-    df_m = df[df["ksic_letter_v"] == sch["ksic_letter"]].copy()
-    log.append(f"  - filtered KSIC '{sch['ksic_letter']}' (제조업): {len(df_m):,} rows")
-
-    # crosswalk merge
-    merged = df_m.merge(cw_year_df, on="raw_code", how="left")
-    n_match = merged["h_code"].notna().sum()
-    log.append(f"  - sigungu match: {n_match:,}/{len(df_m):,} ({n_match/max(len(df_m),1):.1%})")
-
-    h_emp = (
-        merged.dropna(subset=["h_code", "emp_v"])
-        .groupby("h_code")["emp_v"]
-        .sum()
-        .rename(f"E_{year}")
-        .reset_index()
-    )
-    log.append(f"  - h_code: {len(h_emp)}, total emp: {h_emp[f'E_{year}'].sum():,.0f}")
-    return h_emp
-
-
-def main() -> None:
-    log = [f"# Phase 2-B Step 6 v2 — employment 2000→2010 (schema-aware)\n_{TODAY}_\n"]
-
-    cw = pd.read_csv(CW, dtype=str)
-    cw_2000 = cw[cw["year"] == "2000"][["raw_code", "h_code", "sido_code"]].drop_duplicates("raw_code")
-    cw_2010 = cw[cw["year"] == "2010"][["raw_code", "h_code", "sido_code"]].drop_duplicates("raw_code")
-    log.append(f"- crosswalk 2000: {len(cw_2000)} unique raw_code")
-    log.append(f"- crosswalk 2010: {len(cw_2010)} unique raw_code")
-
-    log.append(f"\n## 2000")
-    df_2000 = load_year(2000, log)
-    log.append(f"\n## 2010")
-    df_2010 = load_year(2010, log)
-    if df_2000 is None or df_2010 is None:
-        out = LOGS / f"{TODAY}_employment_change_2000_2010_v2.md"
-        out.write_text("\n".join(log), encoding="utf-8")
-        return
-
-    log.append(f"\n## 2000 aggregate")
-    e_2000 = aggregate_year(df_2000, 2000, cw_2000, log)
-    log.append(f"\n## 2010 aggregate")
-    e_2010 = aggregate_year(df_2010, 2010, cw_2010, log)
-
-    # join
-    merged = e_2000.merge(e_2010, on="h_code", how="outer")
-    merged["E_2000"] = merged["E_2000"].fillna(0)
-    merged["E_2010"] = merged["E_2010"].fillna(0)
-    merged["d5_log_E"] = (
-        np.log(merged["E_2010"].replace(0, np.nan))
-        - np.log(merged["E_2000"].replace(0, np.nan))
-    )
-    log.append(f"\n## Final panel")
-    log.append(f"- h_code rows: {len(merged):,}")
-    log.append(f"- E_2000 total: {merged['E_2000'].sum():,.0f}")
-    log.append(f"- E_2010 total: {merged['E_2010'].sum():,.0f}")
-    log.append(f"- d5_log_E stats: mean={merged['d5_log_E'].mean():.3f}, "
-               f"sd={merged['d5_log_E'].std():.3f}, "
-               f"min={merged['d5_log_E'].min():.3f}, "
-               f"max={merged['d5_log_E'].max():.3f}")
-    log.append(f"- non-null d5_log_E: {merged['d5_log_E'].notna().sum()}")
-
-    log.append("\n### 종사자 증가 top 10")
-    log.append("```")
-    log.append(merged.nlargest(10, "d5_log_E")[["h_code", "E_2000", "E_2010", "d5_log_E"]].to_string(index=False))
-    log.append("```")
-    log.append("\n### 종사자 감소 top 10")
-    log.append("```")
-    log.append(merged.nsmallest(10, "d5_log_E")[["h_code", "E_2000", "E_2010", "d5_log_E"]].to_string(index=False))
-    log.append("```")
-
-    out_path = EXPOSURE / "d5_log_employment_2000_2010.parquet"
-    merged.to_parquet(out_path, index=False)
-    log.append(f"\n- saved: `{out_path.relative_to(PROJ)}`")
-    log.append("\n## 다음 step\n- script 25 (first-stage F) 재실행 — 이번엔 dry-run 아님")
-
-    out = LOGS / f"{TODAY}_employment_change_2000_2010_v2.md"
-    out.write_text("\n".join(log), encoding="utf-8")
-    print(f"[OK] {out}")
-
-
-if __name__ == "__main__":
-    main()
+TODAY = date.today.isoformat if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace") # Year-specific schema (cols are HEADER NAMES, not indexes — robust to col reorder)
+SCHEMA = { 2000: { "sido_col": "행정구역(시도)", "sgg_col": "행정구역(구시군)", "ksic_col": "산업분류(대)", "emp_col": "7.종사자수합계_계(①+…+④)", "ksic_letter": "D", # 8차 }, 2010: { "sido_col": "행정구역시도코드", "sgg_col": "행정구역시군구코드", "ksic_col": "주사업_산업대분류코드", "emp_col": "종사자수_광업제조업부문_총계", "ksic_letter": "C", # 9차 },
+} def load_year(year: int, log: list) -> pd.DataFrame | None: files = sorted(RAW.glob(f"{year}*.csv")) if not files: log.append(f"- ❌ {year} csv not found") return None f = files[0] df = pd.read_csv(f, encoding="cp949", dtype=str, low_memory=False) log.append(f"- {year}: `{f.name}`, rows={len(df):,}, cols={df.shape[1]}") return df def aggregate_year(df: pd.DataFrame, year: int, cw_year_df: pd.DataFrame, log: list) -> pd.DataFrame: sch = SCHEMA[year] # verify columns exist for k, col in sch.items: if k.endswith("_col") and col not in df.columns: log.append(f" - ⚠️ column `{col}` not in df. fallback search by partial match.") matches = [c for c in df.columns if col[:6] in str(c)] log.append(f" candidates: {matches[:3]}") if matches: sch[k] = matches[0] # build keys df["sido_v"] = df[sch["sido_col"]].astype(str).str.zfill(2) df["sgg_v"] = df[sch["sgg_col"]].astype(str).str.zfill(3) df["raw_code"] = df["sido_v"] + df["sgg_v"] df["ksic_letter_v"] = df[sch["ksic_col"]].astype(str).str.strip df["emp_v"] = pd.to_numeric(df[sch["emp_col"]], errors="coerce") # filter manufacturing log.append(f" - KSIC letter distribution: {df['ksic_letter_v'].value_counts.head(8).to_dict}") df_m = df[df["ksic_letter_v"] == sch["ksic_letter"]].copy log.append(f" - filtered KSIC '{sch['ksic_letter']}' (제조업): {len(df_m):,} rows") # crosswalk merge merged = df_m.merge(cw_year_df, on="raw_code", how="left") n_match = merged["h_code"].notna.sum log.append(f" - sigungu match: {n_match:,}/{len(df_m):,} ({n_match/max(len(df_m),1):.1%})") h_emp = ( merged.dropna(subset=["h_code", "emp_v"]) .groupby("h_code")["emp_v"] .sum .rename(f"E_{year}") .reset_index ) log.append(f" - h_code: {len(h_emp)}, total emp: {h_emp[f'E_{year}'].sum:,.0f}") return h_emp def main -> None: log = [f"# Phase 2-B Step 6 v2 — employment 2000→2010 (schema-aware)\n_{TODAY}_\n"] cw = pd.read_csv(CW, dtype=str) cw_2000 = cw[cw["year"] == "2000"][["raw_code", "h_code", "sido_code"]].drop_duplicates("raw_code") cw_2010 = cw[cw["year"] == "2010"][["raw_code", "h_code", "sido_code"]].drop_duplicates("raw_code") log.append(f"- crosswalk 2000: {len(cw_2000)} unique raw_code") log.append(f"- crosswalk 2010: {len(cw_2010)} unique raw_code") log.append(f"\n## 2000") df_2000 = load_year(2000, log) log.append(f"\n## 2010") df_2010 = load_year(2010, log) if df_2000 is None or df_2010 is None: out = LOGS / f"{TODAY}_employment_change_2000_2010_v2.md" out.write_text("\n".join(log), encoding="utf-8") return log.append(f"\n## 2000 aggregate") e_2000 = aggregate_year(df_2000, 2000, cw_2000, log) log.append(f"\n## 2010 aggregate") e_2010 = aggregate_year(df_2010, 2010, cw_2010, log) # join merged = e_2000.merge(e_2010, on="h_code", how="outer") merged["E_2000"] = merged["E_2000"].fillna(0) merged["E_2010"] = merged["E_2010"].fillna(0) merged["d5_log_E"] = ( np.log(merged["E_2010"].replace(0, np.nan)) - np.log(merged["E_2000"].replace(0, np.nan)) ) log.append(f"\n## Final panel") log.append(f"- h_code rows: {len(merged):,}") log.append(f"- E_2000 total: {merged['E_2000'].sum:,.0f}") log.append(f"- E_2010 total: {merged['E_2010'].sum:,.0f}") log.append(f"- d5_log_E stats: mean={merged['d5_log_E'].mean:.3f}, " f"sd={merged['d5_log_E'].std:.3f}, " f"min={merged['d5_log_E'].min:.3f}, " f"max={merged['d5_log_E'].max:.3f}") log.append(f"- non-null d5_log_E: {merged['d5_log_E'].notna.sum}") log.append("\n### 종사자 증가 top 10") log.append("```") log.append(merged.nlargest(10, "d5_log_E")[["h_code", "E_2000", "E_2010", "d5_log_E"]].to_string(index=False)) log.append("```") log.append("\n### 종사자 감소 top 10") log.append("```") log.append(merged.nsmallest(10, "d5_log_E")[["h_code", "E_2000", "E_2010", "d5_log_E"]].to_string(index=False)) log.append("```") out_path = EXPOSURE / "d5_log_employment_2000_2010.parquet" merged.to_parquet(out_path, index=False) log.append(f"\n- saved: `{out_path.relative_to(PROJ)}`") log.append("\n## 다음 step\n- script 25 (first-stage F) 재실행 — 이번엔 dry-run 아님") out = LOGS / f"{TODAY}_employment_change_2000_2010_v2.md" out.write_text("\n".join(log), encoding="utf-8") print(f"[OK] {out}") if __name__ == "__main__": main

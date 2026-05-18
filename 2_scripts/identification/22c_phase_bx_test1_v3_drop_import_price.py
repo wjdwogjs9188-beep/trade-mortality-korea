@@ -1,181 +1,20 @@
 """
 PAP v4.0 § 2.2 Test 1 v3 — Drop 수입가 (VIF=27.9) sensitivity
-==============================================================
-
-v2 의 2/6 Bonferroni-significant macro 중 수입가 (β=+0.76, p=0.0049, **VIF=27.9**)
+============================================================== v2 의 2/6 Bonferroni-significant macro 중 수입가 (β=+0.76, p=0.0049, **VIF=27.9**)
 의 유의성은 multicollinearity 인공물 가능성. 수출가·CPI·환율과 거의 linear
-combination. drop 후 GDP 1개만 단독 유의로 남는지 확인.
-
-H0: GDP 만 유의 (1/5 Bonferroni after drop) → A.i main + year FE 필수 결정 robust.
-H1: 추가 macro 가 새로 유의 (예: 수출가가 흡수) → C.ii branch 재고려.
-
-Bonferroni: α = 0.05/5 = 0.01
-
-Author: R-A
-Date  : 2026-05-04
+combination. drop 후 GDP 1개만 단독 유의로 남는지 확인. H0: GDP 만 유의 (1/5 Bonferroni after drop) → A.i main + year FE 필수 결정 robust.
+H1: 추가 macro 가 새로 유의 (예: 수출가가 흡수) → C.ii branch 재고려. Bonferroni: α = 0.05/5 = 0.01 Author: Date : 2026-05-04
 """
-from __future__ import annotations
-
-import sys
+from __future__ import annotations import sys
 from datetime import date
-from pathlib import Path
-
-import numpy as np
+from pathlib import Path import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-
-PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+from statsmodels.stats.outliers_influence import variance_inflation_factor PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 RAW_KRCN = PROJ / "0_raw" / "comtrade_korea_china"
 RAW_ECOS_DIRS = [PROJ / "0_raw" / "ecos_macro", PROJ / "0_raw" / "ecos_macro_extra"]
 DERIVED = PROJ / "3_derived" / "identification"
 LOGS = PROJ / "5_logs" / "integrity_checks"
 DERIVED.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
-TODAY = date.today().isoformat()
-
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-ALPHA_BONF = 0.05 / 5  # 5 macros after dropping 수입가
-
-
-def load_bilateral_yearly() -> pd.DataFrame:
-    files = sorted(RAW_KRCN.glob("KR_*_*.csv"))
-    rows = [pd.read_csv(f, low_memory=False) for f in files]
-    big = pd.concat(rows, ignore_index=True)
-    big.columns = [c.lower() for c in big.columns]
-    flow_col = next(c for c in ("flowcode", "flow") if c in big.columns)
-    year_col = next(c for c in ("refyear", "period", "refperiod", "year") if c in big.columns)
-    val_col = next(c for c in ("primaryvalue", "tradevalue", "value", "fobvalue") if c in big.columns)
-    big[year_col] = pd.to_numeric(big[year_col].astype(str).str[:4], errors="coerce")
-    big[val_col] = pd.to_numeric(big[val_col], errors="coerce")
-    big = big.dropna(subset=[year_col, val_col])
-    is_M = big[flow_col].astype(str).str.upper().str.startswith("M")
-    yearly = (
-        big.assign(M=np.where(is_M, big[val_col], 0.0))
-        .groupby(big[year_col].astype(int))[["M"]]
-        .sum()
-        .reset_index()
-        .rename(columns={year_col: "year"})
-        .sort_values("year")
-        .reset_index(drop=True)
-    )
-    return yearly
-
-
-def load_ecos_macro() -> pd.DataFrame:
-    """5 macro: GDP·수출가·CPI·KRW_USD·BoK_rate (수입가 제외)."""
-    targets = {
-        "200Y110": "GDP_지출_실질",
-        "402Y014": "수출가",
-        "901Y009": "CPI",
-        "731Y004": "KRW_USD",
-        "722Y001": "BoK_rate",
-    }
-    panels = []
-    for code, label in targets.items():
-        files = []
-        for d in RAW_ECOS_DIRS:
-            if d.exists():
-                files.extend(d.glob(f"*{code}*.csv"))
-        if not files:
-            print(f"[macro] {code} ({label}) -- not found")
-            continue
-        f = files[0]
-        try:
-            df = pd.read_csv(f, encoding="utf-8-sig")
-        except UnicodeDecodeError:
-            df = pd.read_csv(f, encoding="cp949")
-        df.columns = [c.lower() for c in df.columns]
-        time_col = next((c for c in df.columns if "time" in c), None)
-        val_col = next((c for c in df.columns if c == "data_value" or "value" in c), None)
-        df["__year"] = df[time_col].astype(str).str[:4].astype(int, errors="ignore")
-        df["__value"] = pd.to_numeric(df[val_col], errors="coerce")
-        item_col = next((c for c in df.columns if "item" in c and "code" in c), None)
-        if item_col is not None:
-            mask = df[item_col].astype(str).str.contains("AA|총지수", na=False)
-            if mask.sum() > 0:
-                df = df[mask].copy()
-        yearly = df.groupby("__year")["__value"].mean().reset_index()
-        yearly.columns = ["year", label]
-        panels.append(yearly)
-        print(f"[macro] {label}: {len(yearly)} years from {f.name}")
-    out = panels[0]
-    for y in panels[1:]:
-        out = out.merge(y, on="year", how="outer")
-    return out.sort_values("year").reset_index(drop=True)
-
-
-def main() -> None:
-    log = [f"# Test 1 v3 — drop 수입가 (VIF=27.9 sensitivity)\n_{TODAY}_\n"]
-    log.append(f"- Bonferroni α = 0.05/5 = **{ALPHA_BONF:.4f}**\n")
-
-    krcn = load_bilateral_yearly()
-    macro = load_ecos_macro()
-    df = krcn.merge(macro, on="year", how="inner").sort_values("year").reset_index(drop=True)
-    df["log_M"] = np.log(df["M"].replace(0, np.nan))
-    df["d5_log_M"] = df["log_M"].diff(5)
-
-    macro_cols = [c for c in macro.columns if c != "year"]
-    for c in macro_cols:
-        df[f"d5_log_{c}_lag1"] = (np.log(df[c].where(df[c] > 0))).diff(5).shift(1)
-
-    obs = df.dropna(subset=["d5_log_M"] + [f"d5_log_{c}_lag1" for c in macro_cols])
-    log.append(f"- usable obs: {len(obs)}\n")
-
-    # VIF
-    vif_cols = [f"d5_log_{c}_lag1" for c in macro_cols]
-    vsub = df[vif_cols].dropna()
-    Xv = sm.add_constant(vsub.values)
-    log.append("## VIF (5 macros, 수입가 제외)\n```")
-    for i, c in enumerate(vif_cols):
-        log.append(f"{c:35s}  VIF = {variance_inflation_factor(Xv, i+1):6.2f}")
-    log.append("```\n")
-
-    # Univariate
-    log.append("## Univariate (HAC maxlags=4)\n")
-    log.append("| macro | N | β | SE | p | sig (Bonf α=0.01) |")
-    log.append("|-------|---|---|----|---|-----|")
-    sig_count = 0
-    rows = []
-    for c in macro_cols:
-        x_col = f"d5_log_{c}_lag1"
-        sub = df.dropna(subset=["d5_log_M", x_col])
-        if len(sub) < 6:
-            continue
-        X = sm.add_constant(sub[[x_col]])
-        m = sm.OLS(sub["d5_log_M"], X).fit(cov_type="HAC", cov_kwds={"maxlags": 4})
-        beta, se, p = m.params[x_col], m.bse[x_col], m.pvalues[x_col]
-        sig = "**YES**" if p < ALPHA_BONF else ("." if p < 0.05 else "")
-        log.append(f"| {c} | {len(sub)} | {beta:+.3f} | {se:.3f} | {p:.4f} | {sig} |")
-        rows.append({"macro": c, "N": len(sub), "beta": beta, "se": se, "p": p,
-                     "sig_bonf": p < ALPHA_BONF})
-        if p < ALPHA_BONF:
-            sig_count += 1
-
-    log.append(f"\n**Bonferroni-significant: {sig_count}/5**\n")
-
-    log.append("## v3 결정\n")
-    if sig_count == 0:
-        log.append("- v2 의 2/6 결과가 multicollinearity 인공물로 확정")
-        log.append("- bilateral 은 idiosyncratic year-FE-residual 측면에서 robust")
-        log.append("- **A.i main 결정 final**: year FE 필수, bilateral robustness 유효")
-    elif sig_count == 1:
-        log.append("- v2 의 GDP 단독 유의 - business cycle 동조 (year FE 가 흡수)")
-        log.append("- 수입가 유의성은 multicollinearity 인공물 확정")
-        log.append("- **A.i main 결정 strong**: year FE 가 GDP comovement 흡수, identification 유효")
-    else:
-        log.append(f"- {sig_count}/5 유의 - 추가 검토 필요")
-        log.append("- 수입가 drop 후에도 multiple macro 유의 = 진짜 contamination 신호")
-        log.append("- **C.ii branch 재고려**: ADH-8 primary, bilateral 은 robustness 만")
-
-    pd.DataFrame(rows).to_csv(DERIVED / "test1_v3_drop_import_price.csv",
-                              index=False, encoding="utf-8-sig")
-    out = LOGS / f"{TODAY}_phase_bx_test1_v3_results.md"
-    out.write_text("\n".join(log), encoding="utf-8")
-    print(f"[OK] log: {out}")
-
-
-if __name__ == "__main__":
-    main()
+TODAY = date.today.isoformat if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace") ALPHA_BONF = 0.05 / 5 # 5 macros after dropping 수입가 def load_bilateral_yearly -> pd.DataFrame: files = sorted(RAW_KRCN.glob("KR_*_*.csv")) rows = [pd.read_csv(f, low_memory=False) for f in files] big = pd.concat(rows, ignore_index=True) big.columns = [c.lower for c in big.columns] flow_col = next(c for c in ("flowcode", "flow") if c in big.columns) year_col = next(c for c in ("refyear", "period", "refperiod", "year") if c in big.columns) val_col = next(c for c in ("primaryvalue", "tradevalue", "value", "fobvalue") if c in big.columns) big[year_col] = pd.to_numeric(big[year_col].astype(str).str[:4], errors="coerce") big[val_col] = pd.to_numeric(big[val_col], errors="coerce") big = big.dropna(subset=[year_col, val_col]) is_M = big[flow_col].astype(str).str.upper.str.startswith("M") yearly = ( big.assign(M=np.where(is_M, big[val_col], 0.0)) .groupby(big[year_col].astype(int))[["M"]] .sum .reset_index .rename(columns={year_col: "year"}) .sort_values("year") .reset_index(drop=True) ) return yearly def load_ecos_macro -> pd.DataFrame: """5 macro: GDP·수출가·CPI·KRW_USD·BoK_rate (수입가 제외).""" targets = { "200Y110": "GDP_지출_실질", "402Y014": "수출가", "901Y009": "CPI", "731Y004": "KRW_USD", "722Y001": "BoK_rate", } panels = for code, label in targets.items: files = for d in RAW_ECOS_DIRS: if d.exists: files.extend(d.glob(f"*{code}*.csv")) if not files: print(f"[macro] {code} ({label}) -- not found") continue f = files[0] try: df = pd.read_csv(f, encoding="utf-8-sig") except UnicodeDecodeError: df = pd.read_csv(f, encoding="cp949") df.columns = [c.lower for c in df.columns] time_col = next((c for c in df.columns if "time" in c), None) val_col = next((c for c in df.columns if c == "data_value" or "value" in c), None) df["__year"] = df[time_col].astype(str).str[:4].astype(int, errors="ignore") df["__value"] = pd.to_numeric(df[val_col], errors="coerce") item_col = next((c for c in df.columns if "item" in c and "code" in c), None) if item_col is not None: mask = df[item_col].astype(str).str.contains("AA|총지수", na=False) if mask.sum > 0: df = df[mask].copy yearly = df.groupby("__year")["__value"].mean.reset_index yearly.columns = ["year", label] panels.append(yearly) print(f"[macro] {label}: {len(yearly)} years from {f.name}") out = panels[0] for y in panels[1:]: out = out.merge(y, on="year", how="outer") return out.sort_values("year").reset_index(drop=True) def main -> None: log = [f"# Test 1 v3 — drop 수입가 (VIF=27.9 sensitivity)\n_{TODAY}_\n"] log.append(f"- Bonferroni α = 0.05/5 = **{ALPHA_BONF:.4f}**\n") krcn = load_bilateral_yearly macro = load_ecos_macro df = krcn.merge(macro, on="year", how="inner").sort_values("year").reset_index(drop=True) df["log_M"] = np.log(df["M"].replace(0, np.nan)) df["d5_log_M"] = df["log_M"].diff(5) macro_cols = [c for c in macro.columns if c != "year"] for c in macro_cols: df[f"d5_log_{c}_lag1"] = (np.log(df[c].where(df[c] > 0))).diff(5).shift(1) obs = df.dropna(subset=["d5_log_M"] + [f"d5_log_{c}_lag1" for c in macro_cols]) log.append(f"- usable obs: {len(obs)}\n") # VIF vif_cols = [f"d5_log_{c}_lag1" for c in macro_cols] vsub = df[vif_cols].dropna Xv = sm.add_constant(vsub.values) log.append("## VIF (5 macros, 수입가 제외)\n```") for i, c in enumerate(vif_cols): log.append(f"{c:35s} VIF = {variance_inflation_factor(Xv, i+1):6.2f}") log.append("```\n") # Univariate log.append("## Univariate (HAC maxlags=4)\n") log.append("| macro | N | β | SE | p | sig (Bonf α=0.01) |") log.append("|-------|---|---|----|---|-----|") sig_count = 0 rows = for c in macro_cols: x_col = f"d5_log_{c}_lag1" sub = df.dropna(subset=["d5_log_M", x_col]) if len(sub) < 6: continue X = sm.add_constant(sub[[x_col]]) m = sm.OLS(sub["d5_log_M"], X).fit(cov_type="HAC", cov_kwds={"maxlags": 4}) beta, se, p = m.params[x_col], m.bse[x_col], m.pvalues[x_col] sig = "**YES**" if p < ALPHA_BONF else ("." if p < 0.05 else "") log.append(f"| {c} | {len(sub)} | {beta:+.3f} | {se:.3f} | {p:.4f} | {sig} |") rows.append({"macro": c, "N": len(sub), "beta": beta, "se": se, "p": p, "sig_bonf": p < ALPHA_BONF}) if p < ALPHA_BONF: sig_count += 1 log.append(f"\n**Bonferroni-significant: {sig_count}/5**\n") log.append("## v3 결정\n") if sig_count == 0: log.append("- v2 의 2/6 결과가 multicollinearity 인공물로 확정") log.append("- bilateral 은 idiosyncratic year-FE-residual 측면에서 robust") log.append("- **A.i main 결정 final**: year FE 필수, bilateral robustness 유효") elif sig_count == 1: log.append("- v2 의 GDP 단독 유의 - business cycle 동조 (year FE 가 흡수)") log.append("- 수입가 유의성은 multicollinearity 인공물 확정") log.append("- **A.i main 결정 strong**: year FE 가 GDP comovement 흡수, identification 유효") else: log.append(f"- {sig_count}/5 유의 - 추가 검토 필요") log.append("- 수입가 drop 후에도 multiple macro 유의 = 진짜 contamination 신호") log.append("- **C.ii branch 재고려**: ADH-8 primary, bilateral 은 robustness 만") pd.DataFrame(rows).to_csv(DERIVED / "test1_v3_drop_import_price.csv", index=False, encoding="utf-8-sig") out = LOGS / f"{TODAY}_phase_bx_test1_v3_results.md" out.write_text("\n".join(log), encoding="utf-8") print(f"[OK] log: {out}") if __name__ == "__main__": main

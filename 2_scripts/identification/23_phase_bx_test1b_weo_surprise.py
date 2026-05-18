@@ -1,251 +1,38 @@
 """
 PAP v4.0 § 2.2 Test 1b — WEO Forecast-Surprise robustness check
-=================================================================
-
-Test 1 (script 22) realised macro lag 검정의 robustness — IMF WEO Korea
-forecast vintage 의 *surprise* 컴포넌트로 같은 검정.
-
-WEO Historical xlsx 실제 schema (preflight 2026-05-04 확인):
+================================================================= Test 1 (script 22) realised macro lag 검정의 robustness — IMF WEO Korea
+forecast vintage 의 *surprise* 컴포넌트로 같은 검정. WEO Historical xlsx 실제 schema (preflight 2026-05-04 확인):
 - sheet 'ngdp_rpch' (Real GDP growth %): 8000 rows × 70 cols
-- columns: country, WEO_Country_Code, ISOAlpha_3Code, year (= target_year),
-           S{vy}ngdp_rpch (Spring release), F{vy}ngdp_rpch (Fall release)
-           for vintage years vy ∈ 1990..2020
-- Korea (KOR) = 40 rows (40 target_years × 1 country)
-
-Surprise 정의:
-- actual_t  =  값 of S{t} 또는 F{t} when target_year = t  (release in year t)
-                = horizon 0 의 가장 최신 (Fall release of year t).
-- forecast_t (1y ahead) = F{t-1} when target_year = t  (Fall t-1 에 발행, target = t)
-- surprise_t = actual_t - forecast_t
-
-Spec:
+- columns: country, WEO_Country_Code, ISOAlpha_3Code, year (= target_year), S{vy}ngdp_rpch (Spring release), F{vy}ngdp_rpch (Fall release) for vintage years vy ∈ 1990..2020
+- Korea (KOR) = 40 rows (40 target_years × 1 country) Surprise 정의:
+- actual_t = 값 of S{t} 또는 F{t} when target_year = t (release in year t) = horizon 0 의 가장 최신 (Fall release of year t).
+- forecast_t (1y ahead) = F{t-1} when target_year = t (Fall t-1 에 발행, target = t)
+- surprise_t = actual_t - forecast_t Spec:
 - d5_log_M_{KR-CN, t} ~ d5_surprise_{KR, t-1, 5y avg}
-- H0: β = 0  → bilateral M ⊥ Korean macro forecast surprise
-
-Inputs:
-- 0_raw/imf_weo_korea_vintage/WEOhistorical.xlsx  (sheet 'ngdp_rpch')
-- 0_raw/comtrade_korea_china/KR_*_*.csv
-
-Outputs:
+- H0: β = 0 → bilateral M ⊥ Korean macro forecast surprise Inputs:
+- 0_raw/imf_weo_korea_vintage/WEOhistorical.xlsx (sheet 'ngdp_rpch')
+- 0_raw/comtrade_korea_china/KR_*_*.csv Outputs:
 - 5_logs/integrity_checks/<date>_phase_bx_test1b_results.md
-- 3_derived/identification/test1b_weo_surprise.csv
-
-Author: R-A
-Date  : 2026-05-04 (v2 — wide schema fix)
+- 3_derived/identification/test1b_weo_surprise.csv Author: Date : 2026-05-04 (v2 — wide schema fix)
 """
-from __future__ import annotations
-
-import re
+from __future__ import annotations import re
 import sys
 from datetime import date
-from pathlib import Path
-
-import numpy as np
+from pathlib import Path import numpy as np
 import pandas as pd
-import statsmodels.api as sm
-
-PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+import statsmodels.api as sm PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 RAW_WEO = PROJ / "0_raw" / "imf_weo_korea_vintage" / "WEOhistorical.xlsx"
 RAW_KRCN = PROJ / "0_raw" / "comtrade_korea_china"
 DERIVED = PROJ / "3_derived" / "identification"
-LOGS = PROJ / "5_logs" / "integrity_checks"
-
-DERIVED.mkdir(parents=True, exist_ok=True)
+LOGS = PROJ / "5_logs" / "integrity_checks" DERIVED.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
-TODAY = date.today().isoformat()
-
-
-# ---------------------------------------------------------------------------
+TODAY = date.today.isoformat # ---------------------------------------------------------------------------
 # WEO loader — wide schema (S{vy}ngdp_rpch / F{vy}ngdp_rpch)
 # ---------------------------------------------------------------------------
-VINTAGE_RE = re.compile(r"^([SF])(\d{4})ngdp_rpch$", re.IGNORECASE)
-
-
-def load_weo_korea(xlsx_path: Path) -> pd.DataFrame:
-    """
-    Wide → long: (target_year, vintage_year, season, value) for Korea.
-    """
-    print(f"[WEO] loading {xlsx_path.name} ...")
-    df = pd.read_excel(xlsx_path, sheet_name="ngdp_rpch")
-    print(f"[WEO] shape={df.shape} cols[0:6]={list(df.columns)[:6]}")
-
-    # Korea (ISO alpha-3 = KOR)
-    iso_col = next((c for c in df.columns if "ISOAlpha" in str(c) or "ISO" in str(c).upper()), None)
-    if iso_col is None:
-        iso_col = "country"
-    kor = df[df[iso_col].astype(str).str.upper().str.contains("KOR")].copy()
-    print(f"[WEO] Korea rows = {len(kor)} (target_years)")
-    if len(kor) == 0:
-        # try country name fallback
-        kor = df[df["country"].astype(str).str.contains("Korea", na=False)].copy()
-        print(f"[WEO] fallback country='Korea': {len(kor)} rows")
-
-    # target_year
-    if "year" not in kor.columns:
-        raise KeyError(f"'year' column not in {list(kor.columns)[:10]}")
-    kor["target_year"] = pd.to_numeric(kor["year"], errors="coerce").astype("Int64")
-
-    # melt vintage columns
-    vintage_cols = [c for c in kor.columns if VINTAGE_RE.match(str(c))]
-    print(f"[WEO] vintage cols: {len(vintage_cols)} (sample: {vintage_cols[:4]} ...)")
-
-    long = kor.melt(
-        id_vars=["target_year"],
-        value_vars=vintage_cols,
-        var_name="vintage_label",
-        value_name="value",
-    )
-    parsed = long["vintage_label"].astype(str).str.extract(VINTAGE_RE)
-    parsed.columns = ["season", "vintage_year"]
-    long = pd.concat([long.drop(columns=["vintage_label"]), parsed], axis=1)
-    long["vintage_year"] = pd.to_numeric(long["vintage_year"], errors="coerce").astype("Int64")
-    long["value"] = pd.to_numeric(long["value"], errors="coerce")
-    long = long.dropna(subset=["target_year", "vintage_year", "value"])
-    long["target_year"] = long["target_year"].astype(int)
-    long["vintage_year"] = long["vintage_year"].astype(int)
-    long["horizon"] = long["target_year"] - long["vintage_year"]
-    return long
-
-
-def compute_forecast_surprise(weo: pd.DataFrame) -> pd.DataFrame:
-    """
-    actual_t   = Fall release in year t (vintage_year=t, season=F, horizon=0)
-    forecast_t = Fall release in year t-1 (vintage_year=t-1, season=F, horizon=1)
-    surprise_t = actual - forecast
-
-    Fall of year t-1 발행은 t-1 년 가을 → t 년의 1y-ahead forecast.
-    """
-    actual = (
-        weo[(weo["horizon"] == 0) & (weo["season"].str.upper() == "F")]
-        .rename(columns={"value": "actual", "target_year": "year"})
-        [["year", "actual"]]
-        .drop_duplicates(subset=["year"])
-    )
-    forecast = (
-        weo[(weo["horizon"] == 1) & (weo["season"].str.upper() == "F")]
-        .rename(columns={"value": "forecast", "target_year": "year"})
-        [["year", "forecast"]]
-        .drop_duplicates(subset=["year"])
-    )
-    surprise = actual.merge(forecast, on="year", how="inner")
-    surprise["surprise"] = surprise["actual"] - surprise["forecast"]
-    return surprise.sort_values("year").reset_index(drop=True)
-
-
-# ---------------------------------------------------------------------------
+VINTAGE_RE = re.compile(r"^([SF])(\d{4})ngdp_rpch$", re.IGNORECASE) def load_weo_korea(xlsx_path: Path) -> pd.DataFrame: """ Wide → long: (target_year, vintage_year, season, value) for Korea. """ print(f"[WEO] loading {xlsx_path.name} ...") df = pd.read_excel(xlsx_path, sheet_name="ngdp_rpch") print(f"[WEO] shape={df.shape} cols[0:6]={list(df.columns)[:6]}") # Korea (ISO alpha-3 = KOR) iso_col = next((c for c in df.columns if "ISOAlpha" in str(c) or "ISO" in str(c).upper), None) if iso_col is None: iso_col = "country" kor = df[df[iso_col].astype(str).str.upper.str.contains("KOR")].copy print(f"[WEO] Korea rows = {len(kor)} (target_years)") if len(kor) == 0: # try country name fallback kor = df[df["country"].astype(str).str.contains("Korea", na=False)].copy print(f"[WEO] fallback country='Korea': {len(kor)} rows") # target_year if "year" not in kor.columns: raise KeyError(f"'year' column not in {list(kor.columns)[:10]}") kor["target_year"] = pd.to_numeric(kor["year"], errors="coerce").astype("Int64") # melt vintage columns vintage_cols = [c for c in kor.columns if VINTAGE_RE.match(str(c))] print(f"[WEO] vintage cols: {len(vintage_cols)} (sample: {vintage_cols[:4]} ...)") long = kor.melt( id_vars=["target_year"], value_vars=vintage_cols, var_name="vintage_label", value_name="value", ) parsed = long["vintage_label"].astype(str).str.extract(VINTAGE_RE) parsed.columns = ["season", "vintage_year"] long = pd.concat([long.drop(columns=["vintage_label"]), parsed], axis=1) long["vintage_year"] = pd.to_numeric(long["vintage_year"], errors="coerce").astype("Int64") long["value"] = pd.to_numeric(long["value"], errors="coerce") long = long.dropna(subset=["target_year", "vintage_year", "value"]) long["target_year"] = long["target_year"].astype(int) long["vintage_year"] = long["vintage_year"].astype(int) long["horizon"] = long["target_year"] - long["vintage_year"] return long def compute_forecast_surprise(weo: pd.DataFrame) -> pd.DataFrame: """ actual_t = Fall release in year t (vintage_year=t, season=F, horizon=0) forecast_t = Fall release in year t-1 (vintage_year=t-1, season=F, horizon=1) surprise_t = actual - forecast Fall of year t-1 발행은 t-1 년 가을 → t 년의 1y-ahead forecast. """ actual = ( weo[(weo["horizon"] == 0) & (weo["season"].str.upper == "F")] .rename(columns={"value": "actual", "target_year": "year"}) [["year", "actual"]] .drop_duplicates(subset=["year"]) ) forecast = ( weo[(weo["horizon"] == 1) & (weo["season"].str.upper == "F")] .rename(columns={"value": "forecast", "target_year": "year"}) [["year", "forecast"]] .drop_duplicates(subset=["year"]) ) surprise = actual.merge(forecast, on="year", how="inner") surprise["surprise"] = surprise["actual"] - surprise["forecast"] return surprise.sort_values("year").reset_index(drop=True) # ---------------------------------------------------------------------------
 # KR-CN bilateral yearly aggregate
 # ---------------------------------------------------------------------------
-def load_bilateral_yearly(raw_dir: Path) -> pd.DataFrame:
-    files = sorted(raw_dir.glob("KR_*_*.csv"))
-    if not files:
-        raise FileNotFoundError(f"no KR_*_*.csv in {raw_dir}")
-    print(f"[KRCN] loading {len(files)} csv ...")
-    rows = []
-    for f in files:
-        try:
-            rows.append(pd.read_csv(f, low_memory=False))
-        except Exception as e:
-            print(f"[KRCN] WARN {f.name}: {e}")
-    big = pd.concat(rows, ignore_index=True)
-    big.columns = [c.lower() for c in big.columns]
-    flow_col = next((c for c in ("flowcode", "flow") if c in big.columns), None)
-    year_col = next((c for c in ("refyear", "period", "refperiod", "year") if c in big.columns), None)
-    val_col = next((c for c in ("primaryvalue", "tradevalue", "value", "fobvalue") if c in big.columns), None)
-    if not (flow_col and year_col and val_col):
-        raise KeyError(f"missing flow/year/value cols. have: {list(big.columns)[:20]}")
-    big[year_col] = pd.to_numeric(big[year_col].astype(str).str[:4], errors="coerce")
-    big[val_col] = pd.to_numeric(big[val_col], errors="coerce")
-    big = big.dropna(subset=[year_col, val_col])
-    is_M = big[flow_col].astype(str).str.upper().str.startswith("M")
-    is_X = big[flow_col].astype(str).str.upper().str.startswith("X")
-    yearly = (
-        big.assign(
-            M=np.where(is_M, big[val_col], 0.0),
-            X=np.where(is_X, big[val_col], 0.0),
-        )
-        .groupby(big[year_col].astype(int))[["M", "X"]]
-        .sum()
-        .reset_index()
-        .rename(columns={year_col: "year"})
-        .sort_values("year")
-        .reset_index(drop=True)
-    )
-    return yearly
-
-
-# ---------------------------------------------------------------------------
+def load_bilateral_yearly(raw_dir: Path) -> pd.DataFrame: files = sorted(raw_dir.glob("KR_*_*.csv")) if not files: raise FileNotFoundError(f"no KR_*_*.csv in {raw_dir}") print(f"[KRCN] loading {len(files)} csv ...") rows = for f in files: try: rows.append(pd.read_csv(f, low_memory=False)) except Exception as e: print(f"[KRCN] WARN {f.name}: {e}") big = pd.concat(rows, ignore_index=True) big.columns = [c.lower for c in big.columns] flow_col = next((c for c in ("flowcode", "flow") if c in big.columns), None) year_col = next((c for c in ("refyear", "period", "refperiod", "year") if c in big.columns), None) val_col = next((c for c in ("primaryvalue", "tradevalue", "value", "fobvalue") if c in big.columns), None) if not (flow_col and year_col and val_col): raise KeyError(f"missing flow/year/value cols. have: {list(big.columns)[:20]}") big[year_col] = pd.to_numeric(big[year_col].astype(str).str[:4], errors="coerce") big[val_col] = pd.to_numeric(big[val_col], errors="coerce") big = big.dropna(subset=[year_col, val_col]) is_M = big[flow_col].astype(str).str.upper.str.startswith("M") is_X = big[flow_col].astype(str).str.upper.str.startswith("X") yearly = ( big.assign( M=np.where(is_M, big[val_col], 0.0), X=np.where(is_X, big[val_col], 0.0), ) .groupby(big[year_col].astype(int))[["M", "X"]] .sum .reset_index .rename(columns={year_col: "year"}) .sort_values("year") .reset_index(drop=True) ) return yearly # ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
-def main() -> None:
-    log = [f"# Phase B-x Test 1b — WEO surprise predictability (v2)\n_{TODAY}_\n"]
-
-    if not RAW_WEO.exists():
-        log.append(f"[FAIL] WEO file not found: {RAW_WEO}")
-        (LOGS / f"{TODAY}_phase_bx_test1b_results.md").write_text("\n".join(log), encoding="utf-8")
-        sys.exit(1)
-    weo = load_weo_korea(RAW_WEO)
-    log.append(f"- WEO Korea NGDP_RPCH long rows: **{len(weo):,}**")
-    log.append(f"- vintage_year range: {weo['vintage_year'].min()}-{weo['vintage_year'].max()}")
-    log.append(f"- target_year range: {weo['target_year'].min()}-{weo['target_year'].max()}")
-    log.append(f"- horizon range: {weo['horizon'].min()}..{weo['horizon'].max()}")
-    log.append(f"- season distribution: {weo['season'].str.upper().value_counts().to_dict()}")
-
-    surp = compute_forecast_surprise(weo)
-    log.append(f"\n- forecast-surprise rows (Fall horizon-0 vs horizon-1): **{len(surp)}**")
-    if len(surp) >= 5:
-        log.append(f"- year range: {surp['year'].min()}-{surp['year'].max()}")
-        log.append(f"- surprise stats: mean={surp['surprise'].mean():.2f}, sd={surp['surprise'].std():.2f}, "
-                   f"min={surp['surprise'].min():.2f}, max={surp['surprise'].max():.2f}")
-
-    krcn = load_bilateral_yearly(RAW_KRCN)
-    log.append(f"\n- KR-CN bilateral year rows: **{len(krcn)}** "
-               f"({krcn['year'].min()}-{krcn['year'].max()})")
-
-    df = surp.merge(krcn, on="year", how="inner").sort_values("year").reset_index(drop=True)
-    df["log_M"] = np.log(df["M"].replace(0, np.nan))
-    df["log_X"] = np.log(df["X"].replace(0, np.nan))
-    df["d5_log_M"] = df["log_M"].diff(5)
-    df["d5_log_X"] = df["log_X"].diff(5)
-    # 5-year cumulative surprise (mean of t-1..t-5)
-    df["d5_surprise_avg"] = df["surprise"].rolling(5).mean().shift(1)
-    df["surprise_l1"] = df["surprise"].shift(1)
-
-    reg = df.dropna(subset=["d5_log_M", "d5_surprise_avg"]).reset_index(drop=True)
-    log.append(f"- regression sample: **{len(reg)}** years")
-
-    if len(reg) < 6:
-        log.append("[WARN] sample < 6 → 검정 보류")
-        (LOGS / f"{TODAY}_phase_bx_test1b_results.md").write_text("\n".join(log), encoding="utf-8")
-        return
-
-    for y_var in ("d5_log_M", "d5_log_X"):
-        sub = reg.dropna(subset=[y_var]).reset_index(drop=True)
-        if len(sub) < 5:
-            log.append(f"\n## {y_var}: sample < 5, skip")
-            continue
-        X = sm.add_constant(sub[["d5_surprise_avg"]])
-        y = sub[y_var]
-        model = sm.OLS(y, X).fit(cov_type="HAC", cov_kwds={"maxlags": 4})
-        beta = model.params["d5_surprise_avg"]
-        se = model.bse["d5_surprise_avg"]
-        p = model.pvalues["d5_surprise_avg"]
-        log.append(f"\n## {y_var} ~ d5_surprise_avg  (HAC SE, maxlags=4)")
-        log.append(f"- N={len(sub)}, β={beta:+.4f}, SE={se:.4f}, p={p:.4f}, R²={model.rsquared:.3f}")
-        if p > 0.10:
-            log.append(f"- [PASS] p > 0.10 → WEO surprise 가 bilateral 예측 X → 외생성 robust 신호")
-        elif p > 0.05:
-            log.append(f"- [BORDER] p ∈ (0.05, 0.10] → borderline")
-        else:
-            log.append(f"- [FAIL] p < 0.05 → bilateral ↔ Korean macro surprise → C.ii branch warning")
-
-    out_csv = DERIVED / "test1b_weo_surprise.csv"
-    reg.to_csv(out_csv, index=False, encoding="utf-8-sig")
-    log.append(f"\n- saved: `{out_csv.relative_to(PROJ)}`")
-
-    log_path = LOGS / f"{TODAY}_phase_bx_test1b_results.md"
-    log_path.write_text("\n".join(log), encoding="utf-8")
-    print(f"\n[OK] log: {log_path}")
-
-
-if __name__ == "__main__":
-    main()
+def main -> None: log = [f"# Phase B-x Test 1b — WEO surprise predictability (v2)\n_{TODAY}_\n"] if not RAW_WEO.exists: log.append(f"[FAIL] WEO file not found: {RAW_WEO}") (LOGS / f"{TODAY}_phase_bx_test1b_results.md").write_text("\n".join(log), encoding="utf-8") sys.exit(1) weo = load_weo_korea(RAW_WEO) log.append(f"- WEO Korea NGDP_RPCH long rows: **{len(weo):,}**") log.append(f"- vintage_year range: {weo['vintage_year'].min}-{weo['vintage_year'].max}") log.append(f"- target_year range: {weo['target_year'].min}-{weo['target_year'].max}") log.append(f"- horizon range: {weo['horizon'].min}..{weo['horizon'].max}") log.append(f"- season distribution: {weo['season'].str.upper.value_counts.to_dict}") surp = compute_forecast_surprise(weo) log.append(f"\n- forecast-surprise rows (Fall horizon-0 vs horizon-1): **{len(surp)}**") if len(surp) >= 5: log.append(f"- year range: {surp['year'].min}-{surp['year'].max}") log.append(f"- surprise stats: mean={surp['surprise'].mean:.2f}, sd={surp['surprise'].std:.2f}, " f"min={surp['surprise'].min:.2f}, max={surp['surprise'].max:.2f}") krcn = load_bilateral_yearly(RAW_KRCN) log.append(f"\n- KR-CN bilateral year rows: **{len(krcn)}** " f"({krcn['year'].min}-{krcn['year'].max})") df = surp.merge(krcn, on="year", how="inner").sort_values("year").reset_index(drop=True) df["log_M"] = np.log(df["M"].replace(0, np.nan)) df["log_X"] = np.log(df["X"].replace(0, np.nan)) df["d5_log_M"] = df["log_M"].diff(5) df["d5_log_X"] = df["log_X"].diff(5) # 5-year cumulative surprise (mean of t-1..t-5) df["d5_surprise_avg"] = df["surprise"].rolling(5).mean.shift(1) df["surprise_l1"] = df["surprise"].shift(1) reg = df.dropna(subset=["d5_log_M", "d5_surprise_avg"]).reset_index(drop=True) log.append(f"- regression sample: **{len(reg)}** years") if len(reg) < 6: log.append("[WARN] sample < 6 → 검정 보류") (LOGS / f"{TODAY}_phase_bx_test1b_results.md").write_text("\n".join(log), encoding="utf-8") return for y_var in ("d5_log_M", "d5_log_X"): sub = reg.dropna(subset=[y_var]).reset_index(drop=True) if len(sub) < 5: log.append(f"\n## {y_var}: sample < 5, skip") continue X = sm.add_constant(sub[["d5_surprise_avg"]]) y = sub[y_var] model = sm.OLS(y, X).fit(cov_type="HAC", cov_kwds={"maxlags": 4}) beta = model.params["d5_surprise_avg"] se = model.bse["d5_surprise_avg"] p = model.pvalues["d5_surprise_avg"] log.append(f"\n## {y_var} ~ d5_surprise_avg (HAC SE, maxlags=4)") log.append(f"- N={len(sub)}, β={beta:+.4f}, SE={se:.4f}, p={p:.4f}, R²={model.rsquared:.3f}") if p > 0.10: log.append(f"- [PASS] p > 0.10 → WEO surprise 가 bilateral 예측 X → 외생성 robust 신호") elif p > 0.05: log.append(f"- [BORDER] p ∈ (0.05, 0.10] → borderline") else: log.append(f"- [FAIL] p < 0.05 → bilateral ↔ Korean macro surprise → C.ii branch warning") out_csv = DERIVED / "test1b_weo_surprise.csv" reg.to_csv(out_csv, index=False, encoding="utf-8-sig") log.append(f"\n- saved: `{out_csv.relative_to(PROJ)}`") log_path = LOGS / f"{TODAY}_phase_bx_test1b_results.md" log_path.write_text("\n".join(log), encoding="utf-8") print(f"\n[OK] log: {log_path}") if __name__ == "__main__": main

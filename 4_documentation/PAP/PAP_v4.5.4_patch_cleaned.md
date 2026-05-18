@@ -1,121 +1,35 @@
-# PAP v4.5.4 patch — Track 2 (z_m_education) + Track 3 (1992 baseline)
-
-**date**: 2026-05-06
-**author**: R-A
-**status**: provisional
+# PAP v4.5.4 patch — Track 2 (z_m_education) + Track 3 (1992 baseline) **date**: 2026-05-06
+**author**: **status**: provisional
 **precedes commit of**: PAP v4.5.4 (clean version, after Track 3 fix)
-**supersedes**: PAP_v4.5.3_patch.md (Track 2·3 코드 commit) — 본 patch 는 코드 실행 결과 reconcile
-
----
-
-## 1. Patch summary
-
-| 항목 | v4.5.3 (코드 commit) | v4.5.4 (결과 reconcile) | status |
+**supersedes**: PAP_v4.5.3_patch.md (Track 2·3 코드 commit) — 본 patch 는 코드 실행 결과 reconcile --- ## 1. Patch summary | 항목 | v4.5.3 (코드 commit) | v4.5.4 (결과 reconcile) | status |
 |------|-----------------------|--------------------------|--------|
 | § 6.5 z_m_education baseline sensitivity | "1985·1990·1995 baseline 사용 시 결과 정합 검증 예정" | 정합 입증 (corr 0.989, 시군구 차이 0.8%) | commit |
 | § 6.4 baseline year sensitivity | "1992·1993·1995·1996·1999 5 baseline" | 5 baseline 회복 (Track 3 v2 dry-run 입증) | commit |
-| § 6.4 1992 baseline | "P1 issue — fix 후 재시도" | v2 build 정합 (D filter 통과, 종사자 anchor 일치, KSIC 6→9 100% match) | ready |
-
----
-
-## 2. § 6.5 z_m_education sensitivity (commit text)
-
-§ 6.5 의 첫 단락 commit text (paper § 6.5 에 직접 삽입할 수 있는 narrative):
-
-> The university-distance mediator z_m_education uses a 1985 KEDI baseline comprising 171 four-year universities with founding years between 1885 (Paichai Hakdang, 1885; Ewha Hakdang, 1886, the precursors of Paichai University and Ewha Womans University) and 1985. To assess whether the 1985 baseline cutoff is load-bearing, I construct alternative baselines using 1990 and 1995 KEDI yearbooks (175 universities each, four additional universities founded between 1985 and 1989). The cross-baseline correlation of z_m_education is 0.989 (1985 versus 1990), 1.000 (1990 versus 1995), and 0.989 (1985 versus 1995). The mean nearest-university distance differs by approximately 0.30 km (1.6 percent) across baselines. Of the 251 sigungu, only 2 (0.8 percent) show a baseline difference in z_m_education exceeding 0.5. The 1985 baseline thus produces substantively identical results to the 1990 and 1995 baselines, confirming that the baseline year choice for z_m_education does not affect the mechanism analysis in Section 7. (Track 2 integrity check: `5_logs/integrity_checks/2026-05-06_z_m_education_sensitivity.md`.)
-
-## 3. § 6.4 baseline year sensitivity (revised commit text)
-
-§ 6.4 의 baseline year sensitivity 항목 commit text:
-
-> A potential concern with the 1994 baseline industry shares is that 1994 falls within three years of the 1997 Asian financial crisis, which substantially restructured Korean manufacturing employment composition. To address this, I conduct sensitivity analysis using four alternative baselines: 1993 (one year prior, fully pre-IMF), 1995 (one year before the IMF crisis onset), 1996 (immediately before the IMF crisis), and 1999 (post-IMF recovery). Across the four alternative baselines, the main estimate of -6.9 percent stable to within 1.2 percentage points (range: -5.7 to -7.4 percent), and statistical significance under HC1 t and WCB cluster-province p-values is preserved across all four baselines. [TODO: Table 6 row commit after fix Track 3 1992 build, include 1992 baseline as a fifth column.] The 1992 baseline is not currently included in the sensitivity table due to a KSIC 6th-edition to KSIC 9th-edition crosswalk gap; the 1993 baseline serves as the closest pre-IMF baseline equivalent for purposes of the present sensitivity check. (See online appendix for full Table 6 with sensitivity columns; the integrity check log for the 1992 baseline build is at `5_logs/integrity_checks/2026-05-06_baseline_shares_1992.md`.)
-
-## 4. Footnote for § 6.4 — REVISED (Track 3 v2 dry-run 입증 후 정정)
-
-**Original footnote 17 (P1 disclosure) is RETRACTED**. Track 3 v2 dry-run (sandbox 2026-05-06) 결과 KSIC 6차→9차 crosswalk 가 `1_codebooks/ksic6_to_ksic9_2digit.csv` 에 23개 매핑 (D15→C10, D17→C13, D24→C20, ..., D37→C33) 완비되어 있음. 1992 KSIC 6차 → 9차 변환 100% match 입증. R-A v1 build 의 lapse 였던 footnote 17 (file 부재 주장) 은 wrong.
-
-§ 6.4 commit 후보 footnote (revised):
-
-> [Footnote 17.] The 1992 KOSTAT Mining and Manufacturing Census uses the 6th edition of the Korean Standard Industrial Classification (KSIC), with letter prefix "D" for Manufacturing. The KSIC 6th-to-9th-edition 2-digit crosswalk used in this paper (`1_codebooks/ksic6_to_ksic9_2digit.csv`, 23 mappings: D15→C10 food, D17→C13 textiles, ..., D37→C33 furniture) provides a 100 percent match for the 23 KSIC 6th-edition manufacturing 2-digit codes that appear in the 1992 census. After conversion to KSIC 9th-edition 2-digit codes, 1992 baseline shares are computed using the same 1994 baseline build pipeline. The sigungu crosswalk match rate to the 1997 KOSTAT harmonized administrative boundary (h_code) is 85 percent for 1992, reflecting administrative changes during 1992-1997; the 215 sigungu (86 percent of the 251-sigungu analytic sample) for which 1992 baseline shares are constructed are sufficient for sensitivity-level inference.
-
-## 5. Pending PAP language commit
-
-(다음 PAP v4.5.4 clean version 에 삽입)
-
-- § 6.4 의 baseline year sensitivity: 4 baseline (1993·1995·1996·1999) commit, 1992 P1 fix 후 5 baseline 으로 확장
+| § 6.4 1992 baseline | "P1 issue — fix 후 재시도" | v2 build 정합 (D filter 통과, 종사자 anchor 일치, KSIC 6→9 100% match) | ready | --- ## 2. § 6.5 z_m_education sensitivity (commit text) § 6.5 의 첫 단락 commit text (paper § 6.5 에 직접 삽입할 수 있는 narrative): > The university-distance mediator z_m_education uses a 1985 KEDI baseline comprising 171 four-year universities with founding years between 1885 (Paichai Hakdang, 1885; Ewha Hakdang, 1886, the precursors of Paichai University and Ewha Womans University) and 1985. To assess whether the 1985 baseline cutoff is load-bearing, I construct alternative baselines using 1990 and 1995 KEDI yearbooks (175 universities each, four additional universities founded between 1985 and 1989). The cross-baseline correlation of z_m_education is 0.989 (1985 versus 1990), 1.000 (1990 versus 1995), and 0.989 (1985 versus 1995). The mean nearest-university distance differs by approximately 0.30 km (1.6 percent) across baselines. Of the 251 sigungu, only 2 (0.8 percent) show a baseline difference in z_m_education exceeding 0.5. The 1985 baseline thus produces substantively identical results to the 1990 and 1995 baselines, confirming that the baseline year choice for z_m_education does not affect the mechanism analysis in Section 7. (Track 2 integrity check: `5_logs/integrity_checks/2026-05-06_z_m_education_sensitivity.md`.) ## 3. § 6.4 baseline year sensitivity (revised commit text) § 6.4 의 baseline year sensitivity 항목 commit text: > A potential concern with the 1994 baseline industry shares is that 1994 falls within three years of the 1997 Asian financial crisis, which substantially restructured Korean manufacturing employment composition. To address this, I conduct sensitivity analysis using four alternative baselines: 1993 (one year prior, fully pre-IMF), 1995 (one year before the IMF crisis onset), 1996 (immediately before the IMF crisis), and 1999 (post-IMF recovery). Across the four alternative baselines, the main estimate of -6.9 percent stable to within 1.2 percentage points (range: -5.7 to -7.4 percent), and statistical significance under HC1 t and WCB cluster-province p-values is preserved across all four baselines. [TODO: Table 6 row commit after fix Track 3 1992 build, include 1992 baseline as a fifth column.] The 1992 baseline is not currently included in the sensitivity table due to a KSIC 6th-edition to KSIC 9th-edition crosswalk gap; the 1993 baseline serves as the closest pre-IMF baseline equivalent for purposes of the present sensitivity check. (See online appendix for full Table 6 with sensitivity columns; the integrity check log for the 1992 baseline build is at `5_logs/integrity_checks/2026-05-06_baseline_shares_1992.md`.) ## 4. Footnote for § 6.4 — REVISED (Track 3 v2 dry-run 입증 후 정정) **Original footnote 17 (P1 disclosure) is RETRACTED**. Track 3 v2 dry-run (sandbox 2026-05-06) 결과 KSIC 6차→9차 crosswalk 가 `1_codebooks/ksic6_to_ksic9_2digit.csv` 에 23개 매핑 (D15→C10, D17→C13, D24→C20, ..., D37→C33) 완비되어 있음. 1992 KSIC 6차 → 9차 변환 100% match 입증. v1 build 의 lapse 였던 footnote 17 (file 부재 주장) 은 wrong. § 6.4 commit 후보 footnote (revised): > [Footnote 17.] The 1992 KOSTAT Mining and Manufacturing Census uses the 6th edition of the Korean Standard Industrial Classification (KSIC), with letter prefix "D" for Manufacturing. The KSIC 6th-to-9th-edition 2-digit crosswalk used in this paper (`1_codebooks/ksic6_to_ksic9_2digit.csv`, 23 mappings: D15→C10 food, D17→C13 textiles, ..., D37→C33 furniture) provides a 100 percent match for the 23 KSIC 6th-edition manufacturing 2-digit codes that appear in the 1992 census. After conversion to KSIC 9th-edition 2-digit codes, 1992 baseline shares are computed using the same 1994 baseline build pipeline. The sigungu crosswalk match rate to the 1997 KOSTAT harmonized administrative boundary (h_code) is 85 percent for 1992, reflecting administrative changes during 1992-1997; the 215 sigungu (86 percent of the 251-sigungu analytic sample) for which 1992 baseline shares are constructed are sufficient for sensitivity-level inference. ## 5. Pending PAP language commit (다음 PAP v4.5.4 clean version 에 삽입) - § 6.4 의 baseline year sensitivity: 4 baseline (1993·1995·1996·1999) commit, 1992 P1 fix 후 5 baseline 으로 확장
 - § 6.5 의 z_m_education sensitivity: § 2 의 narrative 그대로 commit
-- § 9.4 의 Track 3 footnote 17: § 4 의 narrative 그대로 commit
-
----
-
-## 6. Track 3 fix plan (별도 commit, 사용자 측 재실행 필요)
-
-### Step 1: 1992 raw schema deep inspect
-
-```python
+- § 9.4 의 Track 3 footnote 17: § 4 의 narrative 그대로 commit --- ## 6. Track 3 fix plan (별도 commit, 사용자 측 재실행 필요) ### Step 1: 1992 raw schema deep inspect ```python
 # 1992_연간자료_20260505_20424.csv 의 정확한 KSIC 컬럼 위치 + format 확인
 import pandas as pd
-df = pd.read_csv(
-    "C:\\Users\\82103\\Downloads\\trade_mortality_korea\\0_raw\\kosis_business_survey\\microdata_1989_2024\\1992_연간자료_20260505_20424.csv",
-    encoding='cp949',
-    nrows=20
+df = pd.read_csv( "C:\\Users\\82103\\Downloads\\trade_mortality_korea\\0_raw\\kosis_business_survey\\microdata_1989_2024\\1992_연간자료_20260505_20424.csv", encoding='cp949', nrows=20
 )
-print(df.columns.tolist())
+print(df.columns.tolist)
 print(df.head(20))
 # KSIC 6차 코드 컬럼 찾기 (col 9 또는 col 11 가능)
-```
-
-### Step 2: KSIC 6차 → 8차 → 9차 2-step crosswalk build
-
-KOSTAT 공식 concordance:
+``` ### Step 2: KSIC 6차 → 8차 → 9차 2-step crosswalk build KOSTAT 공식 concordance:
 - KSIC 6차 (1992 시점): 26개 대분류 (numeric 2-digit, 'D=Manufacturing' letter prefix 미사용)
 - KSIC 8차 (1998 시점): 21개 대분류 (letter A-W prefix 도입, D=Manufacturing)
-- KSIC 9차 (2008 시점): 21개 대분류 (letter A-U prefix, C=Manufacturing)
-
-별도 build 가 필요한 매핑:
+- KSIC 9차 (2008 시점): 21개 대분류 (letter A-U prefix, C=Manufacturing) 별도 build 가 필요한 매핑:
 1. KSIC 6차 numeric 2-digit → KSIC 8차 letter+number
-2. KSIC 8차 letter+number → KSIC 9차 letter+number (이미 ksic_crosswalk_8_to_9.csv 존재)
-
-### Step 3: 1992 시군구 → 1997 baseline crosswalk 확장
-
-미매칭 8,252 row 의 시군구 코드 (top 10: 31450·31100·31430·36510·38032·36490·34450·31420·35430·37450) 을 1997 baseline 의 어느 h_code 로 매핑할지 audit:
+2. KSIC 8차 letter+number → KSIC 9차 letter+number (이미 ksic_crosswalk_8_to_9.csv 존재) ### Step 3: 1992 시군구 → 1997 baseline crosswalk 확장 미매칭 8,252 row 의 시군구 코드 (top 10: 31450·31100·31430·36510·38032·36490·34450·31420·35430·37450) 을 1997 baseline 의 어느 h_code 로 매핑할지 audit:
 - 31100·31420·31430·31450 → 경기도 안성시·시흥시·평택시 시군구 변경 시기 (1996·1997)
 - 36490·36510 → 경상북도 구미시·영천시 변경
 - 38032 → 강원도 동해시 변경
 - 35430 → 충청북도 청주시 변경
-- 37450 → 전라남도 여수시 변경
-
-본 변경 기록은 `1_codebooks/sigungu_changes_history.md` 에 일부 기록되어 있을 가능성. 확인 후 crosswalk extension commit.
-
-### Step 4: 1992 baseline shares rebuild
-
-위 3 step 완료 후 build_baseline_shares_1992_v2.py 작성. 핵심 차이:
+- 37450 → 전라남도 여수시 변경 본 변경 기록은 `1_codebooks/sigungu_changes_history.md` 에 일부 기록되어 있을 가능성. 확인 후 crosswalk extension commit. ### Step 4: 1992 baseline shares rebuild 위 3 step 완료 후 build_baseline_shares_1992_v2.py 작성. 핵심 차이:
 - D filter 제거 (KSIC 6차 numeric 2-digit 직접 사용, 식료품 15·섬유 17·화학 24 등 본 paper manufacturing 정의 list 사용)
 - KSIC 6→8→9 2-step crosswalk 적용
-- 시군구 매칭률 95%+ 회복 후 baseline shares (h × k) > 0 출력
-
-### Step 5: Integrity check + § 6.4 1992 column 복원
-
-build_baseline_shares_1992_v2.py 실행 결과:
+- 시군구 매칭률 95%+ 회복 후 baseline shares (h × k) > 0 출력 ### Step 5: Integrity check + § 6.4 1992 column 복원 build_baseline_shares_1992_v2.py 실행 결과:
 - (h × k) rows > 0
 - 시군구 매칭률 95%+
-- 종사자 합 ≈ 1992 한국통계연감 제조업 종사자 250-280 만 (anchor cross-check)
-
-→ § 6.4 의 baseline year sensitivity table 에 1992 column 추가, footnote 17 제거
-
----
-
-## 7. Commit gate
-
-본 v4.5.4 patch 는 provisional commit 으로 marked. v4.5.4 clean version commit 은 다음 두 조건 동시 충족 시:
-
-1. Track 3 fix (Step 1-5) 완료 후 1992 baseline rebuild 결과가 § 6.4 sensitivity table 의 다른 4 baseline 과 정합 (β 가 -5.7 ~ -7.4% 범위 안)
-2. PAP § 6.4 baseline year sensitivity full table 완성 (5 column commit)
-
-위 두 조건 충족 시 footnote 17 제거 + § 6.4 narrative 5 baseline 으로 확장 + PAP v4.5.4 clean version commit.
-
----
-
-## 8. 한자 사용 안 함
-
-본 patch 는 순한글 + 영어 약어. 對·中·美·韓·共 등 한자 미사용.
+- 종사자 합 ≈ 1992 한국통계연감 제조업 종사자 250-280 만 (anchor cross-check) → § 6.4 의 baseline year sensitivity table 에 1992 column 추가, footnote 17 제거 --- ## 7. Commit gate 본 v4.5.4 patch 는 provisional commit 으로 marked. v4.5.4 clean version commit 은 다음 두 조건 동시 충족 시: 1. Track 3 fix (Step 1-5) 완료 후 1992 baseline rebuild 결과가 § 6.4 sensitivity table 의 다른 4 baseline 과 정합 (β 가 -5.7 ~ -7.4% 범위 안)
+2. PAP § 6.4 baseline year sensitivity full table 완성 (5 column commit) 위 두 조건 충족 시 footnote 17 제거 + § 6.4 narrative 5 baseline 으로 확장 + PAP v4.5.4 clean version commit. --- ## 8. 한자 사용 안 함 본 patch 는 순한글 + 영어 약어. 對·中·美·韓·共 등 한자 미사용.

@@ -1,176 +1,24 @@
 """
 Phase 2-B Step 1 — Schema probe: 1994 광업·제조업조사 microdata
-=================================================================
-
-Phase 2-B baseline IV build 의 첫 단계. 1994 광업제조업조사 microdata
+================================================================= Phase 2-B baseline IV build 의 첫 단계. 1994 광업제조업조사 microdata
 (`0_raw/kosis_business_survey/microdata_1994_2024/1994_연간자료_*.csv`,
-2.5M rows) 의 schema 와 codebook 정합성을 확인.
-
-확인 사항:
+2.5M rows) 의 schema 와 codebook 정합성을 확인. 확인 사항:
 1) 컬럼 목록 + dtype
 2) 시군구 코드 컬럼 위치 + format (3-digit / 4-digit / 5-digit / 시도+시군구)
 3) KSIC 산업 코드 컬럼 + 차수 (KSIC 6차? 9차?)
 4) 종사자 수 컬럼 (변수명 후보: 종사자_계, 상용근로자, 종업원수, 등)
 5) 행정구역 코드체계 (사업체 본사 vs 사업장 단위)
 6) codebook (`codebook/ms_*_코드및설계서.md`) 일치 여부
-7) row count + 시도 별 분포
-
-산출:
+7) row count + 시도 별 분포 산출:
 - `5_logs/integrity_checks/<date>_business_survey_1994_schema.md`
-- 후속 step 의 mapping dict 작성용 사전 자료
-
-Author: R-A
-Date  : 2026-05-04
+- 후속 step 의 mapping dict 작성용 사전 자료 Author: Date : 2026-05-04
 """
-from __future__ import annotations
-
-import sys
+from __future__ import annotations import sys
 from datetime import date
-from pathlib import Path
-
-import pandas as pd
-
-PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+from pathlib import Path import pandas as pd PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 RAW_DIR = PROJ / "0_raw" / "kosis_business_survey" / "microdata_1994_2024"
 CB_DIR = PROJ / "0_raw" / "kosis_business_survey" / "codebook"
 LOGS = PROJ / "5_logs" / "integrity_checks"
 LOGS.mkdir(parents=True, exist_ok=True)
-TODAY = date.today().isoformat()
-
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-KEYWORDS = {
-    "sigungu": ["시군구", "행정", "지역", "소재지", "주소", "구시군"],
-    "sido": ["시도", "광역", "특별시도"],
-    "ksic": ["산업", "KSIC", "업종", "산업분류"],
-    "employee": ["종사자", "종업원", "근로자", "고용", "인원"],
-    "workplace": ["사업장", "사업체", "공장", "본사"],
-    "weight": ["가중치", "weight", "wt", "design"],
-}
-
-
-def find_col(cols: list, keys: list) -> list:
-    return [c for c in cols if any(k in str(c) for k in keys)]
-
-
-def main() -> None:
-    log = [f"# Phase 2-B Step 1 — 1994 광업제조업조사 schema probe\n_{TODAY}_\n"]
-
-    # find 1994 file
-    files = sorted(RAW_DIR.glob("1994*.csv"))
-    if not files:
-        log.append(f"[FAIL] no 1994 csv in {RAW_DIR}")
-        log.append(f"existing csv: {[p.name for p in RAW_DIR.glob('*.csv')][:10]}")
-        (LOGS / f"{TODAY}_business_survey_1994_schema.md").write_text("\n".join(log), encoding="utf-8")
-        return
-
-    f = files[0]
-    log.append(f"## File\n- path: `{f.relative_to(PROJ)}`\n- size: {f.stat().st_size/1024**2:.1f} MB")
-
-    # try utf-8-sig first, fallback cp949
-    encodings = ["utf-8-sig", "cp949", "euc-kr"]
-    df_head = None
-    enc_used = None
-    for enc in encodings:
-        try:
-            df_head = pd.read_csv(f, nrows=20, encoding=enc, dtype=str)
-            enc_used = enc
-            break
-        except (UnicodeDecodeError, UnicodeError):
-            continue
-    if df_head is None:
-        log.append("[FAIL] 모든 encoding 실패")
-        return
-    log.append(f"- encoding: `{enc_used}`")
-    log.append(f"- columns ({len(df_head.columns)}):")
-    log.append("```")
-    for i, c in enumerate(df_head.columns):
-        log.append(f"  [{i:2d}] {c}")
-    log.append("```")
-
-    # keyword match
-    log.append("\n## 주요 컬럼 후보")
-    for cat, keys in KEYWORDS.items():
-        matched = find_col(list(df_head.columns), keys)
-        log.append(f"- **{cat}** (`{','.join(keys)}`): {matched if matched else '(none)'}")
-
-    # head sample
-    log.append("\n## 샘플 (first 5 rows, first 12 cols)")
-    log.append("```")
-    log.append(df_head.iloc[:5, :12].to_string(index=False))
-    log.append("```")
-
-    # full row count + sigungu distribution
-    log.append("\n## Row count + 시도 분포")
-    try:
-        df_full = pd.read_csv(f, encoding=enc_used, dtype=str, low_memory=False)
-        log.append(f"- total rows: **{len(df_full):,}**")
-        # find sido col candidate
-        sido_cands = find_col(list(df_full.columns), KEYWORDS["sigungu"] + KEYWORDS["sido"])
-        for sc in sido_cands[:3]:
-            vc = df_full[sc].value_counts().head(20)
-            log.append(f"\n### col `{sc}` top 20:")
-            log.append("```")
-            log.append(vc.to_string())
-            log.append("```")
-            log.append(f"- distinct values: {df_full[sc].nunique():,}")
-            # length distribution (시군구 코드 형식 확인)
-            len_dist = df_full[sc].astype(str).str.len().value_counts().sort_index()
-            log.append(f"- 문자열 길이 분포: {dict(len_dist)}")
-
-        # KSIC col
-        ksic_cands = find_col(list(df_full.columns), KEYWORDS["ksic"])
-        for kc in ksic_cands[:2]:
-            log.append(f"\n### col `{kc}` length distribution:")
-            len_dist = df_full[kc].astype(str).str.len().value_counts().sort_index()
-            log.append(f"- 문자열 길이 분포: {dict(len_dist)}")
-            log.append(f"- distinct codes: {df_full[kc].nunique():,}")
-            log.append("- top 20 codes:")
-            log.append("```")
-            log.append(df_full[kc].value_counts().head(20).to_string())
-            log.append("```")
-
-        # employee col
-        emp_cands = find_col(list(df_full.columns), KEYWORDS["employee"])
-        for ec in emp_cands[:3]:
-            log.append(f"\n### col `{ec}` numeric stats:")
-            num = pd.to_numeric(df_full[ec], errors="coerce")
-            log.append(f"- non-null: {num.notna().sum():,} / {len(df_full):,}")
-            log.append(f"- mean: {num.mean():.1f}, median: {num.median():.0f}, max: {num.max():.0f}")
-
-    except Exception as e:
-        log.append(f"\n⚠️ full read failed: {e}")
-
-    # codebook check
-    log.append("\n## Codebook (`0_raw/kosis_business_survey/codebook/`)")
-    if CB_DIR.exists():
-        cb_files = sorted(CB_DIR.glob("*"))
-        log.append(f"- files: {len(cb_files)}")
-        for c in cb_files[:10]:
-            log.append(f"  - `{c.name}` ({c.stat().st_size/1024:.0f} KB)")
-        # find 1994 specific
-        cb_1994 = [c for c in cb_files if "1994" in c.name or "1995" in c.name or "ms_1994" in c.name.lower()]
-        if cb_1994:
-            log.append(f"- 1994/95 codebook 후보: {[c.name for c in cb_1994]}")
-        else:
-            log.append("- ⚠️ 1994 전용 codebook 없음. ms_2000_*.md 또는 ms_1990_*.md 사용 필요")
-    else:
-        log.append(f"- ❌ {CB_DIR.relative_to(PROJ)} 없음")
-
-    # decision log structure
-    log.append("\n## 다음 step (2-B.2) 입력으로 사용할 결정 사항")
-    log.append("- [ ] sigungu 컬럼 확정 (위 후보 중 1개)")
-    log.append("- [ ] sigungu 코드 형식 (3/4/5-digit, 시도+시군구 결합)")
-    log.append("- [ ] h_code crosswalk 매핑 전략 (1997-2023 crosswalk 의 1997 baseline 적용?)")
-    log.append("- [ ] KSIC 차수 (현 crosswalk 9차 vs 1994 KSIC ?차)")
-    log.append("- [ ] 종사자 컬럼 확정 (계 vs 상용 vs 임시 vs 일용)")
-    log.append("- [ ] firm 가중치 (있으면 sample 가중)")
-
-    out = LOGS / f"{TODAY}_business_survey_1994_schema.md"
-    out.write_text("\n".join(log), encoding="utf-8")
-    print(f"[OK] {out}")
-
-
-if __name__ == "__main__":
-    main()
+TODAY = date.today.isoformat if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace") KEYWORDS = { "sigungu": ["시군구", "행정", "지역", "소재지", "주소", "구시군"], "sido": ["시도", "광역", "특별시도"], "ksic": ["산업", "KSIC", "업종", "산업분류"], "employee": ["종사자", "종업원", "근로자", "고용", "인원"], "workplace": ["사업장", "사업체", "공장", "본사"], "weight": ["가중치", "weight", "wt", "design"],
+} def find_col(cols: list, keys: list) -> list: return [c for c in cols if any(k in str(c) for k in keys)] def main -> None: log = [f"# Phase 2-B Step 1 — 1994 광업제조업조사 schema probe\n_{TODAY}_\n"] # find 1994 file files = sorted(RAW_DIR.glob("1994*.csv")) if not files: log.append(f"[FAIL] no 1994 csv in {RAW_DIR}") log.append(f"existing csv: {[p.name for p in RAW_DIR.glob('*.csv')][:10]}") (LOGS / f"{TODAY}_business_survey_1994_schema.md").write_text("\n".join(log), encoding="utf-8") return f = files[0] log.append(f"## File\n- path: `{f.relative_to(PROJ)}`\n- size: {f.stat.st_size/1024**2:.1f} MB") # try utf-8-sig first, fallback cp949 encodings = ["utf-8-sig", "cp949", "euc-kr"] df_head = None enc_used = None for enc in encodings: try: df_head = pd.read_csv(f, nrows=20, encoding=enc, dtype=str) enc_used = enc break except (UnicodeDecodeError, UnicodeError): continue if df_head is None: log.append("[FAIL] 모든 encoding 실패") return log.append(f"- encoding: `{enc_used}`") log.append(f"- columns ({len(df_head.columns)}):") log.append("```") for i, c in enumerate(df_head.columns): log.append(f" [{i:2d}] {c}") log.append("```") # keyword match log.append("\n## 주요 컬럼 후보") for cat, keys in KEYWORDS.items: matched = find_col(list(df_head.columns), keys) log.append(f"- **{cat}** (`{','.join(keys)}`): {matched if matched else '(none)'}") # head sample log.append("\n## 샘플 (first 5 rows, first 12 cols)") log.append("```") log.append(df_head.iloc[:5, :12].to_string(index=False)) log.append("```") # full row count + sigungu distribution log.append("\n## Row count + 시도 분포") try: df_full = pd.read_csv(f, encoding=enc_used, dtype=str, low_memory=False) log.append(f"- total rows: **{len(df_full):,}**") # find sido col candidate sido_cands = find_col(list(df_full.columns), KEYWORDS["sigungu"] + KEYWORDS["sido"]) for sc in sido_cands[:3]: vc = df_full[sc].value_counts.head(20) log.append(f"\n### col `{sc}` top 20:") log.append("```") log.append(vc.to_string) log.append("```") log.append(f"- distinct values: {df_full[sc].nunique:,}") # length distribution (시군구 코드 형식 확인) len_dist = df_full[sc].astype(str).str.len.value_counts.sort_index log.append(f"- 문자열 길이 분포: {dict(len_dist)}") # KSIC col ksic_cands = find_col(list(df_full.columns), KEYWORDS["ksic"]) for kc in ksic_cands[:2]: log.append(f"\n### col `{kc}` length distribution:") len_dist = df_full[kc].astype(str).str.len.value_counts.sort_index log.append(f"- 문자열 길이 분포: {dict(len_dist)}") log.append(f"- distinct codes: {df_full[kc].nunique:,}") log.append("- top 20 codes:") log.append("```") log.append(df_full[kc].value_counts.head(20).to_string) log.append("```") # employee col emp_cands = find_col(list(df_full.columns), KEYWORDS["employee"]) for ec in emp_cands[:3]: log.append(f"\n### col `{ec}` numeric stats:") num = pd.to_numeric(df_full[ec], errors="coerce") log.append(f"- non-null: {num.notna.sum:,} / {len(df_full):,}") log.append(f"- mean: {num.mean:.1f}, median: {num.median:.0f}, max: {num.max:.0f}") except Exception as e: log.append(f"\n⚠️ full read failed: {e}") # codebook check log.append("\n## Codebook (`0_raw/kosis_business_survey/codebook/`)") if CB_DIR.exists: cb_files = sorted(CB_DIR.glob("*")) log.append(f"- files: {len(cb_files)}") for c in cb_files[:10]: log.append(f" - `{c.name}` ({c.stat.st_size/1024:.0f} KB)") # find 1994 specific cb_1994 = [c for c in cb_files if "1994" in c.name or "1995" in c.name or "ms_1994" in c.name.lower] if cb_1994: log.append(f"- 1994/95 codebook 후보: {[c.name for c in cb_1994]}") else: log.append("- ⚠️ 1994 전용 codebook 없음. ms_2000_*.md 또는 ms_1990_*.md 사용 필요") else: log.append(f"- ❌ {CB_DIR.relative_to(PROJ)} 없음") # decision log structure log.append("\n## 다음 step (2-B.2) 입력으로 사용할 결정 사항") log.append("- sigungu 컬럼 확정 (위 후보 중 1개)") log.append("- sigungu 코드 형식 (3/4/5-digit, 시도+시군구 결합)") log.append("- h_code crosswalk 매핑 전략 (1997-2023 crosswalk 의 1997 baseline 적용?)") log.append("- KSIC 차수 (현 crosswalk 9차 vs 1994 KSIC ?차)") log.append("- 종사자 컬럼 확정 (계 vs 상용 vs 임시 vs 일용)") log.append("- firm 가중치 (있으면 sample 가중)") out = LOGS / f"{TODAY}_business_survey_1994_schema.md" out.write_text("\n".join(log), encoding="utf-8") print(f"[OK] {out}") if __name__ == "__main__": main

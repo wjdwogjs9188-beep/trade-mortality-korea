@@ -1,39 +1,12 @@
 """
 첫 reduced form (preliminary main result)
-================================================
-
-Spec:
-  Δ_long log(despair_total)_h = α + β · z_x_h^{KR-CN} + γ_t + ε_h
-
-  Δ_long = log(rate_2010) - log(rate_2000)  (10y change)
-  z_x_h = `iv_z_x_bilateral.parquet` z_x_per_worker
-
-5 outcome groups 모두 회귀:
-  despair_total, cancer, cardiovascular, respiratory, external_other
-
-SE layers:
-  - HC1 (sandwich)
-  - cluster-sido (Korea 15-17 sido)
-  - tF inference 의무화 (Phase B-x F=19.65 borderline)
-
-Output:
-  3_derived/regression/first_reduced_form_results.csv
-  5_logs/integrity_checks/<date>_first_reduced_form.md
-
-Author: R-A
-Date  : 2026-05-05
+================================================ Spec: Δ_long log(despair_total)_h = α + β · z_x_h^{KR-CN} + γ_t + ε_h Δ_long = log(rate_2010) - log(rate_2000) (10y change) z_x_h = `iv_z_x_bilateral.parquet` z_x_per_worker 5 outcome groups 모두 회귀: despair_total, cancer, cardiovascular, respiratory, external_other SE layers: - HC1 (sandwich) - cluster-sido (Korea 15-17 sido) - tF inference 의무화 (Phase B-x F=19.65 borderline) Output: 3_derived/regression/first_reduced_form_results.csv 5_logs/integrity_checks/<date>_first_reduced_form.md Author: Date : 2026-05-05
 """
-from __future__ import annotations
-
-import sys
+from __future__ import annotations import sys
 from datetime import date
-from pathlib import Path
-
-import numpy as np
+from pathlib import Path import numpy as np
 import pandas as pd
-import statsmodels.api as sm
-
-PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+import statsmodels.api as sm PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
 MORT = PROJ / "3_derived" / "mortality" / "sigungu_mortality_panel_v02_wa.parquet"
 IV = PROJ / "3_derived" / "bartik" / "iv_z_x_bilateral.parquet"
 CW = PROJ / "1_codebooks" / "sigungu_crosswalk.csv"
@@ -41,136 +14,5 @@ OUT = PROJ / "3_derived" / "regression"
 LOGS = PROJ / "5_logs" / "integrity_checks"
 OUT.mkdir(parents=True, exist_ok=True)
 LOGS.mkdir(parents=True, exist_ok=True)
-TODAY = date.today().isoformat()
-
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-# 10y window 가 가장 robust (한국 시군구 panel). 기본 spec.
-T0, T1 = 2000, 2010
-
-OUTCOMES = ["despair_total", "cancer", "cardiovascular", "respiratory", "external_other"]
-
-
-def main() -> None:
-    log = [f"# 첫 reduced form (preliminary main result)\n_{TODAY}_\n"]
-    log.append(f"- spec: Δlog(rate)_{T0}_{T1} ~ z_x_h^{{KR-CN}}")
-    log.append(f"- IV: bilateral KR-CN z_x_per_worker (Phase B-x A.ii main)\n")
-
-    # 1) load
-    mort = pd.read_parquet(MORT)
-    iv = pd.read_parquet(IV)
-    cw = pd.read_csv(CW, dtype=str)
-    log.append(f"- mortality panel: {mort.shape}")
-    log.append(f"- IV panel: {iv.shape}")
-
-    # 2) sido lookup
-    h_to_sido = cw.drop_duplicates("h_code")[["h_code", "sido_code"]]
-
-    # 3) per-outcome regression
-    results = []
-    for outcome in OUTCOMES:
-        log.append(f"\n## Outcome: **{outcome}**")
-        sub = mort[mort["outcome_group"] == outcome].copy()
-        # year filter
-        sub = sub[sub["year"].isin([T0, T1])].copy()
-        sub["log_rate"] = sub["log_asr_p1"]
-        # pivot to h_code × year
-        pv = sub.pivot_table(index="h_code", columns="year", values="log_rate", aggfunc="mean").reset_index()
-        if T0 not in pv.columns or T1 not in pv.columns:
-            log.append(f"❌ years {T0} or {T1} missing in panel for {outcome}")
-            continue
-        pv["d_log"] = pv[T1] - pv[T0]
-        pv = pv.dropna(subset=["d_log"])
-        log.append(f"- d_log panel: {len(pv)} h_code")
-
-        # merge IV
-        df = pv.merge(iv[["h_code", "z_x_per_worker"]], on="h_code", how="inner")
-        df = df.merge(h_to_sido, on="h_code", how="left")
-        df = df.dropna(subset=["d_log", "z_x_per_worker"])
-        log.append(f"- after merge IV: n={len(df)}")
-        if len(df) < 50:
-            log.append(f"⚠️ n<50, skip")
-            continue
-
-        # standardize z_x for interpretable coefficient
-        df["z_x_std"] = (df["z_x_per_worker"] - df["z_x_per_worker"].mean()) / df["z_x_per_worker"].std()
-
-        # OLS HC1
-        X = sm.add_constant(df[["z_x_std"]])
-        y = df["d_log"]
-        m_hc1 = sm.OLS(y, X).fit(cov_type="HC1")
-        beta = m_hc1.params["z_x_std"]
-        se_hc1 = m_hc1.bse["z_x_std"]
-        p_hc1 = m_hc1.pvalues["z_x_std"]
-
-        # cluster-sido
-        m_cl = sm.OLS(y, X).fit(cov_type="cluster", cov_kwds={"groups": df["sido_code"]})
-        se_cl = m_cl.bse["z_x_std"]
-        p_cl = m_cl.pvalues["z_x_std"]
-
-        # tF inference (Lee-Moreira-McCrary-Porter 2022)
-        # cluster-sido F (from Phase B-x) = 19.65. tF critical value approx for F~20:
-        # |t| > ~3.43 for 5% sig (Lee et al table 3, F=20)
-        TF_CRIT = 3.43
-        t_hc1 = beta / se_hc1
-        t_cl = beta / se_cl
-        sig_hc1_tf = abs(t_hc1) > TF_CRIT
-        sig_cl_tf = abs(t_cl) > TF_CRIT
-
-        log.append(f"- N={len(df)}, R²={m_hc1.rsquared:.3f}")
-        log.append(f"- β (standardized) = {beta:+.4f}")
-        log.append(f"- SE HC1 = {se_hc1:.4f}, t={t_hc1:+.2f}, p={p_hc1:.4f}")
-        log.append(f"- SE cluster-sido = {se_cl:.4f}, t={t_cl:+.2f}, p={p_cl:.4f}")
-        log.append(f"- tF inference (cutoff |t|>{TF_CRIT}): HC1 {'✅' if sig_hc1_tf else '❌'}, cluster {'✅' if sig_cl_tf else '❌'}")
-
-        # interpret β
-        # β = +X means: 1 sd 더 노출 시 mortality 변화 +X (in log units = ~X*100% rate change)
-        if beta > 0:
-            log.append(f"- 해석: 1 sd 더 노출 → {abs(beta)*100:.1f}% 더 사망률 증가 (positive trade shock effect on {outcome})")
-        else:
-            log.append(f"- 해석: 1 sd 더 노출 → {abs(beta)*100:.1f}% 더 사망률 *감소* (protective effect — 본 paper 핵심 가설)")
-
-        results.append({
-            "outcome": outcome,
-            "n": len(df),
-            "beta": beta,
-            "se_HC1": se_hc1,
-            "p_HC1": p_hc1,
-            "se_cluster_sido": se_cl,
-            "p_cluster_sido": p_cl,
-            "t_HC1": t_hc1,
-            "t_cluster_sido": t_cl,
-            "sig_tF_HC1": sig_hc1_tf,
-            "sig_tF_cluster": sig_cl_tf,
-            "r2": m_hc1.rsquared,
-        })
-
-    # 4) save
-    out_csv = OUT / "first_reduced_form_results.csv"
-    pd.DataFrame(results).to_csv(out_csv, index=False, encoding="utf-8-sig")
-    log.append(f"\n- saved: `{out_csv.relative_to(PROJ)}`")
-
-    # 5) summary
-    log.append("\n## Summary table")
-    log.append("| outcome | n | β | SE_HC1 | t_HC1 | tF sig (HC1) | t_cluster | tF sig (cluster) |")
-    log.append("|---------|---|---|--------|-------|--------------|-----------|-------------------|")
-    for r in results:
-        log.append(f"| {r['outcome']} | {r['n']} | {r['beta']:+.3f} | "
-                   f"{r['se_HC1']:.3f} | {r['t_HC1']:+.2f} | "
-                   f"{'✅' if r['sig_tF_HC1'] else '—'} | "
-                   f"{r['t_cluster_sido']:+.2f} | "
-                   f"{'✅' if r['sig_tF_cluster'] else '—'} |")
-
-    log.append("\n## 결정")
-    log.append("- 본 turn 의 spec: 10y change (2000-2010), no FE, HC1 + cluster-sido, tF inference")
-    log.append("- year FE 와 5-layer SE 추가 = Phase 4 별도 turn")
-    log.append("- 본 결과는 **preliminary** — final 은 Romano-Wolf step-down 후 확정")
-
-    out_log = LOGS / f"{TODAY}_first_reduced_form.md"
-    out_log.write_text("\n".join(log), encoding="utf-8")
-    print(f"[OK] {out_log}")
-
-
-if __name__ == "__main__":
-    main()
+TODAY = date.today.isoformat if hasattr(sys.stdout, "reconfigure"): sys.stdout.reconfigure(encoding="utf-8", errors="replace") # 10y window 가 가장 robust (한국 시군구 panel). 기본 spec.
+T0, T1 = 2000, 2010 OUTCOMES = ["despair_total", "cancer", "cardiovascular", "respiratory", "external_other"] def main -> None: log = [f"# 첫 reduced form (preliminary main result)\n_{TODAY}_\n"] log.append(f"- spec: Δlog(rate)_{T0}_{T1} ~ z_x_h^{{KR-CN}}") log.append(f"- IV: bilateral KR-CN z_x_per_worker (Phase B-x A.ii main)\n") # 1) load mort = pd.read_parquet(MORT) iv = pd.read_parquet(IV) cw = pd.read_csv(CW, dtype=str) log.append(f"- mortality panel: {mort.shape}") log.append(f"- IV panel: {iv.shape}") # 2) sido lookup h_to_sido = cw.drop_duplicates("h_code")[["h_code", "sido_code"]] # 3) per-outcome regression results = for outcome in OUTCOMES: log.append(f"\n## Outcome: **{outcome}**") sub = mort[mort["outcome_group"] == outcome].copy # year filter sub = sub[sub["year"].isin([T0, T1])].copy sub["log_rate"] = sub["log_asr_p1"] # pivot to h_code × year pv = sub.pivot_table(index="h_code", columns="year", values="log_rate", aggfunc="mean").reset_index if T0 not in pv.columns or T1 not in pv.columns: log.append(f"❌ years {T0} or {T1} missing in panel for {outcome}") continue pv["d_log"] = pv[T1] - pv[T0] pv = pv.dropna(subset=["d_log"]) log.append(f"- d_log panel: {len(pv)} h_code") # merge IV df = pv.merge(iv[["h_code", "z_x_per_worker"]], on="h_code", how="inner") df = df.merge(h_to_sido, on="h_code", how="left") df = df.dropna(subset=["d_log", "z_x_per_worker"]) log.append(f"- after merge IV: n={len(df)}") if len(df) < 50: log.append(f"⚠️ n<50, skip") continue # standardize z_x for interpretable coefficient df["z_x_std"] = (df["z_x_per_worker"] - df["z_x_per_worker"].mean) / df["z_x_per_worker"].std # OLS HC1 X = sm.add_constant(df[["z_x_std"]]) y = df["d_log"] m_hc1 = sm.OLS(y, X).fit(cov_type="HC1") beta = m_hc1.params["z_x_std"] se_hc1 = m_hc1.bse["z_x_std"] p_hc1 = m_hc1.pvalues["z_x_std"] # cluster-sido m_cl = sm.OLS(y, X).fit(cov_type="cluster", cov_kwds={"groups": df["sido_code"]}) se_cl = m_cl.bse["z_x_std"] p_cl = m_cl.pvalues["z_x_std"] # tF inference (Lee-Moreira-McCrary-Porter 2022) # cluster-sido F (from Phase B-x) = 19.65. tF critical value approx for F~20: # |t| > ~3.43 for 5% sig (Lee et al table 3, F=20) TF_CRIT = 3.43 t_hc1 = beta / se_hc1 t_cl = beta / se_cl sig_hc1_tf = abs(t_hc1) > TF_CRIT sig_cl_tf = abs(t_cl) > TF_CRIT log.append(f"- N={len(df)}, R²={m_hc1.rsquared:.3f}") log.append(f"- β (standardized) = {beta:+.4f}") log.append(f"- SE HC1 = {se_hc1:.4f}, t={t_hc1:+.2f}, p={p_hc1:.4f}") log.append(f"- SE cluster-sido = {se_cl:.4f}, t={t_cl:+.2f}, p={p_cl:.4f}") log.append(f"- tF inference (cutoff |t|>{TF_CRIT}): HC1 {'✅' if sig_hc1_tf else '❌'}, cluster {'✅' if sig_cl_tf else '❌'}") # interpret β # β = +X means: 1 sd 더 노출 시 mortality 변화 +X (in log units = ~X*100% rate change) if beta > 0: log.append(f"- 해석: 1 sd 더 노출 → {abs(beta)*100:.1f}% 더 사망률 증가 (positive trade shock effect on {outcome})") else: log.append(f"- 해석: 1 sd 더 노출 → {abs(beta)*100:.1f}% 더 사망률 *감소* (protective effect — 본 paper 핵심 가설)") results.append({ "outcome": outcome, "n": len(df), "beta": beta, "se_HC1": se_hc1, "p_HC1": p_hc1, "se_cluster_sido": se_cl, "p_cluster_sido": p_cl, "t_HC1": t_hc1, "t_cluster_sido": t_cl, "sig_tF_HC1": sig_hc1_tf, "sig_tF_cluster": sig_cl_tf, "r2": m_hc1.rsquared, }) # 4) save out_csv = OUT / "first_reduced_form_results.csv" pd.DataFrame(results).to_csv(out_csv, index=False, encoding="utf-8-sig") log.append(f"\n- saved: `{out_csv.relative_to(PROJ)}`") # 5) summary log.append("\n## Summary table") log.append("| outcome | n | β | SE_HC1 | t_HC1 | tF sig (HC1) | t_cluster | tF sig (cluster) |") log.append("|---------|---|---|--------|-------|--------------|-----------|-------------------|") for r in results: log.append(f"| {r['outcome']} | {r['n']} | {r['beta']:+.3f} | " f"{r['se_HC1']:.3f} | {r['t_HC1']:+.2f} | " f"{'✅' if r['sig_tF_HC1'] else '—'} | " f"{r['t_cluster_sido']:+.2f} | " f"{'✅' if r['sig_tF_cluster'] else '—'} |") log.append("\n## 결정") log.append("- 본 turn 의 spec: 10y change (2000-2010), no FE, HC1 + cluster-sido, tF inference") log.append("- year FE 와 5-layer SE 추가 = Phase 4 별도 turn") log.append("- 본 결과는 **preliminary** — final 은 Romano-Wolf step-down 후 확정") out_log = LOGS / f"{TODAY}_first_reduced_form.md" out_log.write_text("\n".join(log), encoding="utf-8") print(f"[OK] {out_log}") if __name__ == "__main__": main
