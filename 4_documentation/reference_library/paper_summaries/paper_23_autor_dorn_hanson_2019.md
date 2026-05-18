@@ -42,9 +42,9 @@ Male-specific shock 측정 → 동일 CZ 내 male vs female mortality gap 변화
 - **ADH 2019 가 본 paper 의 가장 직접적인 anchor** (mortality outcome + ADH IV + working-age)
 - **차별화**: 한국은 export-driven (D&A 사망률 ↓ 가 자연스럽게 예측됨, ADH 2019 의 mirror image)
 - **paper § 1 narrative**:
-  > "Autor, Dorn, and Hanson (2019) document that trade-induced manufacturing decline raises 
-  > working-age male mortality from drug and alcohol causes in the US. We examine the inverse 
-  > question: does trade-induced manufacturing growth in an export-oriented economy reduce mortality?"
+ > "Autor, Dorn, and Hanson (2019) document that trade-induced manufacturing decline raises 
+ > working-age male mortality from drug and alcohol causes in the US. We examine the inverse 
+ > question: does trade-induced manufacturing growth in an export-oriented economy reduce mortality?"
 
 ## 본 paper § 9 mechanism (marriage market) 에 활용
 - ADH 2019 의 marriage market deterioration = z_m_marital anchor (Phase B 의 mediator IV)

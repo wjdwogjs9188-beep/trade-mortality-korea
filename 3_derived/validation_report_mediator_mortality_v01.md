@@ -32,10 +32,10 @@ _Generated: 2026-05-04, prior to 11b/11c cross-tab build_
 ### Metric definitions
 - **혼인 4 카테고리**: 1미혼 / 2배우자 / 3사별 / 4이혼 (1997-2024 일치)
 - **교육 3 카테고리** (모든 시점 align): NoHS (1+2+3), HS (4), College+ (5+6+7+8)
-  - mediator panel 도 4 → 3 카테고리 재매핑 필요 (현재 4 카테고리)
+ - mediator panel 도 4 → 3 카테고리 재매핑 필요 (현재 4 카테고리)
 
 ### Baseline and comparison
-- **5-year stacked first-difference** (Pierce-Schott 2020): t=1997-2001 → 2000 census, t=2002-2006 → 2005 census, ..., t=2017-2021 → 2020 census
+- **5-year stacked first-difference** (Pierce-Schott 2020): t=1997-2001 → 2000 census, t=2002-2006 → 2005 census,..., t=2017-2021 → 2020 census
 - 2022-2024 (3년) = incomplete period → drop 또는 별도 처리
 
 ---

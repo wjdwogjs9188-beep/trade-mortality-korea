@@ -76,8 +76,8 @@ _종합 최종 논문 reference mapping: 18 deep-read paper summaries → PAP v3
 ## 2. Tier A — 핵심 Reference (10 papers)
 
 ### 2.1 Dauth, Findeisen, Suedekum (2014)
-**타이틀**: "The Rise of the East and the Far East: German Labor Markets and Trade Integration"  
-**출처**: Journal of Economic Literature, CESifo WP Dec 2013  
+**타이틀**: "The Rise of the East and the Far East: German Labor Markets and Trade Integration" 
+**출처**: Journal of Economic Literature, CESifo WP Dec 2013 
 **저자**: Dauth (IAB), Findeisen (ZEW), Suedekum (Düsseldorf University)
 
 **핵심 기여**:
@@ -107,17 +107,17 @@ F-statistic: ~23 (first-stage for imports)
 ---
 
 ### 2.2 IMF Working Paper 2018-06
-**타이틀**: "Shift-Share Method for Estimating Labor Supply Elasticity and Labor Demand Shocks"  
-**출처**: IMF Working Paper 2018-06  
+**타이틀**: "Shift-Share Method for Estimating Labor Supply Elasticity and Labor Demand Shocks" 
+**출처**: IMF Working Paper 2018-06 
 **저자명**: 파일에서 명시 안 됨 (IMF 정책 논문)
 
 **핵심 기여**:
 - **Shift-share 표준오차의 편향 문제** 형식화: 표준 OLS SE가 **과소추정**
 - 4가지 교정 방법:
-  1. Adjustment factor (closed-form)
-  2. Bootstrap (cross-sectional)
-  3. HR-SE (heteroskedastic-robust)
-  4. Leave-one-out IV (conservative)
+ 1. Adjustment factor (closed-form)
+ 2. Bootstrap (cross-sectional)
+ 3. HR-SE (heteroskedastic-robust)
+ 4. Leave-one-out IV (conservative)
 - **Overidentification test** 이론: GMM 가중 행렬 선택에 따른 타당성 검증
 - **AER 실증 조사**: 2014-2018 IV 논문 100+ 개 검토 → 60% F-stat 보고, **<20% robust SE 사용** (심각한 간과)
 
@@ -141,9 +141,9 @@ Expected SE inflation: 20-50% depending on shift concentration
 ---
 
 ### 2.3 Pierce & Schott (2020)
-**타이틀**: "Trade Liberalization and Mortality" (AER: Insights version)  
-**출처**: American Economic Review: Insights, Vol. 2(1), pp. 47-64  
-**저자**: Justin R. Pierce (Federal Reserve), Peter K. Schott (Yale SOM)  
+**타이틀**: "Trade Liberalization and Mortality" (AER: Insights version) 
+**출처**: American Economic Review: Insights, Vol. 2(1), pp. 47-64 
+**저자**: Justin R. Pierce (Federal Reserve), Peter K. Schott (Yale SOM) 
 **also**: FEDS WP 2016-094 (longer version)
 
 **핵심 기여**:
@@ -178,8 +178,8 @@ Gender heterogeneity: Males > Females (2-3배)
 ---
 
 ### 2.4 Pierce & Schott (2016)
-**타이틀**: "The Impact of Trade Policy on Health Outcomes: Trade and Suicide in the United States"  
-**출처**: Federal Reserve Working Paper 2016-094  
+**타이틀**: "The Impact of Trade Policy on Health Outcomes: Trade and Suicide in the United States" 
+**출처**: Federal Reserve Working Paper 2016-094 
 **저자**: Pierce & Schott (2020의 earlier version)
 
 **추가 상세**:
@@ -192,17 +192,17 @@ Gender heterogeneity: Males > Females (2-3배)
 ---
 
 ### 2.5 Andrews, Stock, Sun (2019)
-**타이틀**: "Weak Instruments in Linear IV Regression: Identification, Inference, and Testing"  
-**출처**: Annual Review of Economics, Vol. 11, pp. 727-753  
+**타이틀**: "Weak Instruments in Linear IV Regression: Identification, Inference, and Testing" 
+**출처**: Annual Review of Economics, Vol. 11, pp. 727-753 
 **저자**: Andrews (Yale), Stock (Harvard), Sun (Harvard)
 
 **핵심 기여**:
 - **Weak instrument problem**의 가장 실용적 review
 - **F-statistic 임계값 체계화**:
-  - F > 13.91: 5% bias (상대적으로 안전)
-  - F > 9.08: 10% bias
-  - **F < 10**: Robust inference 필수
-  - F < 5: 명백히 weak
+ - F > 13.91: 5% bias (상대적으로 안전)
+ - F > 9.08: 10% bias
+ - **F < 10**: Robust inference 필수
+ - F < 5: 명백히 weak
 - **비동분산, clustering, 시계열 상관 모두 고려**한 robust diagnostics
 - **Anderson-Rubin test**: Weak IV 상황에서 credible confidence intervals
 - **AER survey** (2014-2018): 20% of papers have F<5, 30% have F<10 (심각)
@@ -222,8 +222,8 @@ Critical value 테이블: Table 1 in ASS 2019 refer
 ---
 
 ### 2.6 Autor, Dorn, Hanson (2013)
-**타이틀**: "The China Syndrome: Local Labor Market Effects of Import Competition in the United States"  
-**출처**: American Economic Review, Vol. 103(6), pp. 2121-2168  
+**타이틀**: "The China Syndrome: Local Labor Market Effects of Import Competition in the United States" 
+**출처**: American Economic Review, Vol. 103(6), pp. 2121-2168 
 **저자**: Autor (MIT), Dorn (UC3M), Hanson (UCSD)
 
 **핵심 기여**:
@@ -249,8 +249,8 @@ F-statistic: ~23 (modest, not ideal)
 ---
 
 ### 2.7 Sufi (2023)
-**타이틀**: "Housing, Household Debt, and the Business Cycle: An Application to China and Korea"  
-**출처**: Becker Friedman Institute WP No. 2023-109  
+**타이틀**: "Housing, Household Debt, and the Business Cycle: An Application to China and Korea" 
+**출처**: Becker Friedman Institute WP No. 2023-109 
 **저자**: Amir Sufi (University of Chicago Booth)
 
 **핵심 기여**:
@@ -278,9 +278,9 @@ Comparison: Spain, UK와 유사한 위험 구조
 ---
 
 ### 2.8 Finkelstein, Notowidigdo, Shi (2026)
-**타이틀**: "Trading Goods for Lives: NAFTA's Mortality Impacts and Implications"  
-**출처**: Becker Friedman Institute WP No. 2026-33  
-**저자**: Amy Finkelstein (MIT), Matthew Notowidigdo (Chicago Booth), Steven Shi (MIT)  
+**타이틀**: "Trading Goods for Lives: NAFTA's Mortality Impacts and Implications" 
+**출처**: Becker Friedman Institute WP No. 2026-33 
+**저자**: Amy Finkelstein (MIT), Matthew Notowidigdo (Chicago Booth), Steven Shi (MIT) 
 **발행**: February 2026 (최신)
 
 **핵심 기여**:
@@ -312,8 +312,8 @@ Latency: 5-10 years (not immediate)
 ---
 
 ### 2.9 Goldsmith-Pinkham, Sorkin, Swift (2018)
-**타이틀**: "Bartik Instruments: What, When, Why, and How"  
-**출처**: NBER Working Paper No. 24408  
+**타이틀**: "Bartik Instruments: What, When, Why, and How" 
+**출처**: NBER Working Paper No. 24408 
 **저자**: Paul Goldsmith-Pinkham (Yale SOM), Isaac Sorkin (Stanford), Henry Swift
 
 **핵심 기여**:
@@ -337,19 +337,19 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 ---
 
 ### 2.10 Borusyak, Hull, Jaravel (2025)
-**타이틀**: "A Practical Guide to Shift-Share Instruments"  
-**출처**: Journal of Economic Perspectives, Vol. 39(1), pp. 181-204, Winter 2025  
+**타이틀**: "A Practical Guide to Shift-Share Instruments" 
+**출처**: Journal of Economic Perspectives, Vol. 39(1), pp. 181-204, Winter 2025 
 **저자**: Kirill Borusyak (LSE), Peter Hull (Chicago), Xavier Jaravel (LSE)
 
 **핵심 기여**:
 - **최신 methodological guide**: 1/8 of recent NBER papers use shift-share
 - 6가지 핵심 질문:
-  1. 기본 논리는? (Framework)
-  2. Exogeneity 언제 성립? (Conditions)
-  3. Weak instrument 식별? (Diagnostics)
-  4. HTE 존재 시 interpretation? (Weighted average)
-  5. In-sample vs. out-of-sample shift 차이? (Practical)
-  6. Robustness checks 방법? (Validation)
+ 1. 기본 논리는? (Framework)
+ 2. Exogeneity 언제 성립? (Conditions)
+ 3. Weak instrument 식별? (Diagnostics)
+ 4. HTE 존재 시 interpretation? (Weighted average)
+ 5. In-sample vs. out-of-sample shift 차이? (Practical)
+ 6. Robustness checks 방법? (Validation)
 - **체계적 체크리스트**: Valid shift-share를 위한 필수 검증
 
 **본 논문과의 연결**:
@@ -371,8 +371,8 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 ## 3. Tier B — 중요 Reference (5 papers)
 
 ### 3.1 Bartik (1991)
-**타이틀**: "Who Benefits from State and Local Economic Development Policies?" (Shift-share original)  
-**출처**: NBER Working Paper No. 5570  
+**타이틀**: "Who Benefits from State and Local Economic Development Policies?" (Shift-share original) 
+**출처**: NBER Working Paper No. 5570 
 **저자**: Timothy Bartik (W.E. Upjohn Institute)
 
 **역할**: Shift-share IV의 **최초 도입** (1991)
@@ -380,8 +380,8 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 - Foundational idea지만 identification 논리는 모던 논문(GPSS, BHJ)에서 체계화됨
 
 ### 3.2 Borusyak, Hull, Jaravel (2018)
-**타이틀**: "Quasi-Experimental Shift-Share Research Designs"  
-**출처**: NBER Working Paper No. 24997  
+**타이틀**: "Quasi-Experimental Shift-Share Research Designs" 
+**출처**: NBER Working Paper No. 24997 
 **저자**: Borusyak, Hull, Jaravel
 
 **추가 기여** (BHJ 2025와 다른 각도):
@@ -390,8 +390,8 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 - 준실험적 해석: 충격이 "quasi-randomly assigned"
 
 ### 3.3 Mian, Sufi, Verner (2016)
-**타이틀**: "Household Debt and Business Cycles Worldwide"  
-**출처**: American Economic Review, Vol. 106  
+**타이틀**: "Household Debt and Business Cycles Worldwide" 
+**출처**: American Economic Review, Vol. 106 
 **저자**: Mian (Princeton), Sufi (Chicago), Verner (Princeton)
 
 **기여**: 30개 선진국 (1960-2012) 패널
@@ -400,8 +400,8 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 - VAR + Local projections 방법론
 
 ### 3.4 Dix-Carneiro, Soares, Ulyssea (2017)
-**타이틀**: "Economic Shocks and Crime: Evidence from the Brazilian Trade Liberalization"  
-**출처**: NBER Working Paper No. 23400  
+**타이틀**: "Economic Shocks and Crime: Evidence from the Brazilian Trade Liberalization" 
+**출처**: NBER Working Paper No. 23400 
 **저자**: Dix-Carneiro (Duke), Soares (Columbia), Ulyssea (PUC-Rio)
 
 **기여**: Trade shock → 범죄 (homicides) 증가 (2017년 최초)
@@ -411,8 +411,8 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 - **Parallel to our study**: Trade → despair outcomes (Brazil: crime, Korea: mortality)
 
 ### 3.5 Dow, Godøy, Lowenstein, Reich (2019)
-**타이틀**: "Can Economic Policies Reduce Deaths of Despair?"  
-**출처**: NBER Working Paper No. 25787  
+**타이틀**: "Can Economic Policies Reduce Deaths of Despair?" 
+**출처**: NBER Working Paper No. 25787 
 **저자**: Dow (UC Berkeley), Godøy (Statistics Norway), Lowenstein, Reich (UC Berkeley)
 
 **기여**: Minimum wage, EITC 정책 → Deaths of despair 감소?
@@ -430,16 +430,16 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 ## 4. Tier C — 참고 Reference (3 papers)
 
 ### 4.1 Gormley, Graves, Hanson, Petre (2017)
-**ID**: DGHP 2017 (Memory.md에서 언급)  
-**주제**: Shift-share mediation framework (ivmediate)  
+**ID**: DGHP 2017 (Memory.md에서 언급) 
+**주제**: Shift-share mediation framework (ivmediate) 
 **본 논문 역할**: § 5.2 mediation decomposition의 방법론 기본
 
 ### 4.2 Mian, Sufi (2014)
-**타이틀**: "Credit Shocks and the Great Recession"  
+**타이틀**: "Credit Shocks and the Great Recession" 
 **역할**: Household credit mechanism (Sufi 2023의 선행 연구)
 
 ### 4.3 Conley (1999)
-**타이틀**: "Spatial Econometrics" (referenced indirectly)  
+**타이틀**: "Spatial Econometrics" (referenced indirectly) 
 **역할**: § 7.4에서 spatial autocorrelation SE
 
 ---
@@ -502,19 +502,19 @@ Interpretation: 가중치가 0.1 이상인 산업 < 5개면 주의 필요
 
 ```
 Trade shock → [Instrument: Shift-share IV] 
-           → Industry job losses 
-           → Regional employment ↓ 
-           → Household income ↓ 
-           → Mental health ↓, substance use ↑ 
-           → Mortality ↑
+ → Industry job losses 
+ → Regional employment ↓ 
+ → Household income ↓ 
+ → Mental health ↓, substance use ↑ 
+ → Mortality ↑
 ```
 
 **본 논문의 novelty**: **Family channel 추가**
 ```
 Regional employment ↓ 
-  → Household instability, divorce ↑ 
-  → Children's health, education ↓ 
-  → Long-term despair outcomes
+ → Household instability, divorce ↑ 
+ → Children's health, education ↓ 
+ → Long-term despair outcomes
 ```
 
 **Reference for family channel**:
@@ -535,8 +535,8 @@ Regional employment ↓
 - **4가지 원인**: 자살 + 약물 + ARLD + 기타 간질환
 - **Age-standardized rate**: 2000년 인구 기준 15개 age bin
 - **Baseline (2000)**: 
-  - 자살 10/100k, 약물 5/100k, ARLD 4/100k, 간질환 2/100k
-  - **Total**: ~21/100k
+ - 자살 10/100k, 약물 5/100k, ARLD 4/100k, 간질환 2/100k
+ - **Total**: ~21/100k
 
 ### ICD-10 Korean mapping (질병관리청)
 - 소분류 029 (식도암) ≠ 약물 중독 (분리)
@@ -573,51 +573,51 @@ the direct employment pathway documented in prior work.
 ### § 2 (Literature Review)
 ```markdown
 2.1 Trade and Labor Markets:
-  - Foundational: Autor, Dorn & Hanson (2013), Dauth, Findeisen & Suedekum (2014)
-  
+ - Foundational: Autor, Dorn & Hanson (2013), Dauth, Findeisen & Suedekum (2014)
+
 2.2 Trade and Health:
-  - Pierce & Schott (2020) [US counties]
-  - Finkelstein et al. (2026) [NAFTA, all-cause mortality]
-  
+ - Pierce & Schott (2020) [US counties]
+ - Finkelstein et al. (2026) [NAFTA, all-cause mortality]
+
 2.3 Family and Economic Shocks:
-  - Dix-Carneiro, Soares & Ulyssea (2017) [crime as family stress indicator]
-  - Hanson (2018) [marriage premium]
-  - Sufi (2023) [household debt and financial stress]
+ - Dix-Carneiro, Soares & Ulyssea (2017) [crime as family stress indicator]
+ - Hanson (2018) [marriage premium]
+ - Sufi (2023) [household debt and financial stress]
 ```
 
 ### § 5 (Methodology)
 ```markdown
 5.1 Identification Strategy (Shift-share IV):
-  - Baseline: Autor et al. (2013), Goldsmith-Pinkham et al. (2018)
-  - Implementation: Borusyak et al. (2025) practical guide
-  - First-stage: Andrews, Stock & Sun (2019) diagnostics
-  
+ - Baseline: Autor et al. (2013), Goldsmith-Pinkham et al. (2018)
+ - Implementation: Borusyak et al. (2025) practical guide
+ - First-stage: Andrews, Stock & Sun (2019) diagnostics
+
 5.2 Mediation Framework:
-  - DGHP (2017) ivmediate approach
-  - Dix-Carneiro (2017) mechanism decomposition
+ - DGHP (2017) ivmediate approach
+ - Dix-Carneiro (2017) mechanism decomposition
 ```
 
 ### § 7 (Inference & Robustness)
 ```markdown
 7.1-7.2: Standard Errors
-  - Clustering: IMF WP (2018-06), Cameron-Gelbach-Miller approaches
-  
+ - Clustering: IMF WP (2018-06), Cameron-Gelbach-Miller approaches
+
 7.5: Weak IV Testing
-  - Thresholds: Andrews, Stock & Sun (2019), Table 1
-  - Anderson-Rubin test: ASS (2019), Section 5
-  
+ - Thresholds: Andrews, Stock & Sun (2019), Table 1
+ - Anderson-Rubin test: ASS (2019), Section 5
+
 7.3: Shift-share specific inference
-  - Adjustment factors: IMF (2018-06)
-  - Leave-one-out: GPSS (2018)
+ - Adjustment factors: IMF (2018-06)
+ - Leave-one-out: GPSS (2018)
 ```
 
 ### § 8 (Limitations & Policy)
 ```markdown
 8.1: Trade's hidden cost
-  - Finkelstein et al. (2026)
-  
+ - Finkelstein et al. (2026)
+
 8.2: Can policy offset?
-  - Dow et al. (2019): Mixed evidence on min wage, EITC
+ - Dow et al. (2019): Mixed evidence on min wage, EITC
 ```
 
 ---
@@ -638,30 +638,30 @@ the direct employment pathway documented in prior work.
 ## 12. Implementation Checklist for Paper Completion
 
 ### Phase 1: Bartik IV Setup
-- [ ] Industry classification: KSIC/ISIC alignment
-- [ ] Initial employment shares: 2014 baseline from KOSIS/ECOS
-- [ ] National industry employment growth: 2015-2021 KOSIS
-- [ ] First-stage F-stat calculation & reporting
-- [ ] GPSS Rotemberg weight check (transparency)
+- Industry classification: KSIC/ISIC alignment
+- Initial employment shares: 2014 baseline from KOSIS/ECOS
+- National industry employment growth: 2015-2021 KOSIS
+- First-stage F-stat calculation & reporting
+- GPSS Rotemberg weight check (transparency)
 
 ### Phase 2: Robust Inference
-- [ ] Clustering at 시도 level (16 regions) + 연도
-- [ ] Heteroskedasticity-consistent HC3/HC4
-- [ ] Shift-share adjustment factor (IMF formula)
-- [ ] Leave-one-out Bartik IV (BHJ robustness)
-- [ ] Hansen J-test for overidentification
+- Clustering at 시도 level (16 regions) + 연도
+- Heteroskedasticity-consistent HC3/HC4
+- Shift-share adjustment factor (IMF formula)
+- Leave-one-out Bartik IV (BHJ robustness)
+- Hansen J-test for overidentification
 
 ### Phase 3: Weak IV & Testing
-- [ ] Olea-Pflueger effective F (ASS 2019 code)
-- [ ] Anderson-Rubin CI construction
-- [ ] First-stage heteroskedasticity test
-- [ ] Monte Carlo for critical values under local-to-zero
+- Olea-Pflueger effective F (ASS 2019 code)
+- Anderson-Rubin CI construction
+- First-stage heteroskedasticity test
+- Monte Carlo for critical values under local-to-zero
 
 ### Phase 4: Mediation & Mechanism
-- [ ] Decompose direct (reduced-form) vs. indirect (via employment)
-- [ ] ivmediate framework (DGHP 2017)
-- [ ] Family outcome proxies (divorce, family dissolution, child education)
-- [ ] Subgroup analysis: gender, age, family structure
+- Decompose direct (reduced-form) vs. indirect (via employment)
+- ivmediate framework (DGHP 2017)
+- Family outcome proxies (divorce, family dissolution, child education)
+- Subgroup analysis: gender, age, family structure
 
 ---
 
@@ -709,9 +709,9 @@ $$\widehat{SE}_{adj} = SE_{OLS} \times \sqrt{1 + \text{HHI}_{\text{shocks}} / N_
 
 ### A.4 Weak IV threshold (Andrews, Stock & Sun 2019)
 ```
-F-stat > 13.91   : Safe (5% bias)
-F-stat > 9.08    : Caution (10% bias)
-F-stat < 5       : Highly unreliable (robust inference mandatory)
+F-stat > 13.91: Safe (5% bias)
+F-stat > 9.08: Caution (10% bias)
+F-stat < 5: Highly unreliable (robust inference mandatory)
 ```
 
 ### A.5 Age-Standardization Formula

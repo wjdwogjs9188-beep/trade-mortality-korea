@@ -45,7 +45,7 @@
 
 **Deaths of despair (DoD)** defined as three broad categories:
 1. **Drug overdose** (external cause)
-2. **Suicide** (external cause)  
+2. **Suicide** (external cause) 
 3. **Alcohol-related liver disease (ARLD)** (internal cause)
 
 **Data source**: 
@@ -109,9 +109,9 @@ Where L_jc^1990 = # workers in industry j, county c in 1990
 
 ```
 DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c 
-             + β·X_ct 
-             + Σ_t γ_t × 1{year=t} × X_c 
-             + δ_c + δ_t + ε_ct
+ + β·X_ct 
+ + Σ_t γ_t × 1{year=t} × X_c 
+ + δ_c + δ_t + ε_ct
 ```
 
 **Notation**:
@@ -126,11 +126,11 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 **Time-invariant controls X_c** (interacted with year dummies):
 - Chinese tariff & subsidy changes (post-2001 WTO accession)
 - 1990 county demographics:
-  - Median household income (proxy for healthcare access)
-  - Share college-educated (technical change proxy)
-  - Share veterans (DoD risk)
-  - Share foreign-born
-  - Share manufacturing employment
+ - Median household income (proxy for healthcare access)
+ - Share college-educated (technical change proxy)
+ - Share veterans (DoD risk)
+ - Share foreign-born
+ - Share manufacturing employment
 
 **Fixed effects**:
 - δ_c = County fixed effects (time-invariant county characteristics)
@@ -143,16 +143,16 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 ### Identification assumptions
 
 1. **Parallel trends (pre-PNTR)**: Counties with high/low NTR gaps had same mortality trends 1990-2000
-   - Test: Visual inspection of θ_t pre-2000 → should be ~0 and non-significant
-   
+ - Test: Visual inspection of θ_t pre-2000 → should be ~0 and non-significant
+
 2. **Exogeneity of shares**: 1990 employment shares (L_jc^1990) predetermined
-   - Not forward-looking before PNTR announcement (2000)
-   - Risk: If firms relocated anticipating PNTR in 1990s → endogenous shares
-   - Mitigation: Non-NTR rates set 1930 (way before any firms' planning horizons)
+ - Not forward-looking before PNTR announcement (2000)
+ - Risk: If firms relocated anticipating PNTR in 1990s → endogenous shares
+ - Mitigation: Non-NTR rates set 1930 (way before any firms' planning horizons)
 
 3. **Exclusion restriction**: NTR gap affects mortality ONLY through trade exposure
-   - Not through other unobserved county characteristics
-   - Test: No effect on other causes of death (cancer, respiratory)
+ - Not through other unobserved county characteristics
+ - Test: No effect on other causes of death (cancer, respiratory)
 
 ---
 
@@ -162,15 +162,15 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 
 **Figure 1, Panel D** (all DoD combined):
 - **Pre-PNTR (1990-2000)**: θ_t coefficients oscillate around zero, non-significant
-  - Supports parallel trends assumption ✓
-  
+ - Supports parallel trends assumption ✓
+
 - **Post-PNTR (2001-2013)**: θ_t becomes positive and **statistically significant** from 2001 onward
-  
+
 - **Magnitude** (interquartile shift in NTR gap = 8.3 pp):
-  - **Effect size**: 2-3 deaths per 100,000 per year
-  - **Relative to baseline**: ~10-15% of 2000 average DoD mortality (20 per 100k)
-  - **Timing**: Effect emerges immediately after PNTR (2001), grows over time
-  
+ - **Effect size**: 2-3 deaths per 100,000 per year
+ - **Relative to baseline**: ~10-15% of 2000 average DoD mortality (20 per 100k)
+ - **Timing**: Effect emerges immediately after PNTR (2001), grows over time
+
 - **Interpretation**: A county moving from 25th to 75th percentile in trade exposure experiences ~2-3 additional DoD deaths per 100k population annually
 
 ### 4.2 Decomposition by Cause of Death
@@ -186,7 +186,7 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 - Despite similar baseline to drug OD (10 vs 5 per 100k)
 - Interpretation: **Not responsive to trade-induced labor market shocks**
 
-**Alcohol-related liver disease - ARLD (Figure 1, Panel C)**: ✗ NOT SIGNIFICANT  
+**Alcohol-related liver disease - ARLD (Figure 1, Panel C)**: ✗ NOT SIGNIFICANT 
 - θ_t ~ 0 and non-significant throughout
 - Baseline (4 per 100k) is lowest of three
 - Interpretation: **Slower-onset chronic disease, less responsive to acute shocks**
@@ -221,7 +221,7 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 1. **Manufacturing employment composition**: 68% male in 1999 vs 49% population-wide
 2. **Within manufacturing, whites over-represented**: 84% vs 82% population-wide
 3. **Wage loss concentration**: Whites concentrated in high-wage occupations (managerial, professional) in manufacturing
-   → Larger income shocks upon displacement
+ → Larger income shocks upon displacement
 4. **Psychological effects**: Status loss amplifies economic hardship for males (Cutler et al. 2006)
 5. **Geographic concentration**: Other racial groups more geographically concentrated → smaller sample size = noisier estimates
 
@@ -260,7 +260,7 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 
 **Panel C (+ State opioid law controls)**:
 - Add state-year indicators for opioid regulation stringency (2006-2012)
-  - E.g., pain clinic regulation, doctor licensing restrictions
+ - E.g., pain clinic regulation, doctor licensing restrictions
 - Source: Meara et al. (2016)
 - **Result**: Virtually identical effect
 - Interpretation: Results not driven by state policy differences in opioid supply regulation
@@ -268,9 +268,9 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 **Panel D (+ State-year fixed effects)**:
 - Most conservative specification: δ_{ct} for all state-year pairs
 - This **absorbs all across-state variation** in NTR gap!
-  - Many counties near state borders with different exposures → identifies off remaining within-state variation
+ - Many counties near state borders with different exposures → identifies off remaining within-state variation
 - **Result**: Effect remains positive but **precision severely degrades** (much wider CI)
-  - Still shows upward shift visually
+ - Still shows upward shift visually
 - Interpretation: State-year FE very restrictive; results robust but with caveats
 
 ### 4.6 Validity Test: Other Causes of Death
@@ -356,7 +356,7 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 - Online Appendix discusses potential role of migration
 - Counties with greater job loss may experience out-migration of workers
 - This could **bias results downward** (lower observed DoD if workers leave)
-  - But estimates remain significant, so conservative interpretation
+ - But estimates remain significant, so conservative interpretation
 
 ---
 
@@ -367,18 +367,18 @@ DeathRate_ct = Σ_t θ_t × 1{year=t} × NTRGap_c
 Pierce-Schott 2020은 **본 paper의 직접적인 벤치마크**입니다:
 
 **유사점**:
-1. **Trade exposure measure**: Shift-share structure (county = 시군구, industry j = SIC/NAICS)
-   - 본 paper도 동일 구조: 시군구 × 산업 × China trade shock
-   
+1. **Trade exposure measure**: Shift-share structure (county = 시군구, industry j = SIC/NCS)
+ - 본 paper도 동일 구조: 시군구 × 산업 × China trade shock
+
 2. **Policy change**: Exogenous trade policy shock (PNTR → Korea의 FTA/China shock도 가능)
-   - Korea도 WTO 가입 (1995), China FTA 추진 등 정책적 변화 있음
-   
+ - Korea도 WTO 가입 (1995), China FTA 추진 등 정책적 변화 있음
+
 3. **Outcome**: Deaths of despair (drug OD, suicide, ARLD)
-   - 본 paper: 한국 ICD-10 분류로 동일하게 측정 가능
-   - 다만 한국은 **자살 비율이 훨씬 높음** (OECD 최고 수준)
+ - 본 paper: 한국 ICD-10 분류로 동일하게 측정 가능
+ - 다만 한국은 **자살 비율이 훨씬 높음** (OECD 최고 수준)
 
 4. **Mechanisms**: Labor market → disability → substance abuse → mortality
-   - 한국 맥락에서 **household debt → family dissolution → suicide** 추가 경로
+ - 한국 맥락에서 **household debt → family dissolution → suicide** 추가 경로
 
 ### B. 차이점 & 한국에 적용할 시 고려사항
 
@@ -428,47 +428,47 @@ Pierce-Schott 2020은 **본 paper의 직접적인 벤치마크**입니다:
 ### A. 강점 (Strengths)
 
 1. **Exogeneity of variation**: Non-NTR rates set 1930 → cannot respond to 2000 conditions
-   - → Reverse causality ruled out
-   - **Lesson**: Korea도 pre-treatment (pre-2000) 산업구조 사용 권장
+ - → Reverse causality ruled out
+ - **Lesson**: Korea도 pre-treatment (pre-2000) 산업구조 사용 권장
 
 2. **Parallel trends evidence**: Visual inspection of pre-2000 θ_t clearly shows ~0
-   - → Builds confidence in DiD assumption
-   - **Lesson**: 본 paper도 pre-2005 trend plot 필수
+ - → Builds confidence in DiD assumption
+ - **Lesson**: 본 paper도 pre-2005 trend plot 필수
 
 3. **Cause-specific analysis**: Separate by drug OD, suicide, ARLD
-   - Not just "deaths of despair" aggregate
-   - **Lesson**: 한국도 자살, 약물, 음주를 분리 분석
+ - Not just "deaths of despair" aggregate
+ - **Lesson**: 한국도 자살, 약물, 음주를 분리 분석
 
 4. **Multiple heterogeneity dimensions**: Race, gender, age
-   - Not just by county
-   - **Lesson**: 본 paper도 성별, 연령별 이질성 보고
+ - Not just by county
+ - **Lesson**: 본 paper도 성별, 연령별 이질성 보고
 
 5. **Mechanism pathway**: Unemployment → disability → opioid exposure
-   - Data-driven hypothesis (not just speculation)
-   - **Lesson**: 본 paper의 household debt pathway도 intermediate outcomes 제시
+ - Data-driven hypothesis (not just speculation)
+ - **Lesson**: 본 paper의 household debt pathway도 intermediate outcomes 제시
 
 ### B. 한계 (Limitations)
 
 1. **PNTR as binary event**: Trade exposure happens at discrete date (2001)
-   - Real trade liberalization is gradual (tariff phase-ins over 10-15 years)
-   - **Implication**: Timing of effect might be hard to identify
-   - **Korea**: China shock is more gradual (2000s-2010s) → advantage?
+ - Real trade liberalization is gradual (tariff phase-ins over 10-15 years)
+ - **Implication**: Timing of effect might be hard to identify
+ - **Korea**: China shock is more gradual (2000s-2010s) → advantage?
 
 2. **Opioid supply confound**:
-   - OxyContin introduced 1996, coincidental with pre-PNTR uncertainty
-   - This timing **aids** identification (PNTR effect should show post-2001, not 1996-2000)
-   - But state-year FE (Panel D, Figure 4) degrades precision when controlling for opioid policy
-   - **Lesson**: Difficult to separate supply vs demand effects
+ - OxyContin introduced 1996, coincidental with pre-PNTR uncertainty
+ - This timing **aids** identification (PNTR effect should show post-2001, not 1996-2000)
+ - But state-year FE (Panel D, Figure 4) degrades precision when controlling for opioid policy
+ - **Lesson**: Difficult to separate supply vs demand effects
 
 3. **Geographic scale**: County level may mix multiple local labor markets
-   - Authors test CUMA level with similar results
-   - But still broader than actual job-search markets
-   - **Korea**: 시군구 level might have similar heterogeneity
+ - Authors test CUMA level with similar results
+ - But still broader than actual job-search markets
+ - **Korea**: 시군구 level might have similar heterogeneity
 
 4. **Race-specific effects unexplained**: Why ONLY whites? Authors offer hypotheses but don't test definitively
-   - Could be employment composition + wage loss magnitude
-   - Or could be medication/healthcare access differences
-   - **Lesson**: Need mechanism data to pin down heterogeneity sources
+ - Could be employment composition + wage loss magnitude
+ - Or could be medication/healthcare access differences
+ - **Lesson**: Need mechanism data to pin down heterogeneity sources
 
 ---
 
@@ -533,17 +533,17 @@ Mortality: Evidence from US Counties." American Economic Review: Insights,
 
 **본 Paper에서의 역할**:
 1. **벤치마크**: PNTR→mortality 효과 크기 비교
-   - Pierce-Schott: +2-3 deaths/100k (10-15% of baseline)
-   - 본 paper: 한국 effect magnitude 비교 기준
+ - Pierce-Schott: +2-3 deaths/100k (10-15% of baseline)
+ - 본 paper: 한국 effect magnitude 비교 기준
 
 2. **방법론**: Trade exposure measure, DiD specification, robustness checks
-   - 특히 cause-specific analysis (자살 vs 약물) 시사
+ - 특히 cause-specific analysis (자살 vs 약물) 시사
 
 3. **메커니즘**: Unemployment → disability → substance abuse
-   - 한국에서는 unemployment → debt → family dissolution → suicide 추가
+ - 한국에서는 unemployment → debt → family dissolution → suicide 추가
 
 4. **이질성**: Gender (white males), age (20-54 peak)
-   - 한국도 성별, 연령별 차이 기대
+ - 한국도 성별, 연령별 차이 기대
 
 **최종 평가**: 본 paper의 가장 직접적인 선행논문. 미국 context이지만 methodology와 findings 모두 한국 적용에 매우 relevant함.
 

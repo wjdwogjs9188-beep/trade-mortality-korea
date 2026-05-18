@@ -94,15 +94,15 @@ Layer 5: AR + tF
 ```
 Outcome: ln(mortality_despair)
 
-                     (1)        (2)         (3)         (4)         (5)
-                     HC1        Cluster     AKM         Conley      AR + tF
-β (Bartik IV)       -1.015**   -1.015**   -1.015*     -1.015*     [AR p]
-SE                  (0.243)    (0.401)    (0.512)     (0.480)     —
-t-stat              -4.18      -2.53      -1.98       -2.11       —
-p-value (standard)  <0.001     0.011      0.048       0.035       —
-AR test p           —          —           —           —           [0.024]
-tF p-value          —          —           —           —           [0.038]
-First-stage F       12.3       12.3        12.3        12.3        12.3
+ (1) (2) (3) (4) (5)
+ HC1 Cluster AKM Conley AR + tF
+β (Bartik IV) -1.015** -1.015** -1.015* -1.015* [AR p]
+SE (0.243) (0.401) (0.512) (0.480) —
+t-stat -4.18 -2.53 -1.98 -2.11 —
+p-value (standard) <0.001 0.011 0.048 0.035 —
+AR test p — — — — [0.024]
+tF p-value — — — — [0.038]
+First-stage F 12.3 12.3 12.3 12.3 12.3
 ```
 
 → **5개 SE 모두 통과** 면 본 연구 main result 강력. 특히 column (5) AR/tF 가 가장 conservative.
@@ -196,7 +196,7 @@ First-stage F       12.3       12.3        12.3        12.3        12.3
 ## 9. 다음 단계 메모
 
 1. **Phase 3 시 first-stage F 보고** — Olea-Pflueger robust F (Stock-Yogo 의 heteroskedastic 일반화)
-2. **AR test 구현** — Python `linearmodels.IV2SLS().firststage().diagnostics`
+2. **AR test 구현** — Python `linearmodels.IV2SLS.firststage.diagnostics`
 3. **tF correction** — Lee et al. (2022) 의 보정 방법, R 또는 직접 구현
 4. **Pre-test 회피** — IV 선택은 pre-analysis plan 으로 사전 결정
 5. paper 에 Andrews-Stock-Sun 2019 인용 + 그들의 AER survey 결과 활용

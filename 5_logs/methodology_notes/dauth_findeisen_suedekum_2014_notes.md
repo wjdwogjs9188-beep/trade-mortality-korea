@@ -47,7 +47,7 @@ $$\Delta(\text{Export exp.})^{EAST}_{it} = \sum_j \frac{E_{ijt}}{E_{jt}} \cdot \
 ### Specification
 ```
 Δ y_{it} = β_M × Δ(Import exp.)_{it} + β_X × Δ(Export exp.)_{it} 
-         + α_i + τ_t + X_{it}φ + ε_{it}
+ + α_i + τ_t + X_{it}φ + ε_{it}
 ```
 
 - $y_{it}$: manufacturing emp share, unemployment, etc.
@@ -99,7 +99,7 @@ $$\Delta(\text{Export exp.})^{EAST}_{it} = \sum_j \frac{E_{ijt}}{E_{jt}} \cdot \
 
 ```
 ln(MortRate)_{ct} = β_M × ImportExp_{ct} + β_X × ExportExp_{ct}
-                  + α_c + τ_t + X_{ct}φ + ε
+ + α_c + τ_t + X_{ct}φ + ε
 ```
 
 본 연구 한국 데이터:
@@ -138,11 +138,11 @@ ln(MortRate)_{ct} = β_M × ImportExp_{ct} + β_X × ExportExp_{ct}
 
 DFS 의 robustness checks:
 1. **Eastern Europe vs China 분리**: 독일은 동유럽 효과 main
-   → 본 연구: **중국 import vs export 분리** 효과 비교 (Comtrade KR-CN 50 files 활용)
+ → 본 연구: **중국 import vs export 분리** 효과 비교 (Comtrade KR-CN 50 files 활용)
 2. **Industry sub-classification**: 자동차 vs 텍스타일 등
-   → 본 연구: KSIC 산업별 robustness
+ → 본 연구: KSIC 산업별 robustness
 3. **Individual worker-level analysis**: panel of workers
-   → 본 연구는 시군구 단위만 (개인 단위 mortality data 없음, KOSTAT microdata limit)
+ → 본 연구는 시군구 단위만 (개인 단위 mortality data 없음, KOSTAT microdata limit)
 
 ---
 
@@ -188,20 +188,20 @@ DFS 의 robustness checks:
 **본 연구의 4가지 unique contribution:**
 
 1. **DFS 의 mortality version** ⭐⭐⭐
-   - DFS 가 employment 만 본 것을 mortality 로 확장
-   - Export-driven 경제의 health protective effect 직접 검증
+ - DFS 가 employment 만 본 것을 mortality 로 확장
+ - Export-driven 경제의 health protective effect 직접 검증
 
 2. **Pierce-Schott 의 한국판 (with reverse direction)**
-   - PSc 가 PNTR mortality 증가 → 본 연구는 KR-CN export → 보호효과
-   - Mechanism 비교 (HIRA 약물 데이터 추가)
+ - PSc 가 PNTR mortality 증가 → 본 연구는 KR-CN export → 보호효과
+ - Mechanism 비교 (HIRA 약물 데이터 추가)
 
 3. **Finkelstein 2026 framework 의 한국 적용**
-   - β_m vs β_n decomposition
-   - Manufacturing 안정성의 mortality 보호효과
+ - β_m vs β_n decomposition
+ - Manufacturing 안정성의 mortality 보호효과
 
 4. **Sufi 2023 와 결합**
-   - Trade × Household debt interaction
-   - 한국 specific (가계부채 boom 동시기)
+ - Trade × Household debt interaction
+ - 한국 specific (가계부채 boom 동시기)
 
 → 본 연구가 **4개 framework 통합** 의 한국 케이스. 박사논문 contribution 분명.
 
@@ -231,19 +231,19 @@ DFS 의 robustness checks:
 1990s-2000s globalization era 의 mortality 영향:
 
 미국 (Pierce-Schott + Finkelstein + Case-Deaton):
-  PNTR/NAFTA → manufacturing job loss → deaths of despair ↑
-  특히 백인 working-age, drug overdose dominant
+ PNTR/NAFTA → manufacturing job loss → deaths of despair ↑
+ 특히 백인 working-age, drug overdose dominant
 
 독일 (Dauth-Findeisen-Suedekum):
-  East trade → employment net 증가 (+442k)
-  Manufacturing 유지, mortality 영향 미연구
+ East trade → employment net 증가 (+442k)
+ Manufacturing 유지, mortality 영향 미연구
 
 한국 (본 연구):
-  KR-CN trade → employment 안정/증가 (export-driven)
-  Mortality protective effect 가설
-  자살 (102) main outcome (한국 OECD top)
-  HIRA mechanism 직접 검증
-  가계부채 (Sufi 2023) interaction
+ KR-CN trade → employment 안정/증가 (export-driven)
+ Mortality protective effect 가설
+ 자살 (102) main outcome (한국 OECD top)
+ HIRA mechanism 직접 검증
+ 가계부채 (Sufi 2023) interaction
 ```
 
 → **본 연구가 globalization-mortality literature 의 가장 중요한 missing case (Korea)** 채움.

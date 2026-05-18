@@ -13,9 +13,9 @@
 핵심 통찰:
 
 1. **Shift-Share 분해의 도입**: 지역 고용 성장을 다음으로 분해:
-   - **Shift**: 국가 수준 산업 성장률
-   - **Share**: 지역의 초기 산업 구성
-   - 수식: $g_\ell = \sum_k s_{l,0} g_k$ (국가 성장 가중)
+ - **Shift**: 국가 수준 산업 성장률
+ - **Share**: 지역의 초기 산업 구성
+ - 수식: $g_\ell = \sum_k s_{l,0} g_k$ (국가 성장 가중)
 
 2. **설명력**: 이 simple 분해가 지역 고용 변동을 얼마나 설명하는가?
 
@@ -28,9 +28,9 @@
 - **기간**: 1970년대-1980년대 (출판 당시 최신 데이터)
 - **산업 분류**: 광범위한 산업 체계 (2-digit 또는 3-digit SIC)
 - **변수**: 
-  - 지역 고용 성장률 ($g_\ell$)
-  - 산업 초기 점유율 ($s_{l,0}$, base year)
-  - 국가 산업 성장률 ($g_k$)
+ - 지역 고용 성장률 ($g_\ell$)
+ - 산업 초기 점유율 ($s_{l,0}$, base year)
+ - 국가 산업 성장률 ($g_k$)
 
 ### 관찰:
 - Bartik (1991)은 상대적으로 **단순한 데이터 구조** 사용
@@ -59,7 +59,7 @@ $$g_\ell = g_{\text{national}} + \sum_k (s_{l,0} - \bar{s}_{0}) g_k$$
 Bartik는 명시적으로 다음을 제시:
 - **첫 단계**: 지역 고용 변화가 Bartik 도구와 관련
 - **배제 제약**: Bartik 도구가 결과(예: 임금)에 직접 영향 없음
-  - → 오직 고용 변화를 통해서만 영향
+ - → 오직 고용 변화를 통해서만 영향
 
 ## Empirical Specification
 
@@ -148,27 +148,27 @@ Bartik (1991)은 제한적 이질성 분석:
 **원형(Archetype) 관계**:
 
 1. **IV 구조의 원점**:
-   - Bartik (1991): 지역 고용 분석의 처음 shift-share 적용
-   - GPSS (2024408): Bartik IV의 "검은 상자" 열기
-   - BHJ (24997): 충격 외생성으로 정당화
-   - **본 PAP**: 한국 무역 충격에 적용
+ - Bartik (1991): 지역 고용 분석의 처음 shift-share 적용
+ - GPSS (2024408): Bartik IV의 "검은 상자" 열기
+ - BHJ (24997): 충격 외생성으로 정당화
+ - **본 PAP**: 한국 무역 충격에 적용
 
 2. **식별의 진화**:
-   - **Bartik 원래**: "산업 점유율이 외생적" (주장만 함)
-   - **GPSS**: 점유율 외생성 명시적 강조, Rotemberg 진단
-   - **BHJ**: "충격이 외생적이면 충분" (약한 조건)
-   - **본 PAP**: 둘 다 검증 가능
+ - **Bartik 원래**: "산업 점유율이 외생적" (주장만 함)
+ - **GPSS**: 점유율 외생성 명시적 강조, Rotemberg 진단
+ - **BHJ**: "충격이 외생적이면 충분" (약한 조건)
+ - **본 PAP**: 둘 다 검증 가능
 
 3. **한국 적용의 신뢰도**:
-   - 초기 산업 점유율(1970, 1980): 역사적 정책(중화학공업, 산단 조성)
-     → 현재 사망률과 직접 관계 가능 (내생성)
-   - **그러나**: 글로벌 무역 패턴 변화(중국 부상, WTO)는 한국 지역 구조와 무상관
-     → **충격 외생성이 더 설득력 있음**
+ - 초기 산업 점유율(1970, 1980): 역사적 정책(중화학공업, 산단 조성)
+ → 현재 사망률과 직접 관계 가능 (내생성)
+ - **그러나**: 글로벌 무역 패턴 변화(중국 부상, WTO)는 한국 지역 구조와 무상관
+ → **충격 외생성이 더 설득력 있음**
 
 4. **데이터 수준의 현대화**:
-   - Bartik (1991): 대략적 산업 분류 (2-3자리)
-   - **본 PAP**: 한국 사망 micro-data + 정교한 산업 분류 가능
-   - 결과 변수 다양성: 고용 → 사망률 (질적 변수)
+ - Bartik (1991): 대략적 산업 분류 (2-3자리)
+ - **본 PAP**: 한국 사망 micro-data + 정교한 산업 분류 가능
+ - 결과 변수 다양성: 고용 → 사망률 (질적 변수)
 
 ### 역사적 인용:
 
@@ -193,8 +193,8 @@ Bartik (1991)은 제한적 이질성 분석:
 
 **본 PAP 교훈**:
 - 한국 초기 산업 점유율(1980)이 진정 외생적인지 명시 검증 필요
-  - 박정희 중화학공업 정책은 동해안에 조성됨 (전략적 선택)
-  - → 역사적 설정이 외생적이었는가?
+ - 박정희 중화학공업 정책은 동해안에 조성됨 (전략적 선택)
+ - → 역사적 설정이 외생적이었는가?
 - 대안: BHJ 프레임 전환 (충격 외생성으로 초점 옮기기)
 
 ### 교훈 2: 기계적 적용의 위험성
@@ -233,7 +233,7 @@ Bartik (1991)은 제한적 이질성 분석:
 6. 논의: 제한, 향후 연구
 
 **GPSS와 BHJ의 상호 인용**로부터 Bartik (1991)의 중요성 유추:
-- GPSS: "The intellectual history of the Bartik instrument is complicated. The earliest use of a shift-share type decomposition we have found is Perloff (1957). ... What is distinctive about Bartik (1991) is that it explicitly discusses the logic in terms of the national component of growth rates." (footnote 1, p. 1)
+- GPSS: "The intellectual history of the Bartik instrument is complicated. The earliest use of a shift-share type decomposition we have found is Perloff (1957).... What is distinctive about Bartik (1991) is that it explicitly discusses the logic in terms of the national component of growth rates." (footnote 1, p. 1)
 - BHJ: "A large and growing number of empirical studies use shift-share instruments... In many settings, such as those of Bartik (1991), Blanchard and Katz (1992)..." (Abstract)
 
 ---

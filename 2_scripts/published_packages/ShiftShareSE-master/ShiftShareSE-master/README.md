@@ -22,15 +22,15 @@ IV regression using data from [Autor, Dorn, and Hanson
 (2013)](https://doi.org/10.1257/aer.103.6.2121), included in the package as `ADH`:
 ``` r
 ivreg_ss(d_sh_empl ~ 1 | shock, X=IV, data=ADH$reg, W=ADH$W,
-         method=c("ehw", "akm", "akm0"))
+ method=c("ehw", "akm", "akm0"))
 ```
 
 Corresponding reduced-form and first-stage regressions:
 ```r
 reg_ss(d_sh_empl ~ 1, X=IV, data=ADH$reg, W=ADH$W,
-       method=c("ehw", "akm", "akm0"))
+ method=c("ehw", "akm", "akm0"))
 reg_ss(shock ~ 1, X=IV, data=ADH$reg, W=ADH$W,
-       method=c("ehw", "akm", "akm0"))
+ method=c("ehw", "akm", "akm0"))
 ```
 
 ## Installation
@@ -45,7 +45,7 @@ install.packages("ShiftShareSE")
 Alternatively, you can get the current development version from GitHub:
 ``` r
 if (!requireNamespace("remotes")) {
-  install.packages("remotes")
+ install.packages("remotes")
 }
 remotes::install_github("kolesarm/Robust-Small-Sample-Standard-Errors")
 ```

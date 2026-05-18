@@ -20,15 +20,15 @@
 
 ```
 trade_mortality_korea/
-├── 0_raw/         읽기 전용 raw 데이터 (5 zip 추출)
-├── 1_codebooks/   변수 정의 yaml (ICD-10, KSIC, 시군구)
-├── 2_scripts/     Python 파이프라인 (00_*.py ~ 11_*.py)
-│   └── lib/       공유 모듈 (validate, icd10, io, log)
-├── 3_derived/     파이프라인 결과 (.parquet, git 제외)
-├── 4_results/     표·그림 (git 포함)
-├── 5_logs/        실행 로그 + 방법론 결정 기록
-├── 6_papers/      27개 reference paper 리뷰
-└── 7_paper/       논문 v4.0 작성
+├── 0_raw/ 읽기 전용 raw 데이터 (5 zip 추출)
+├── 1_codebooks/ 변수 정의 yaml (ICD-10, KSIC, 시군구)
+├── 2_scripts/ Python 파이프라인 (00_*.py ~ 11_*.py)
+│ └── lib/ 공유 모듈 (validate, icd10, io, log)
+├── 3_derived/ 파이프라인 결과 (.parquet, git 제외)
+├── 4_results/ 표·그림 (git 포함)
+├── 5_logs/ 실행 로그 + 방법론 결정 기록
+├── 6_papers/ 27개 reference paper 리뷰
+└── 7_paper/ 논문 v4.0 작성
 ```
 
 자세한 설명은 [DATA_SOURCES.md](DATA_SOURCES.md), [METHODOLOGY.md](METHODOLOGY.md) 참고.
@@ -47,7 +47,7 @@ make all
 # 또는 단계별
 python 2_scripts/00_extract_zips.py
 python 2_scripts/01_build_mortality_panel.py
-# ... 11_make_figures.py 까지
+#... 11_make_figures.py 까지
 ```
 
 실행 시 `5_logs/pipeline_runs/YYYY-MM-DD_HH-MM_<script>.log` 자동 생성.

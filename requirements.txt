@@ -2,28 +2,28 @@
 # 설치: pip install -r requirements.txt
 #
 # 정책:
-#   - 과학 계산 패키지(numpy/pandas/scipy 등)는 >= 로 (Python 버전별 wheel 자동 선택)
-#   - 나머지는 == 로 재현성 확보
+# - 과학 계산 패키지(numpy/pandas/scipy 등)는 >= 로 (Python 버전별 wheel 자동 선택)
+# - 나머지는 == 로 재현성 확보
 
 # Core data
 pandas>=2.2.3
-numpy>=2.1.0             # Python 3.13 wheel 있음 (1.26.x는 cp313 미지원)
-pyarrow>=17.0.0          # parquet
-openpyxl>=3.1.5          # xlsx
-xlrd>=2.0.1              # 구 xls (.xls 전용, .xlsx 는 openpyxl)
+numpy>=2.1.0 # Python 3.13 wheel 있음 (1.26.x는 cp313 미지원)
+pyarrow>=17.0.0 # parquet
+openpyxl>=3.1.5 # xlsx
+xlrd>=2.0.1 # 구 xls (.xls 전용,.xlsx 는 openpyxl)
 
 # Stats / Econometrics
 scipy>=1.13.1
 statsmodels>=0.14.4
-linearmodels>=6.1        # IV, panel
+linearmodels>=6.1 # IV, panel
 patsy>=0.5.6
 
 # IO + utils
-chardet==5.2.0           # 인코딩 감지
+chardet==5.2.0 # 인코딩 감지
 pyyaml==6.0.2
 tqdm==4.66.5
 python-dotenv==1.0.1
-tabulate>=0.9.0          # markdown 표 (없어도 자체 함수 사용)
+tabulate>=0.9.0 # markdown 표 (없어도 자체 함수 사용)
 
 # Plotting
 matplotlib>=3.9.2
@@ -36,8 +36,8 @@ pyproj>=3.6.1
 # Document
 python-docx==1.1.2
 pypdf>=5.0.1
-pdf2docx==0.5.8          # PDF → DOCX
-mammoth==1.8.0           # DOCX → Markdown
+pdf2docx==0.5.8 # PDF → DOCX
+mammoth==1.8.0 # DOCX → Markdown
 
 # Testing
 pytest>=8.3.3

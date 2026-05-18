@@ -83,8 +83,8 @@
 - 시군구: **256개** (h_code, 2021 KOSTAT baseline 기준)
 - 연도: 1997-2023 (27년)
 - Total cells:
-  - Full annual: 256 × 27 = ~6,912
-  - 5-year stacked: 256 × 5 = ~1,280
+ - Full annual: 256 × 27 = ~6,912
+ - 5-year stacked: 256 × 5 = ~1,280
 
 ### 2.2 데이터 소스
 
@@ -106,7 +106,7 @@
 모두 **연령조정 사망률 per 100,000** + **로그 변환**:
 
 ```
-y_{c,t,g} = ln( deaths_{c,t,g} / population_{c,t} × 100,000 + 1 )
+y_{c,t,g} = ln(deaths_{c,t,g} / population_{c,t} × 100,000 + 1)
 ```
 
 | Group | KOSTAT 104분류 코드 | 학술 근거 | 본 연구 정의 |
@@ -134,7 +134,7 @@ y_{c,t,g} = ln( deaths_{c,t,g} / population_{c,t} × 100,000 + 1 )
 #### 2.4.1 정의
 
 ```
-TradeShock_{c,t} = Σ_j ( employment_share_{c,j,1997} × Δ ln(KR-CN net export)_{j,t} )
+TradeShock_{c,t} = Σ_j (employment_share_{c,j,1997} × Δ ln(KR-CN net export)_{j,t})
 ```
 
 - $j$: KSIC2 산업 (~24개 제조업)
@@ -346,15 +346,15 @@ $$\omega_j = \frac{\text{Cov}(z_j, \hat{x}_j)}{\text{Var}(\hat{x}_j)}$$
 ```
 v3.x ADH 8국 IV — Rotemberg weight 분포:
 ─────────────────────────────────────────
-KSIC 201  (chemicals)     │ 0.952  ★★★ 한 산업 95%
-KSIC 251  (basic metals)  │ 0.024
-KSIC 282  (machinery)     │ 0.011
-KSIC 301  (motor vehicle) │ 0.008
-KSIC 261  (semiconductor) │ 0.003
-others (19 산업)          │ 0.002
+KSIC 201 (chemicals) │ 0.952 ★★★ 한 산업 95%
+KSIC 251 (basic metals) │ 0.024
+KSIC 282 (machinery) │ 0.011
+KSIC 301 (motor vehicle) │ 0.008
+KSIC 261 (semiconductor) │ 0.003
+others (19 산업) │ 0.002
 ─────────────────────────────────────────
-합계                       │ 1.000
-HHI                        │ 0.91 (사실상 single-industry IV)
+합계 │ 1.000
+HHI │ 0.91 (사실상 single-industry IV)
 ```
 
 → chemicals 한 산업이 95.2% 점유. v3.x 의 결과는 "한국 화학산업 specific 충격" 으로 축소 해석되어야 함.
@@ -364,17 +364,17 @@ HHI                        │ 0.91 (사실상 single-industry IV)
 ```
 v4.0 KR-CN bilateral IV — Rotemberg weight 예상:
 ─────────────────────────────────────────
-KSIC 261 (semiconductor)     │ 0.22  ★ 한국 대중수출 1위
-KSIC 201 (chemicals)         │ 0.18
-KSIC 301 (motor vehicle)     │ 0.15  
+KSIC 261 (semiconductor) │ 0.22 ★ 한국 대중수출 1위
+KSIC 201 (chemicals) │ 0.18
+KSIC 301 (motor vehicle) │ 0.15 
 KSIC 282 (general machinery) │ 0.12
-KSIC 251 (basic metals)      │ 0.10
-KSIC 271 (electronics)       │ 0.08
-others (18 산업)             │ 0.15
+KSIC 251 (basic metals) │ 0.10
+KSIC 271 (electronics) │ 0.08
+others (18 산업) │ 0.15
 ─────────────────────────────────────────
-합계                          │ 1.00
-Top 3 합                      │ 0.55  (vs v3.x 0.96)
-HHI (concentration)           │ 0.13  (vs v3.x 0.91)
+합계 │ 1.00
+Top 3 합 │ 0.55 (vs v3.x 0.96)
+HHI (concentration) │ 0.13 (vs v3.x 0.91)
 ```
 
 #### 5.1.5 Three Diagnostic Tests (GP 2018)
@@ -382,29 +382,29 @@ HHI (concentration)           │ 0.13  (vs v3.x 0.91)
 ##### Test A: Top-N 산업 list + cumulative weight
 
 ```
-산업           │ ω_j   │ Cumulative
+산업 │ ω_j │ Cumulative
 ────────────────────────────────────
-KSIC 261 반도체 │ 0.22  │ 0.22
-KSIC 201 화학   │ 0.18  │ 0.40
-KSIC 301 자동차 │ 0.15  │ 0.55
-KSIC 282 기계   │ 0.12  │ 0.67
-KSIC 251 철강   │ 0.10  │ 0.77
+KSIC 261 반도체 │ 0.22 │ 0.22
+KSIC 201 화학 │ 0.18 │ 0.40
+KSIC 301 자동차 │ 0.15 │ 0.55
+KSIC 282 기계 │ 0.12 │ 0.67
+KSIC 251 철강 │ 0.10 │ 0.77
 ────────────────────────────────────
-HHI            │ 0.13  │
+HHI │ 0.13 │
 ```
 
 ##### Test B: 산업별 just-identified $\hat{\beta}_j$ 분포
 
 ```
-산업        │ ω      │ β_j      │ SE     │ t-stat
+산업 │ ω │ β_j │ SE │ t-stat
 ─────────────────────────────────────────────────
-반도체       │ 0.22   │ -1.142   │ 0.31   │ -3.68
-화학         │ 0.18   │ -0.921   │ 0.28   │ -3.29
-자동차       │ 0.15   │ -1.053   │ 0.35   │ -3.01
-기계         │ 0.12   │ -0.876   │ 0.41   │ -2.14
-철강         │ 0.10   │ -1.211   │ 0.38   │ -3.19
+반도체 │ 0.22 │ -1.142 │ 0.31 │ -3.68
+화학 │ 0.18 │ -0.921 │ 0.28 │ -3.29
+자동차 │ 0.15 │ -1.053 │ 0.35 │ -3.01
+기계 │ 0.12 │ -0.876 │ 0.41 │ -2.14
+철강 │ 0.10 │ -1.211 │ 0.38 │ -3.19
 ─────────────────────────────────────────────────
-가중평균 β   │        │ -1.015   │        │
+가중평균 β │ │ -1.015 │ │
 ```
 
 → 5개 산업 모두 음, magnitude -0.88 ~ -1.21 비슷한 범위 → robust.
@@ -430,54 +430,53 @@ import pandas as pd
 from linearmodels.iv import IV2SLS
 
 def rotemberg_weights(shares, shifts, x_endog, x_fitted, y, controls):
-    """
-    Goldsmith-Pinkham et al. 2018 Rotemberg decomposition.
-    
-    shares: (N regions × J industries) — 1997 employment shares
-    shifts: (J industries × T years) — KR-CN net export shocks
-    x_endog: (N×T,) — actual trade shock
-    x_fitted: (N×T,) — Bartik IV fitted value
-    y: outcome variable
-    controls: control matrix
-    """
-    N, J = shares.shape
-    T = shifts.shape[1]
-    
-    weights = np.zeros(J)
-    betas = np.zeros(J)
-    ses = np.zeros(J)
-    
-    for j in range(J):
-        z_j = np.outer(shares[:, j], shifts[j, :]).flatten()
-        
-        # Rotemberg weight
-        weights[j] = np.cov(z_j, x_fitted)[0, 1] / np.var(x_fitted)
-        
-        # 산업 j 단독 IV 회귀
-        iv_j = IV2SLS(y, controls, x_endog, z_j).fit(cov_type='clustered')
-        betas[j] = iv_j.params['x_endog']
-        ses[j] = iv_j.std_errors['x_endog']
-    
-    weights = weights / weights.sum()
-    return weights, betas, ses
+ """
+ Goldsmith-Pinkham et al. 2018 Rotemberg decomposition.
 
+ shares: (N regions × J industries) — 1997 employment shares
+ shifts: (J industries × T years) — KR-CN net export shocks
+ x_endog: (N×T,) — actual trade shock
+ x_fitted: (N×T,) — Bartik IV fitted value
+ y: outcome variable
+ controls: control matrix
+ """
+ N, J = shares.shape
+ T = shifts.shape[1]
+
+ weights = np.zeros(J)
+ betas = np.zeros(J)
+ ses = np.zeros(J)
+
+ for j in range(J):
+ z_j = np.outer(shares[:, j], shifts[j,:]).flatten
+
+ # Rotemberg weight
+ weights[j] = np.cov(z_j, x_fitted)[0, 1] / np.var(x_fitted)
+
+ # 산업 j 단독 IV 회귀
+ iv_j = IV2SLS(y, controls, x_endog, z_j).fit(cov_type='clustered')
+ betas[j] = iv_j.params['x_endog']
+ ses[j] = iv_j.std_errors['x_endog']
+
+ weights = weights / weights.sum
+ return weights, betas, ses
 
 # 실행
 weights, betas, ses = rotemberg_weights(...)
 
 # HHI
-hhi = (weights ** 2).sum()
+hhi = (weights ** 2).sum
 print(f"HHI: {hhi:.4f}")
 print(f"Stock-Yogo standard: < 0.25")
 
 # Output table
 result = pd.DataFrame({
-    'KSIC': industry_codes,
-    'industry_name': industry_names,
-    'rotemberg_weight': weights,
-    'beta_j': betas,
-    'se_j': ses,
-    't_stat': betas / ses,
+ 'KSIC': industry_codes,
+ 'industry_name': industry_names,
+ 'rotemberg_weight': weights,
+ 'beta_j': betas,
+ 'se_j': ses,
+ 't_stat': betas / ses,
 }).sort_values('rotemberg_weight', ascending=False)
 result.to_csv('3_derived/identification/rotemberg_diagnostic.csv')
 ```
@@ -501,27 +500,27 @@ result.to_csv('3_derived/identification/rotemberg_diagnostic.csv')
 ```
 Table: Correlates of 1997 Manufacturing Employment Share
 
-                              │ Bivariate    │ Conditional
-Variable                      │ ρ (coef, p)  │ on sido FE
+ │ Bivariate │ Conditional
+Variable │ ρ (coef, p) │ on sido FE
 ───────────────────────────────────────────────────────
 A. Levels (OK to correlate)
-  ln(GRDP per capita), 1995   │  0.42***    │  0.31***
-  ln(population), 1995        │  0.58***    │  0.45***
-  University share, 2000      │  0.21**     │  0.18*
-  Hospital beds per 1k, 2000  │  0.28***    │  0.19**
-  Mortality rate, 1995        │ -0.34***    │ -0.22**
+ ln(GRDP per capita), 1995 │ 0.42*** │ 0.31***
+ ln(population), 1995 │ 0.58*** │ 0.45***
+ University share, 2000 │ 0.21** │ 0.18*
+ Hospital beds per 1k, 2000 │ 0.28*** │ 0.19**
+ Mortality rate, 1995 │ -0.34*** │ -0.22**
 
 B. Trends (must NOT correlate) ★★★
-  Δ ln(GRDP) 1990-1996        │  0.04       │  0.02   ✅
-  Δ population 1990-1996      │  0.07       │  0.05   ✅
-  Δ mortality 1990-1996       │ -0.09       │ -0.06   ✅
-  Δ despair mortality 90-96   │  0.11       │  0.08   ✅
-  Δ employment 1990-1996      │  0.05       │  0.03   ✅
+ Δ ln(GRDP) 1990-1996 │ 0.04 │ 0.02 ✅
+ Δ population 1990-1996 │ 0.07 │ 0.05 ✅
+ Δ mortality 1990-1996 │ -0.09 │ -0.06 ✅
+ Δ despair mortality 90-96 │ 0.11 │ 0.08 ✅
+ Δ employment 1990-1996 │ 0.05 │ 0.03 ✅
 
 C. Geographic
-  Distance to coast (km)      │ -0.12*      │ -0.08
-  Distance to Seoul (km)      │ -0.18**     │  —
-  Sido FE (R²)                │  0.34       │  —
+ Distance to coast (km) │ -0.12* │ -0.08
+ Distance to Seoul (km) │ -0.18** │ —
+ Sido FE (R²) │ 0.34 │ —
 ───────────────────────────────────────────────────────
 N = 256 sigungu
 *** p<0.01, ** p<0.05, * p<0.1
@@ -543,29 +542,29 @@ import statsmodels.formula.api as smf
 df = pd.read_parquet('3_derived/master_panel.parquet')
 
 covariates_levels = [
-    'ln_grdp_pc_1995', 'ln_pop_1995', 'univ_share_2000',
-    'hospital_beds_2000', 'mortality_1995'
+ 'ln_grdp_pc_1995', 'ln_pop_1995', 'univ_share_2000',
+ 'hospital_beds_2000', 'mortality_1995'
 ]
 covariates_trends = [
-    'd_ln_grdp_1990_1996', 'd_pop_1990_1996',
-    'd_mortality_1990_1996', 'd_despair_1990_1996',
-    'd_employment_1990_1996'
+ 'd_ln_grdp_1990_1996', 'd_pop_1990_1996',
+ 'd_mortality_1990_1996', 'd_despair_1990_1996',
+ 'd_employment_1990_1996'
 ]
 
-results = []
+results = 
 for var in covariates_levels + covariates_trends:
-    biv = smf.ols(f'mfg_share_1997 ~ {var}', data=df).fit()
-    cond = smf.ols(f'mfg_share_1997 ~ {var} + C(sido)', data=df).fit()
-    results.append({
-        'variable': var,
-        'category': 'level' if var in covariates_levels else 'trend',
-        'biv_coef': biv.params[var],
-        'biv_se': biv.bse[var],
-        'biv_p': biv.pvalues[var],
-        'cond_coef': cond.params[var],
-        'cond_se': cond.bse[var],
-        'cond_p': cond.pvalues[var],
-    })
+ biv = smf.ols(f'mfg_share_1997 ~ {var}', data=df).fit
+ cond = smf.ols(f'mfg_share_1997 ~ {var} + C(sido)', data=df).fit
+ results.append({
+ 'variable': var,
+ 'category': 'level' if var in covariates_levels else 'trend',
+ 'biv_coef': biv.params[var],
+ 'biv_se': biv.bse[var],
+ 'biv_p': biv.pvalues[var],
+ 'cond_coef': cond.params[var],
+ 'cond_se': cond.bse[var],
+ 'cond_p': cond.pvalues[var],
+ })
 
 pd.DataFrame(results).to_csv('3_derived/identification/share_balance_test.csv')
 ```
@@ -584,21 +583,21 @@ pd.DataFrame(results).to_csv('3_derived/identification/share_balance_test.csv')
 
 $$\Delta \ln(\text{Mortality})_{c,t} = \alpha_t + \sum_{k=-7}^{+25} \beta_k \cdot \mathbb{1}[t-1997=k] \cdot \text{MfgShare}_c^{1990} + X_{c,t-1}'\gamma + \epsilon_{c,t}$$
 
-- $k = -7, ..., -1$ (1990-1996): pre-period — $\beta_k$ 가 모두 0 이어야 함 (평행)
-- $k = 0, ..., +25$ (1997-2022): post-period — $\beta_k$ 가 점차 음 (or 양) 으로 발산
+- $k = -7,..., -1$ (1990-1996): pre-period — $\beta_k$ 가 모두 0 이어야 함 (평행)
+- $k = 0,..., +25$ (1997-2022): post-period — $\beta_k$ 가 점차 음 (or 양) 으로 발산
 
 #### 5.3.3 Pre-period 결과 표
 
 ```
-Year (k)  │ β_k     │ SE      │ p-value │ 95% CI
+Year (k) │ β_k │ SE │ p-value │ 95% CI
 ─────────────────────────────────────────────────
-1990 (-7) │ -0.012  │ 0.024   │ 0.62    │ [-0.06, 0.04]
-1991 (-6) │  0.008  │ 0.022   │ 0.71    │ [-0.04, 0.05]
-1992 (-5) │ -0.015  │ 0.020   │ 0.45    │ [-0.05, 0.02]
-1993 (-4) │  0.011  │ 0.019   │ 0.56    │ [-0.03, 0.05]
-1994 (-3) │ -0.007  │ 0.018   │ 0.69    │ [-0.04, 0.03]
-1995 (-2) │  0.009  │ 0.017   │ 0.60    │ [-0.02, 0.04]
-1996 (-1) │  0.000  │  —      │  —      │  baseline
+1990 (-7) │ -0.012 │ 0.024 │ 0.62 │ [-0.06, 0.04]
+1991 (-6) │ 0.008 │ 0.022 │ 0.71 │ [-0.04, 0.05]
+1992 (-5) │ -0.015 │ 0.020 │ 0.45 │ [-0.05, 0.02]
+1993 (-4) │ 0.011 │ 0.019 │ 0.56 │ [-0.03, 0.05]
+1994 (-3) │ -0.007 │ 0.018 │ 0.69 │ [-0.04, 0.03]
+1995 (-2) │ 0.009 │ 0.017 │ 0.60 │ [-0.02, 0.04]
+1996 (-1) │ 0.000 │ — │ — │ baseline
 ─────────────────────────────────────────────────
 Joint F-test (k=-7 to -1): F = 0.84, p = 0.55 ✅
 ```
@@ -719,14 +718,14 @@ Joint F-test (k=-7 to -1): F = 0.84, p = 0.55 ✅
 ### 6.6 5-Layer 결과 표 (paper Table 2)
 
 ```
-                     (1)        (2)         (3)         (4)         (5)
-                     HC1        Cluster     AKM         Conley      AR + tF
-β (Bartik IV)       -1.015**   -1.015**   -1.015*     -1.015*     [AR p]
-SE                  (0.243)    (0.401)    (0.512)     (0.480)     —
-t-stat              -4.18      -2.53      -1.98       -2.11       —
-p-value             <0.001     0.011      0.048       0.035       [tF p]
-First-stage F       12.3       12.3        12.3        12.3        12.3
-N (5-yr stacked)    1,280      1,280      1,280       1,280       1,280
+ (1) (2) (3) (4) (5)
+ HC1 Cluster AKM Conley AR + tF
+β (Bartik IV) -1.015** -1.015** -1.015* -1.015* [AR p]
+SE (0.243) (0.401) (0.512) (0.480) —
+t-stat -4.18 -2.53 -1.98 -2.11 —
+p-value <0.001 0.011 0.048 0.035 [tF p]
+First-stage F 12.3 12.3 12.3 12.3 12.3
+N (5-yr stacked) 1,280 1,280 1,280 1,280 1,280
 ```
 
 #### 합격 기준
@@ -761,9 +760,9 @@ $$\Delta \ln(\text{Mortality})_{c,t} = \alpha_t + \pi \cdot \text{Bartik}_{c,t} 
 - Spatial weight matrix: 인접 시군구 (rook contiguity) + 50km
 
 ```
-                     β_m (own)    β_n (spillover)   Total
-Despair             -0.847***    -0.168            -1.015
-                    (0.198)      (0.121)
+ β_m (own) β_n (spillover) Total
+Despair -0.847*** -0.168 -1.015
+ (0.198) (0.121)
 ```
 
 ### 7.4 Alternative Outcome Forms
@@ -808,13 +807,13 @@ Despair             -0.847***    -0.168            -1.015
 ```
 Outcome: ln(despair mortality)
 
-                     β (Bartik IV)    SE
-Male, 25-54         -1.842***        (0.412)
-Male, 55-79         -0.987**         (0.345)
-Male, 80+            -0.234          (0.512)
-Female, 25-54       -0.745*          (0.398)
-Female, 55-79       -0.521           (0.387)
-Female, 80+          0.012           (0.456)
+ β (Bartik IV) SE
+Male, 25-54 -1.842*** (0.412)
+Male, 55-79 -0.987** (0.345)
+Male, 80+ -0.234 (0.512)
+Female, 25-54 -0.745* (0.398)
+Female, 55-79 -0.521 (0.387)
+Female, 80+ 0.012 (0.456)
 ```
 
 **가설**: $|\beta_{male, 25-54}|$ 가 가장 큼 (working-age vulnerability)
@@ -825,7 +824,7 @@ Female, 80+          0.012           (0.456)
 |-----|------|
 | 농촌 (도) vs 광역시 | 농촌 효과 더 큼 (Sufi 2023) |
 | 인구 50k 미만 vs 이상 | 작은 도시 vulnerability |
-| 노령화 정도 (4분위) | 노령화 높을수록 ? |
+| 노령화 정도 (4분위) | 노령화 높을수록? |
 
 ### 8.3 By Industry Exposure
 
@@ -1007,27 +1006,26 @@ Female, 80+          0.012           (0.456)
 import numpy as np
 
 def akm_se(shares, shifts, residuals, n_obs):
-    """
-    Adão-Kolesár-Morales (2019) standard errors.
+ """
+ Adão-Kolesár-Morales (2019) standard errors.
 
-    Heuristic: residuals correlated across regions with similar industry shares
+ Heuristic: residuals correlated across regions with similar industry shares
 
-    Parameters:
-        shares: (N regions × J industries) — 1997 employment shares
-        shifts: (J industries × T years) — KR-CN net export shifts
-        residuals: (N×T,) — regression residuals
-        n_obs: total observations
+ Parameters:
+ shares: (N regions × J industries) — 1997 employment shares
+ shifts: (J industries × T years) — KR-CN net export shifts
+ residuals: (N×T,) — regression residuals
+ n_obs: total observations
 
-    Returns:
-        AKM standard error (scalar)
-    """
-    weights = np.einsum("ij,i->j", shares, residuals)  # shift-level weights
-    var = np.sum(weights**2 * np.var(shifts, axis=1))
-    return np.sqrt(var) / n_obs
-
+ Returns:
+ AKM standard error (scalar)
+ """
+ weights = np.einsum("ij,i->j", shares, residuals) # shift-level weights
+ var = np.sum(weights**2 * np.var(shifts, axis=1))
+ return np.sqrt(var) / n_obs
 
 # 사용 예
-result = IV2SLS(y, X, X_endog, Z).fit()
+result = IV2SLS(y, X, X_endog, Z).fit
 residuals = result.resids
 akm = akm_se(shares_1997, shifts_kr_cn, residuals, len(y))
 print(f"AKM SE: {akm:.4f}")
@@ -1069,112 +1067,109 @@ import numpy as np
 import pandas as pd
 from linearmodels.iv import IV2SLS
 
-
 def compute_rotemberg(shares_matrix, shifts_matrix, x_endog, x_fitted,
-                      y, controls, weights=None):
-    """
-    Full Rotemberg decomposition with Tests A, B, C.
+ y, controls, weights=None):
+ """
+ Full Rotemberg decomposition with Tests A, B, C.
 
-    Returns:
-        dict with weights, betas, SEs, HHI, top-N table
-    """
-    N, J = shares_matrix.shape
-    T = shifts_matrix.shape[1]
+ Returns:
+ dict with weights, betas, SEs, HHI, top-N table
+ """
+ N, J = shares_matrix.shape
+ T = shifts_matrix.shape[1]
 
-    # Test A: Rotemberg weights
-    omega = np.zeros(J)
-    for j in range(J):
-        z_j = np.outer(shares_matrix[:, j], shifts_matrix[j, :]).flatten()
-        omega[j] = np.cov(z_j, x_fitted)[0, 1] / np.var(x_fitted)
-    omega = omega / omega.sum()
+ # Test A: Rotemberg weights
+ omega = np.zeros(J)
+ for j in range(J):
+ z_j = np.outer(shares_matrix[:, j], shifts_matrix[j,:]).flatten
+ omega[j] = np.cov(z_j, x_fitted)[0, 1] / np.var(x_fitted)
+ omega = omega / omega.sum
 
-    # HHI concentration
-    hhi = (omega ** 2).sum()
+ # HHI concentration
+ hhi = (omega ** 2).sum
 
-    # Test B: industry-level β_j (just-identified IV)
-    betas = np.zeros(J)
-    ses = np.zeros(J)
-    for j in range(J):
-        z_j = np.outer(shares_matrix[:, j], shifts_matrix[j, :]).flatten()
-        try:
-            iv_j = IV2SLS(y, controls, x_endog, z_j).fit(cov_type='clustered')
-            betas[j] = iv_j.params['x_endog']
-            ses[j] = iv_j.std_errors['x_endog']
-        except Exception:
-            betas[j] = np.nan
-            ses[j] = np.nan
+ # Test B: industry-level β_j (just-identified IV)
+ betas = np.zeros(J)
+ ses = np.zeros(J)
+ for j in range(J):
+ z_j = np.outer(shares_matrix[:, j], shifts_matrix[j,:]).flatten
+ try:
+ iv_j = IV2SLS(y, controls, x_endog, z_j).fit(cov_type='clustered')
+ betas[j] = iv_j.params['x_endog']
+ ses[j] = iv_j.std_errors['x_endog']
+ except Exception:
+ betas[j] = np.nan
+ ses[j] = np.nan
 
-    return {
-        'weights': omega,
-        'betas': betas,
-        'ses': ses,
-        'hhi': hhi,
-        'top_5_cumulative': np.sort(omega)[::-1][:5].sum()
-    }
-
+ return {
+ 'weights': omega,
+ 'betas': betas,
+ 'ses': ses,
+ 'hhi': hhi,
+ 'top_5_cumulative': np.sort(omega)[::-1][:5].sum
+ }
 
 def rotemberg_pretrend_test(shares_matrix, shifts_matrix, omega,
-                            mortality_pretrend, top_n=3):
-    """
-    Test C: Pre-trend by industry (top-N Rotemberg weight)
-    """
-    top_industries = np.argsort(omega)[::-1][:top_n]
+ mortality_pretrend, top_n=3):
+ """
+ Test C: Pre-trend by industry (top-N Rotemberg weight)
+ """
+ top_industries = np.argsort(omega)[::-1][:top_n]
 
-    pretrend_results = []
-    for j in top_industries:
-        share_j = shares_matrix[:, j]
-        from scipy.stats import pearsonr
-        r, p = pearsonr(share_j, mortality_pretrend)
-        pretrend_results.append({
-            'industry_j': j,
-            'omega': omega[j],
-            'pretrend_corr': r,
-            'pretrend_p': p
-        })
+ pretrend_results = 
+ for j in top_industries:
+ share_j = shares_matrix[:, j]
+ from scipy.stats import pearsonr
+ r, p = pearsonr(share_j, mortality_pretrend)
+ pretrend_results.append({
+ 'industry_j': j,
+ 'omega': omega[j],
+ 'pretrend_corr': r,
+ 'pretrend_p': p
+ })
 
-    return pd.DataFrame(pretrend_results)
-
+ return pd.DataFrame(pretrend_results)
 
 # 메인 실행
 if __name__ == '__main__':
-    # 데이터 로드
-    shares = pd.read_parquet('1_codebooks/sigungu_industry_share_1997.parquet')
-    shifts = pd.read_parquet('3_derived/kr_cn_net_export_shifts.parquet')
-    panel = pd.read_parquet('3_derived/master_panel.parquet')
+ # 데이터 로드
+ shares = pd.read_parquet('1_codebooks/sigungu_industry_share_1997.parquet')
+ shifts = pd.read_parquet('3_derived/kr_cn_net_export_shifts.parquet')
+ panel = pd.read_parquet('3_derived/master_panel.parquet')
 
-    # Rotemberg
-    result = compute_rotemberg(
-        shares.values, shifts.values,
-        x_endog=panel['trade_shock'].values,
-        x_fitted=panel['bartik_iv'].values,
-        y=panel['d_ln_despair'].values,
-        controls=panel[['ln_pop', 'old_share', 'ln_grdp_pc']].values,
-    )
+ # Rotemberg
+ result = compute_rotemberg(
+ shares.values, shifts.values,
+ x_endog=panel['trade_shock'].values,
+ x_fitted=panel['bartik_iv'].values,
+ y=panel['d_ln_despair'].values,
+ controls=panel[['ln_pop', 'old_share', 'ln_grdp_pc']].values,
+)
 
-    # Pre-trend (Test C)
-    pretrend = rotemberg_pretrend_test(
-        shares.values, shifts.values, result['weights'],
-        mortality_pretrend=panel['d_mortality_1990_1996'].values,
-        top_n=3
-    )
+ # Pre-trend (Test C)
+ pretrend = rotemberg_pretrend_test(
+ shares.values, shifts.values, result['weights'],
+ mortality_pretrend=panel['d_mortality_1990_1996'].values,
+ top_n=3
+)
 
-    # 산출
-    output = pd.DataFrame({
-        'industry_code': shares.columns,
-        'rotemberg_weight': result['weights'],
-        'beta_j': result['betas'],
-        'se_j': result['ses'],
-        't_stat': result['betas'] / result['ses'],
-    }).sort_values('rotemberg_weight', ascending=False)
+ # 산출
+ output = pd.DataFrame({
+ 'industry_code': shares.columns,
+ 'rotemberg_weight': result['weights'],
+ 'beta_j': result['betas'],
+ 'se_j': result['ses'],
+ 't_stat': result['betas'] / result['ses'],
+ }).sort_values('rotemberg_weight', ascending=False)
 
-    output.to_csv('3_derived/identification/rotemberg_diagnostic.csv', index=False)
-    pretrend.to_csv('3_derived/identification/rotemberg_pretrend.csv', index=False)
+ output.to_csv('3_derived/identification/rotemberg_diagnostic.csv', index=False)
+ pretrend.to_csv('3_derived/identification/rotemberg_pretrend.csv', index=False)
 
-    print(f"HHI: {result['hhi']:.4f} (target < 0.25)")
-    print(f"Top 5 cumulative: {result['top_5_cumulative']:.4f}")
-    print()
-    print("Top 10 industries:")
-    print(output.head(10).to_string())
+ print(f"HHI: {result['hhi']:.4f} (target < 0.25)")
+ print(f"Top 5 cumulative: {result['top_5_cumulative']:.4f}")
+ print
+ print("Top 10 industries:")
+ print(output.head(10).to_string)
 ```
 
 ---
@@ -1189,8 +1184,8 @@ if __name__ == '__main__':
 - **Reference line**: k = -1 (1996), $\beta_k = 0$
 - **Vertical line**: k = 0 (1997, China shock onset)
 - **Markers**:
-  - Pre-period (k < 0): hollow circle
-  - Post-period (k >= 0): filled circle
+ - Pre-period (k < 0): hollow circle
+ - Post-period (k >= 0): filled circle
 - **CI**: 95% with cluster-sido SE
 - **Color**: monochrome (paper-friendly)
 - **Size**: 6 × 4 inches (paper insert)
@@ -1207,10 +1202,10 @@ if __name__ == '__main__':
 
 ```
 3_derived/figures/
-  pretrend_event_study.png       (Figure 6 main)
-  pretrend_event_study.pdf       (vector for publication)
-  pretrend_tercile_timeseries.png (Figure 6 supplement)
-  pretrend_event_study_data.csv  (underlying coefficients)
+ pretrend_event_study.png (Figure 6 main)
+ pretrend_event_study.pdf (vector for publication)
+ pretrend_tercile_timeseries.png (Figure 6 supplement)
+ pretrend_event_study_data.csv (underlying coefficients)
 ```
 
 ### E.4 Implementation notes
@@ -1221,17 +1216,17 @@ import seaborn as sns
 
 fig, ax = plt.subplots(figsize=(6, 4))
 ax.errorbar(
-    k_values, beta_k, yerr=1.96 * se_k,
-    fmt='o', color='black', capsize=3,
-    markerfacecolor=['white' if k < 0 else 'black' for k in k_values]
+ k_values, beta_k, yerr=1.96 * se_k,
+ fmt='o', color='black', capsize=3,
+ markerfacecolor=['white' if k < 0 else 'black' for k in k_values]
 )
 ax.axhline(0, color='gray', linewidth=0.5)
 ax.axvline(0, color='red', linewidth=0.5, linestyle='--', label='1997 (shock onset)')
 ax.set_xlabel('Years relative to 1997 (k)')
 ax.set_ylabel(r'$\beta_k$')
 ax.set_title('Event-Study: Pre-Trend Test')
-ax.legend()
-plt.tight_layout()
+ax.legend
+plt.tight_layout
 plt.savefig('3_derived/figures/pretrend_event_study.png', dpi=300)
 plt.savefig('3_derived/figures/pretrend_event_study.pdf')
 ```
@@ -1244,22 +1239,22 @@ plt.savefig('3_derived/figures/pretrend_event_study.pdf')
 
 ```
 3_derived/identification/
-  first_stage_diagnostics.csv      (검정 0: F-stat, weak IV indicators)
-  rotemberg_diagnostic.csv         (검정 1A,B: weight + β_j)
-  rotemberg_pretrend.csv           (검정 1C: 산업별 pre-trend)
-  share_balance_test.csv           (검정 2: covariate balance)
-  pretrend_event_study.csv         (검정 3: pre-trend β_k)
-  placebo_random_shifters.csv      (검정 4: AKM placebo 1000 iter)
-  share_permutation.csv            (검정 5: permutation 1000 iter)
-  identification_report.md         (종합 narrative)
+ first_stage_diagnostics.csv (검정 0: F-stat, weak IV indicators)
+ rotemberg_diagnostic.csv (검정 1A,B: weight + β_j)
+ rotemberg_pretrend.csv (검정 1C: 산업별 pre-trend)
+ share_balance_test.csv (검정 2: covariate balance)
+ pretrend_event_study.csv (검정 3: pre-trend β_k)
+ placebo_random_shifters.csv (검정 4: AKM placebo 1000 iter)
+ share_permutation.csv (검정 5: permutation 1000 iter)
+ identification_report.md (종합 narrative)
 
 3_derived/figures/
-  rotemberg_weights_v3_v4.png      (Figure 4)
-  share_balance_scatter.png        (Figure 5)
-  pretrend_event_study.png         (Figure 6) 핵심
-  pretrend_tercile_timeseries.png  (Figure 6 supplement)
-  placebo_distribution.png         (Figure 7)
-  permutation_distribution.png     (Figure 8)
+ rotemberg_weights_v3_v4.png (Figure 4)
+ share_balance_scatter.png (Figure 5)
+ pretrend_event_study.png (Figure 6) 핵심
+ pretrend_tercile_timeseries.png (Figure 6 supplement)
+ placebo_distribution.png (Figure 7)
+ permutation_distribution.png (Figure 8)
 ```
 
 ---
@@ -1270,36 +1265,36 @@ plt.savefig('3_derived/figures/pretrend_event_study.pdf')
 4. Identification
 
 4.1 Bartik Instrument Construction
-    - shares (1997 KSIC2 × sigungu) + shifts (KR-CN net export)
-    - 수식 + 데이터 source
+ - shares (1997 KSIC2 × sigungu) + shifts (KR-CN net export)
+ - 수식 + 데이터 source
 
 4.2 Identifying Assumption
-    - Share exogeneity (GP 2018 path, main)
-    - Shift exogeneity (BHJ 2025 path, robustness)
+ - Share exogeneity (GP 2018 path, main)
+ - Shift exogeneity (BHJ 2025 path, robustness)
 
 4.3 First-Stage Strength
-    - Olea-Pflueger F-stat (target > 23.1)
-    - Stock-Yogo critical value 표
+ - Olea-Pflueger F-stat (target > 23.1)
+ - Stock-Yogo critical value 표
 
 4.4 Rotemberg Decomposition
-    - HHI
-    - Top 10 산업 weight + β_j
-    - V3 → V4 비교
+ - HHI
+ - Top 10 산업 weight + β_j
+ - V3 → V4 비교
 
 4.5 Share-Covariate Balance
-    - Levels OK, Trends pass
-    - Goldsmith-Pinkham Table 4 형식
+ - Levels OK, Trends pass
+ - Goldsmith-Pinkham Table 4 형식
 
 4.6 Pre-Trend Event-Study
-    - Joint F-test
-    - Coefficient plot Figure
+ - Joint F-test
+ - Coefficient plot Figure
 
 4.7 Placebo Tests
-    - Random shifters (AKM)
-    - Share permutation (BDM)
+ - Random shifters (AKM)
+ - Share permutation (BDM)
 
 4.8 Summary
-    - 6개 검정 모두 통과 → main identification valid
+ - 6개 검정 모두 통과 → main identification valid
 ```
 
 ---

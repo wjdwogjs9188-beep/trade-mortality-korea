@@ -21,14 +21,14 @@
 # addmissing = F
 # 
 # ssaggregate(
-#   data = df,
-#   vars = ~ y + x + z + l_sh_routine33,
-#   weights = "wei",
-#   n = "sic87dd",
-#   t = "year",
-#   s = "ind_share",
-#   controls = ~ t2 + Lsh_manuf
-# )
+# data = df,
+# vars = ~ y + x + z + l_sh_routine33,
+# weights = "wei",
+# n = "sic87dd",
+# t = "year",
+# s = "ind_share",
+# controls = ~ t2 + Lsh_manuf
+#)
 # 
 # 
 # 
@@ -47,14 +47,14 @@
 # addmissing = T
 # 
 # ssaggregate(
-#   data = df,
-#   shares = shares,
-#   vars = ~ y + x + z + l_sh_routine33,
-#   weights = "wei",
-#   n = "sic87dd",
-#   t = "year",
-#   s = "ind_share",
-#   l = "czone",
-#   controls = ~ t2 + Lsh_manuf,
-#   addmissing = T
-# )
+# data = df,
+# shares = shares,
+# vars = ~ y + x + z + l_sh_routine33,
+# weights = "wei",
+# n = "sic87dd",
+# t = "year",
+# s = "ind_share",
+# l = "czone",
+# controls = ~ t2 + Lsh_manuf,
+# addmissing = T
+#)

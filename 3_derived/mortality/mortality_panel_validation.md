@@ -2,15 +2,15 @@
 
 - Generated: 2026-05-03
 - v4 changes vs v3:
-  1. Cancer 정의 027-048 → 027-047 (KOSIS 공식 C00-C97 악성신생물과 정합. 048 양성/불명 → 'other' 흡수)
-  2. 2023 microdata partial(262,710) → full(352,511) 교체
-  3. V8 KOSIS cancer cross-check + V9 2023 record count 추가
+ 1. Cancer 정의 027-048 → 027-047 (KOSIS 공식 C00-C97 악성신생물과 정합. 048 양성/불명 → 'other' 흡수)
+ 2. 2023 microdata partial(262,710) → full(352,511) 교체
+ 3. V8 KOSIS cancer cross-check + V9 2023 record count 추가
 - Source: `0_raw/mortality_kostat/사망사료 정리/` (27 cp949 CSVs)
 - Crosswalk: `1_codebooks/sigungu_crosswalk_v2.csv` (229 h_codes, 27 years)
 - Outputs:
-  - `3_derived/mortality/mortality_microdata_combined.parquet` (7,298,820 rows; full incl. foreign/unmapped)
-  - `3_derived/mortality/mortality_panel_v01.parquet` (1,483,920 rows)
-  - `3_derived/mortality/unmatched_mortality.parquet` (0 unique foreign/unmapped raw_codes)
+ - `3_derived/mortality/mortality_microdata_combined.parquet` (7,298,820 rows; full incl. foreign/unmapped)
+ - `3_derived/mortality/mortality_panel_v01.parquet` (1,483,920 rows)
+ - `3_derived/mortality/unmatched_mortality.parquet` (0 unique foreign/unmapped raw_codes)
 
 ## Outcome groups (mutually exclusive, priority order)
 
@@ -68,7 +68,7 @@
 | V4 domestic sigungu unmapped < 1% | PASS | domestic_unmapped=0 of 7,298,820 = 0.0000%; foreign=0 (0.0000%) |
 | V5 KOSTAT suicide cross-check ±2% | PASS | 2010: ours=15,558 official=15,566 diff=-0.051%; 2011: ours=15,906 official=15,906 diff=+0.000%; 2015: ours=13,510 official=13,513 diff=-0.022%; 2019: ours=13,793 official=13,799 diff=-0.043% |
 | V6 deaths trend 1997 < 2010 < 2020 | PASS | 1997=244,579 2010=255,335 2020=304,921 |
-| V7 outcome distribution (other < 50%) | PASS | other=29.62%  | despair_total=579,774(7.94%)  cardiovascular=1,561,216(21.39%)  cancer=1,902,394(26.07%)  respiratory=623,918(8.55%)  external_other=469,284(6.43%)  other=2,161,279(29.62%) |
+| V7 outcome distribution (other < 50%) | PASS | other=29.62% | despair_total=579,774(7.94%) cardiovascular=1,561,216(21.39%) cancer=1,902,394(26.07%) respiratory=623,918(8.55%) external_other=469,284(6.43%) other=2,161,279(29.62%) |
 | V8 KOSIS cancer cross-check ±0.5% (C00-C97, codes 027-047) | PASS | 1998: ours=51,283 official=51,291 diff=-0.016%; 2000: ours=58,195 official=58,197 diff=-0.003%; 2005: ours=65,529 official=65,529 diff=+0.000%; 2010: ours=72,047 official=72,048 diff=-0.001%; 2015: ours=76,854 official=76,855 diff=-0.001%; 2020: ours=82,199 official=82,204 diff=-0.006%; 2023: ours=85,270 official=85,271 diff=-0.001% |
 | V9 2023 record count ~352,511 (full file) | PASS | n_in_2023=352,511 expected=352,511 diff=+0.0000% |
 
@@ -106,10 +106,10 @@
 
 - KOSTAT age_5yr_code unique (21): `['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '99']` (1-20 ordinal + 99 미상)
 - KOSIS C3 unique (24): `['000', '020', '050', '070', '100', '120', '130', '150', '160', '180', '190', '210', '230', '260', '280', '310', '330', '340', '360', '370', '380', '410', '430', '440']`
-- KOSIS C3_NM 일부: `['0 - 4세', '10 - 14세', '100세 이상', '15 - 19세', '20 - 24세', '25 - 29세', '30 - 34세', '35 - 39세', '40 - 44세', '45 - 49세'] ...`
+- KOSIS C3_NM 일부: `['0 - 4세', '10 - 14세', '100세 이상', '15 - 19세', '20 - 24세', '25 - 29세', '30 - 34세', '35 - 39세', '40 - 44세', '45 - 49세']...`
 - **MISMATCH**: KOSTAT 는 1..20 ordinal (예: 3=5-9세), KOSIS 는 020/050/070/... 시작연령*10 형식. **Stage 3 join 전에 mapping dict 필요**.
-  - 또한 KOSTAT 코드 1 (0세) + 2 (1-4세) → KOSIS 020 (0-4세) 합산 필요.
-  - KOSIS 의 80+ vs 80-84 vs 85+ vs 85-89 등 multi-bucket 처리 정책도 별도 결정.
+ - 또한 KOSTAT 코드 1 (0세) + 2 (1-4세) → KOSIS 020 (0-4세) 합산 필요.
+ - KOSIS 의 80+ vs 80-84 vs 85+ vs 85-89 등 multi-bucket 처리 정책도 별도 결정.
 
 ### KOSIS year coverage
 

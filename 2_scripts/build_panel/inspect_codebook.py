@@ -10,12 +10,12 @@ xl = pd.ExcelFile(cb_path)
 print('Sheets:', xl.sheet_names)
 
 for sname in xl.sheet_names:
-    print(f'\n===== {sname} =====')
-    s = xl.parse(sname, header=None, dtype=str)
-    print('shape:', s.shape)
-    # Print rows that mention 5세 or 연령
-    text = s.fillna('').astype(str)
-    for i, row in text.iterrows():
-        joined = ' | '.join(row.values)
-        if ('5세' in joined or '연령' in joined or 'age' in joined.lower()) and i < 600:
-            print(f'  row {i}: {joined[:200]}')
+ print(f'\n===== {sname} =====')
+ s = xl.parse(sname, header=None, dtype=str)
+ print('shape:', s.shape)
+ # Print rows that mention 5세 or 연령
+ text = s.fillna('').astype(str)
+ for i, row in text.iterrows:
+ joined = ' | '.join(row.values)
+ if ('5세' in joined or '연령' in joined or 'age' in joined.lower) and i < 600:
+ print(f' row {i}: {joined[:200]}')

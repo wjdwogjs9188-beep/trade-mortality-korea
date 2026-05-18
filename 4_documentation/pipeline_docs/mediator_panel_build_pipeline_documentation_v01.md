@@ -60,13 +60,13 @@ working-age 25-64 자살률") 이 paper § 5.2 regression 의 outcome.
 
 ---
 
-## 3. Stage A — KOSIS API mediator denominator 시도 (FAIL → MDIS 전환)
+## 3. Stage A — KOSIS API mediator denominator 시도 (FL → MDIS 전환)
 
 ### 3.1 시도 spec
 
 KOSIS Open API 12 URL (혼인 6 시점 1995-2020 + 교육 6 시점):
 - DT_1IN9503, DT_1IN9502, DT_1PM0001, DT_1INOO02, DT_1IN0508, DT_1IN0504,
-  DT_1IN1006, DT_1IN1004, DT_1PM1504, DT_1PM1501, DT_1PM2002, DT_1PM2001
+ DT_1IN1006, DT_1IN1004, DT_1PM1504, DT_1PM1501, DT_1PM2002, DT_1PM2001
 
 cell limit 40,000 회피 위해 17 시도 분할 호출 (`fetch_kosis_split` 함수, sido in
 `["11","21","22","23","24","25","26","29","31","32","33","34","35","36","37","38","39"]`).
@@ -79,7 +79,7 @@ cell limit 40,000 회피 위해 17 시도 분할 호출 (`fetch_kosis_split` 함
 - C1 = 시도 (서울 11), C2 = 연령 또는 성별, C3 = 혼인/교육
 - 시군구 column 자체 부재 — TBL_NM 의 "...-시군구" 표기는 misnomer
 - 5 표 verify (marriage_2010, marriage_2015, marriage_2020, education_2010, education_2015,
-  education_2020) 모두 동일
+ education_2020) 모두 동일
 
 DT 첫 값 = 시도 합계 (예: 서울 marriage_2020 DT = 8,264,053 = 한국인 15세 이상 서울 전체).
 
@@ -101,7 +101,7 @@ DT 첫 값 = 시도 합계 (예: 서울 marriage_2020 DT = 8,264,053 = 한국인
 사용자 MDIS 신청 ZIP 5 + 3 = 총 8 zip:
 - `2%_표본_인구_20260504_65001_데이터.zip`: 2000-2020 5 시점 (사용 권장 — column header 정상)
 - `2%_표본_인구_20260430_43590_데이터.zip`: 1990-2010 5 시점 (1990, 1995 만 사용 — 2000+
-  column header broken)
+ column header broken)
 - `USRCNFRM_*.zip` × 3: 파일설계서 + 시군구코드집 + 작성결과 가이드
 
 ### 4.2 Step 06 — 압축해제 + inventory
@@ -150,12 +150,12 @@ per-year column NAME mapping dict (`YEAR_COLUMN_MAP`) 사용:
 
 처리:
 1. h_code 결합 = `시도(2) + 시군구(zfill 3) = 5자리`
-2. age_band = 5세 단위 (`00-04`, ..., `80-84`, `85+`)
+2. age_band = 5세 단위 (`00-04`,..., `80-84`, `85+`)
 3. 국적 filter (2010+ `출생시국적_대한민국여부=1`, 1995-2007 변수 부재 → 전체 keep)
 4. 가중값 적용 (sum(weight) = 모집단 추정)
 5. cross-tab 2 panel:
-   - **marriage**: h_code × year × sex × age × marital → population
-   - **education**: h_code × year × sex × age × education → population
+ - **marriage**: h_code × year × sex × age × marital → population
+ - **education**: h_code × year × sex × age × education → population
 
 산출 v01:
 - `mediator_panel_marriage_v01.parquet` (140,971 rows, 7 시점, 522 unique h_code)
@@ -223,7 +223,7 @@ cp949, 평균 ~15-22 MB):
 
 **bug history (4 회 재시도)**:
 
-1. 첫 시도: column rename 시 1997-2007 의 age_5y_code 모두 NaN. column 명 정상 (`['17', '18', ...]`) 인데 rename 후 NaN.
+1. 첫 시도: column rename 시 1997-2007 의 age_5y_code 모두 NaN. column 명 정상 (`['17', '18',...]`) 인데 rename 후 NaN.
 2. 두 시도: keyword fuzzy match + Unicode NFC normalize → 동일 fail.
 3. 세 시도: **position-based parse** (column 명 무시, index 직접 사용) → 매핑 OK.
 4. 네 시도: 1997-2007 national filter `→ 0` (all drop). 원인 = `national_code` NaN → `astype(str)` 후 `"nan"` string → `isin(["1", ""])` 매칭 fail.
@@ -244,13 +244,13 @@ cp949, 평균 ~15-22 MB):
 
 **처리 단계**:
 1. 시군구 자릿수 정규화 (2023 5자리 anomaly + 2024 column 명 변경 처리)
-2. age band 매핑 (`AGE_BAND_MAP`: 1=00-04, ..., 18=85+, 19+ = 85+ 통합)
+2. age band 매핑 (`AGE_BAND_MAP`: 1=00-04,..., 18=85+, 19+ = 85+ 통합)
 3. 한국인 filter (외국인 `"2"` 만 drop, 1997-2007 변수 부재 시 전체 keep)
 4. 혼인 1-4 only (9 미상 drop)
 5. **교육 3 카테고리 매핑** (mediator panel 과 align):
-   - NoHS (1+2+3 = 무학+초등+중학)
-   - HS (4 = 고등학교)
-   - College+ (5+6+7 = 대학 통합)
+ - NoHS (1+2+3 = 무학+초등+중학)
+ - HS (4 = 고등학교)
+ - College+ (5+6+7 = 대학 통합)
 6. cause_104 그대로 keep
 
 산출:
@@ -266,7 +266,7 @@ per-year row count (28 시점, sample):
 distribution:
 - marital_code: 2 (배우자) 48% / 4 (이혼) 38% / 1 (미혼) 8% / 3 (사별) 6%
 - education_band: NoHS 71% / HS 19% / College+ 10% (모든 연령 합산이라 NoHS 비율 high)
-- age_band 85+ = 28%, 80-84 = 14%, ... working-age 25-64 = ~14%
+- age_band 85+ = 28%, 80-84 = 14%,... working-age 25-64 = ~14%
 
 ### 5.3 Step 11b — Numerator panel (mortality × mediator cross-tab)
 
@@ -275,10 +275,10 @@ distribution:
 3 step 처리:
 1. **age_band 25-64 filter** (M1 fix — mediator panel align): 7.4M → 1.5M (20.3%)
 2. **sigungu_crosswalk_v2 적용** (M2 fix): h_code 362 → 229+17 = 346 (2024 시점 신설 시군구
-   23개 unmatched, 2.64%)
+ 23개 unmatched, 2.64%)
 3. **2 cross-tab**:
-   - marital: h_code × year × sex × age × marital_code × cause_104 → deaths
-   - education: 동일 + education_band
+ - marital: h_code × year × sex × age × marital_code × cause_104 → deaths
+ - education: 동일 + education_band
 
 산출:
 - `mortality_marital_panel_v01.parquet` (1,011,186 rows)
@@ -330,10 +330,10 @@ annual rate per 100K person-year (5년 sum 의 annual 환산).
 `12_mediator_specific_mortality_rate.py`:
 
 - `mediator_specific_marital_rate_v01.parquet` (187,379 rows)
-  - columns: h_code, period (1-5), census_year, sex_code, age_band, marital_code, cause_group,
-    deaths_5y, population, rate_per_100k
+ - columns: h_code, period (1-5), census_year, sex_code, age_band, marital_code, cause_group,
+ deaths_5y, population, rate_per_100k
 - `mediator_specific_education_rate_v01.parquet` (171,811 rows)
-  - 동일 + education_band
+ - 동일 + education_band
 
 merge denom missing:
 - marital: 9.74% (mortality h_code 346 vs mediator h_code 279 → 추가 67 unmatched 의심)
@@ -442,18 +442,18 @@ spec 와 일치
 
 1. **1990 sigungu 코드 (2자리)** mapping placeholder. 1990 mediator 자체는 미사용.
 2. **1997-2007 외국인 식별 불가** (사망 microdata 변수 부재) → numerator 미세 inflation
-   (< 0.5% 추정).
+ (< 0.5% 추정).
 3. **혼인/교육 미상 (9) drop** → MAR 가정. 1997-2000 high missing rate (혼인 2.5%, 교육 7%)
-   sensitivity test 권장.
+ sensitivity test 권장.
 4. **education 1997-2007 = 5 카테고리 (대학 통합), 2008+ = 7 카테고리** → **3 카테고리
-   (College+ 통합)** 으로 align. 전문대 vs 4년제 정보 손실.
+ (College+ 통합)** 으로 align. 전문대 vs 4년제 정보 손실.
 5. **2022-2024 incomplete period** → drop. 2017-2021 이 마지막 stack period.
 6. **MDIS 인구 microdata 2% 표본 weight** — weighted pop sum vs 행안부 한국 총인구 ±5%
-   오차 normal.
+ 오차 normal.
 7. **denom missing 9.74% (marital), 2.11% (education)** — Stage 5 regression 시 listwise
-   deletion. 영향 minor 가정.
+ deletion. 영향 minor 가정.
 8. **2024 시점 사망 microdata** = 252 h_code (다른 시점 229) → crosswalk 미cover. Stage
-   1997-2021 의 main analysis 무관.
+ 1997-2021 의 main analysis 무관.
 
 ---
 
@@ -462,7 +462,7 @@ spec 와 일치
 11a 의 cleaning bug (4 회 재시도) 가 가장 큰 시간 손실. 원인 = column rename 시 한국어
 encoding 미세 차이 + national_code NaN cast issue. 대안 = **codebook xlsx 사전 inspect**:
 - 파일설계서 의 column 시작 position + 길이 → position-based parse 가능 (column 명 차이
-  무시)
+ 무시)
 - 코드정보 sheet 의 변수 정의 (혼인 1-4-9, 교육 1-7/8) → mapping dict 정확
 - 시군구 codebook → 시점별 행정구역 변화 (2024 신설 시군구 등)
 
@@ -477,13 +477,13 @@ encoding 미세 차이 + national_code NaN cast issue. 대안 = **codebook xlsx 
 본 panel build 완료. 다음:
 
 1. **denom missing 67 h_code verify** — 어느 시군구인지 list 추출, 1990 placeholder 잔류
-   여부 진단
+ 여부 진단
 2. **deaths of despair 4 outcome × 5 period 시각화** — line chart (한국 historical
-   추세 검증)
+ 추세 검증)
 3. **mediator share panel build** — denominator panel 의 marital/education 비율 산출
-   (Stage 5 mediation regression 의 mediator 변수)
+ (Stage 5 mediation regression 의 mediator 변수)
 4. **Stage 5 regression** — `ivmediate` (DGHP 2017 Stata) 의 mediator-specific rate
-   panel input 으로 사용
+ panel input 으로 사용
 5. **Bartik IV (Stage 4 완료 후)** 결합 → main analysis
 
 ---

@@ -75,7 +75,7 @@ nan_h = cw[cw['h_code'].isna]
 print(f' crosswalk rows with h_code NaN: {len(nan_h)}')
 if len(nan_h) > 0: for _, r in nan_h.iterrows: print(f' sgguCd={r["sgguCd"]} ({r.get("sgguCdNm","?")}) — h_code mapping 부재') # msupUseAmt vs totUseQty
 print(f'\n=== 8. msupUseAmt vs totUseQty alternative metric ===')
-cell_agg = raw.groupby(['sgguCd','year','atcStep4Cd']).agg( totUseQty_sum=('totUseQty','sum'), msupUseAmt_sum=('msupUseAmt','sum')
+cell_agg = raw.groupby(['sgguCd','year','atcStep4Cd']).agg(totUseQty_sum=('totUseQty','sum'), msupUseAmt_sum=('msupUseAmt','sum')
 ).reset_index
 log_corr = np.corrcoef(np.log1p(cell_agg['totUseQty_sum']), np.log1p(cell_agg['msupUseAmt_sum']))[0,1]
 print(f' cell n: {len(cell_agg):,}')

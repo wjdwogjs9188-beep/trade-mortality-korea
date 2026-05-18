@@ -35,4 +35,4 @@ _2026-05-05_
 - ⚠️ 2023_사망_연간자료_B형_20260410_64844.csv: missing ['sido_resid', 'sgg_resid', 'cause_104', 'age_code']
 - ⚠️ 2024_사망_연간자료_B형_20260410_64844.csv: missing ['sido_resid', 'sgg_resid', 'cause_104', 'age_code']
 
-[FAIL] no data loaded
+[FL] no data loaded

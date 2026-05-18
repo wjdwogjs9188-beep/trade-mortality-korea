@@ -5,31 +5,31 @@
 #' @param impose_null A logical - should the null hypothesis be imposed or not?
 #' @param r Shifts the null hypothesis.
 #' @param B number of bootstrap iterations
-#' @param bootcluster The bootcluster specification in `boottest()`
+#' @param bootcluster The bootcluster specification in `boottest`
 #' @param clustid A data.frame containing the cluster variables
 #' @param sign_level The significance level.
 #' @param conf_int Logical. Should confidence intervals be calculated
-#'  (by test inversion)?
+#' (by test inversion)?
 #' @param tol Numeric vector of length 1. The desired accuracy
-#'        (convergence tolerance) used in the root finding procedure to
-#'        find the confidence interval.
-#'        1e-6 by default.
+#' (convergence tolerance) used in the root finding procedure to
+#' find the confidence interval.
+#' 1e-6 by default.
 #' @param p_val_type type Type of p-value. By default "two-tailed".
 #' Other options: "equal-tailed", ">", "<"
 #' @param type character or function. The character string specifies
-#'  the type
-#'        of boostrap to use: One of "rademacher", "mammen", "norm"
-#'        and "webb". Alternatively, type can be a function(n) for drawing
-#'        wild bootstrap factors. "rademacher" by default.
+#' the type
+#' of boostrap to use: One of "rademacher", "mammen", "norm"
+#' and "webb". Alternatively, type can be a function(n) for drawing
+#' wild bootstrap factors. "rademacher" by default.
 #' @param floattype Should floating
-#' @param bootstrapc Logical scalar. TRUE  to request
+#' @param bootstrapc Logical scalar. TRUE to request
 #' bootstrap-c instead of bootstrap-t.
 #' @param getauxweights Logical. Whether to save auxilliary weight matrix (v)
 #' @param fweights Should frequency weight or probability weights be used for
 #' WLS? Currently, only frequency weights are supported
 #' @param maxmatsize NULL by default = no limit. Else numeric scalar to set
 #' the maximum size of auxilliary weight matrix (v), in gigabytes. Only
-#'  relevant when 'engine = "WildBootTests.jl"'
+#' relevant when 'engine = "WildBootTests.jl"'
 #' @param small Logical Should a small sample correction (N-1)/(N-k) be used?
 #' @param clusteradj Logical. Should a ssc G / (G-1) be used?
 #' @param clustermin Logical. Should G be computed as min(G) in case of multi-
@@ -51,205 +51,203 @@
 #' @noRd
 
 boot_algo_julia <- function(preprocess,
-                            impose_null,
-                            r,
-                            B,
-                            bootcluster,
-                            clustid,
-                            sign_level,
-                            conf_int,
-                            tol,
-                            p_val_type,
-                            type,
-                            floattype,
-                            bootstrapc,
-                            getauxweights,
-                            fweights,
-                            maxmatsize,
-                            small,
-                            clusteradj,
-                            clustermin,
-                            fe = NULL,
-                            fedfadj = NULL,
-                            liml = NULL,
-                            arubin = NULL,
-                            fuller = NULL,
-                            kappa = NULL,
-                            bootstrap_type = "11") {
+ impose_null,
+ r,
+ B,
+ bootcluster,
+ clustid,
+ sign_level,
+ conf_int,
+ tol,
+ p_val_type,
+ type,
+ floattype,
+ bootstrapc,
+ getauxweights,
+ fweights,
+ maxmatsize,
+ small,
+ clusteradj,
+ clustermin,
+ fe = NULL,
+ fedfadj = NULL,
+ liml = NULL,
+ arubin = NULL,
+ fuller = NULL,
+ kappa = NULL,
+ bootstrap_type = "11") {
 
+ # pass an internal seed which 'inherits' from global seed
 
-  # pass an internal seed which 'inherits' from global seed
+ global_seed <-.Random.seed
+ # need to pass a rng object to WildBootTests.jl
+ JuliaConnectoR::juliaEval("using StableRNGs")
+ internal_seed <-
+ JuliaConnectoR::juliaEval(paste0("rng = StableRNG(", get_seed, ")"))
+ on.exit(set.seed(global_seed))
 
-  global_seed <- .Random.seed
-  # need to pass a rng object to WildBootTests.jl
-  JuliaConnectoR::juliaEval("using StableRNGs")
-  internal_seed <-
-      JuliaConnectoR::juliaEval(paste0("rng = StableRNG(", get_seed(), ")"))
-  on.exit(set.seed(global_seed))
+ resp <- as.numeric(preprocess$Y)
 
-  resp <- as.numeric(preprocess$Y)
+ if (inherits(preprocess, "iv")) {
+ predexog <- preprocess$X_exog
+ predendog <- preprocess$X_endog
+ inst <- preprocess$instruments
+ } else if (inherits(preprocess, "ols")) {
+ predexog <- preprocess$X
+ }
 
-  if (inherits(preprocess, "iv")) {
-    predexog <- preprocess$X_exog
-    predendog <- preprocess$X_endog
-    inst <- preprocess$instruments
-  } else if (inherits(preprocess, "ols")) {
-    predexog <- preprocess$X
-  }
+ if (is.matrix(preprocess$R)) {
+ R <- preprocess$R
+ } else {
+ R <- matrix(preprocess$R, 1, length(preprocess$R))
+ }
+ r <- r
+ #' @srrstats {G2.4a}
+ reps <- as.integer(B) # WildBootTests.jl demands integer
 
-  if (is.matrix(preprocess$R)) {
-    R <- preprocess$R
-  } else {
-    R <- matrix(preprocess$R, 1, length(preprocess$R))
-  }
-  r <- r
-  #' @srrstats {G2.4a}
-  reps <- as.integer(B) # WildBootTests.jl demands integer
+ all_c <- preprocess$all_c
+ clustid_df <-
+ preprocess$cluster_bootcluster[, all_c, drop = FALSE]
 
-  all_c <- preprocess$all_c
-  clustid_df <-
-    preprocess$cluster_bootcluster[, all_c, drop = FALSE]
+ nrow_df <- nrow(clustid_df)
+ #' @srrstats {G2.4a}
+ clustid_mat <- vapply(clustid_df, to_integer, integer(nrow_df))
 
-  nrow_df <- nrow(clustid_df)
-  #' @srrstats {G2.4a}
-  clustid_mat <- vapply(clustid_df, to_integer, integer(nrow_df))
+ # `nbootclustvar::Integer=1`: number of bootstrap-clustering variables
+ # `nerrclustvar::Integer=nbootclustvar`: number of error-clustering variables
+ nbootclustvar <-
+ ifelse(bootcluster == "max", length(clustid), length(bootcluster))
+ nerrclustvar <- length(clustid)
 
-  # `nbootclustvar::Integer=1`: number of bootstrap-clustering variables
-  # `nerrclustvar::Integer=nbootclustvar`: number of error-clustering variables
-  nbootclustvar <-
-    ifelse(bootcluster == "max", length(clustid), length(bootcluster))
-  nerrclustvar <- length(clustid)
+ obswt <- preprocess$weights
+ getci <-
+ ifelse(is.null(conf_int) || conf_int == TRUE, TRUE, FALSE)
+ imposenull <-
+ ifelse(is.null(impose_null) || impose_null == TRUE, TRUE, FALSE)
+ rtol <- tol
 
-  obswt <- preprocess$weights
-  getci <-
-    ifelse(is.null(conf_int) || conf_int == TRUE, TRUE, FALSE)
-  imposenull <-
-    ifelse(is.null(impose_null) || impose_null == TRUE, TRUE, FALSE)
-  rtol <- tol
+ JuliaConnectoR::juliaEval("using WildBootTests")
 
-  JuliaConnectoR::juliaEval("using WildBootTests")
+ suppressWarnings(WildBootTests <-
+ JuliaConnectoR::juliaImport("WildBootTests"))
 
-  suppressWarnings(WildBootTests <-
-    JuliaConnectoR::juliaImport("WildBootTests"))
+ ptype <- switch(p_val_type,
+ "two-tailed" = "symmetric",
+ "equal-tailed" = "equaltail",
+ "<" = "lower",
+ ">" = "upper",
+ ptype
+)
 
-  ptype <- switch(p_val_type,
-    "two-tailed" = "symmetric",
-    "equal-tailed" = "equaltail",
-    "<" = "lower",
-    ">" = "upper",
-    ptype
-  )
+ auxwttype <- switch(type,
+ "rademacher" = "rademacher",
+ "mammen" = "mammen",
+ "norm" = "normal",
+ "webb" = "webb",
+ "gamma" = "gamma",
+ auxwttype
+)
 
-  auxwttype <- switch(type,
-    "rademacher" = "rademacher",
-    "mammen" = "mammen",
-    "norm" = "normal",
-    "webb" = "webb",
-    "gamma" = "gamma",
-    auxwttype
-  )
+ eval_list <- list(
+ floattype,
+ R,
+ r,
+ resp = resp,
+ predexog = predexog,
+ clustid = clustid_mat,
+ nbootclustvar = nbootclustvar,
+ nerrclustvar = nerrclustvar,
+ nbootclustvar = nbootclustvar,
+ nerrclustvar = nerrclustvar,
+ obswt = obswt,
+ getci = getci,
+ imposenull = imposenull,
+ rtol = rtol,
+ auxwttype = auxwttype,
+ ptype = ptype,
+ reps = reps,
+ fweights = FALSE,
+ bootstrapc = bootstrapc,
+ jk = FALSE,
+ rng = internal_seed
+)
 
-  eval_list <- list(
-    floattype,
-    R,
-    r,
-    resp = resp,
-    predexog = predexog,
-    clustid = clustid_mat,
-    nbootclustvar = nbootclustvar,
-    nerrclustvar = nerrclustvar,
-    nbootclustvar = nbootclustvar,
-    nerrclustvar = nerrclustvar,
-    obswt = obswt,
-    getci = getci,
-    imposenull = imposenull,
-    rtol = rtol,
-    auxwttype = auxwttype,
-    ptype = ptype,
-    reps = reps,
-    fweights = FALSE,
-    bootstrapc = bootstrapc,
-    jk = FALSE,
-    rng = internal_seed
-  )
+ if (!is.null(small)) {
+ eval_list[["small"]] <- small
+ }
 
+ if (!is.null(clusteradj)) {
+ eval_list[["clusteradj"]] <- clusteradj
+ }
 
-  if (!is.null(small)) {
-    eval_list[["small"]] <- small
-  }
+ if (!is.null(clustermin)) {
+ eval_list[["clustermin"]] <- clustermin
+ }
 
-  if (!is.null(clusteradj)) {
-    eval_list[["clusteradj"]] <- clusteradj
-  }
+ if (!is.null(fe)) {
+ feid <- as.integer(preprocess$fixed_effect[, 1])
+ eval_list[["feid"]] <- feid
+ eval_list[["fedfadj"]] <- fedfadj
+ }
 
-  if (!is.null(clustermin)) {
-    eval_list[["clustermin"]] <- clustermin
-  }
+ if (!is.null(maxmatsize)) {
+ eval_list[["maxmatsize"]] <- maxmatsize
+ }
 
-  if (!is.null(fe)) {
-    feid <- as.integer(preprocess$fixed_effect[, 1])
-    eval_list[["feid"]] <- feid
-    eval_list[["fedfadj"]] <- fedfadj
-  }
+ if (!is.null(sign_level)) {
+ eval_list[["level"]] <- 1 - sign_level
+ }
 
-  if (!is.null(maxmatsize)) {
-    eval_list[["maxmatsize"]] <- maxmatsize
-  }
+ if (inherits(preprocess, "iv")) {
+ eval_list[["predendog"]] <- predendog
+ eval_list[["inst"]] <- inst
+ if (!is.null(liml)) {
+ eval_list[["liml"]] <- liml
+ }
+ if (!is.null(arubin)) {
+ eval_list[["arubin"]] <- arubin
+ }
+ if (!is.null(fuller)) {
+ eval_list[["fuller"]] <- fuller
+ }
+ if (!is.null(kappa)) {
+ eval_list[["kappa"]] <- kappa
+ }
+ }
 
-  if (!is.null(sign_level)) {
-    eval_list[["level"]] <- 1 - sign_level
-  }
+ if(bootstrap_type == "31"){
+ eval_list[["jk"]] <- TRUE
+ }
 
-  if (inherits(preprocess, "iv")) {
-    eval_list[["predendog"]] <- predendog
-    eval_list[["inst"]] <- inst
-    if (!is.null(liml)) {
-      eval_list[["liml"]] <- liml
-    }
-    if (!is.null(arubin)) {
-      eval_list[["arubin"]] <- arubin
-    }
-    if (!is.null(fuller)) {
-      eval_list[["fuller"]] <- fuller
-    }
-    if (!is.null(kappa)) {
-      eval_list[["kappa"]] <- kappa
-    }
-  }
+ wildboottest_res <- do.call(WildBootTests$wildboottest, eval_list)
 
-  if(bootstrap_type == "31"){
-    eval_list[["jk"]] <- TRUE
-  }
+ # collect results:
+ p_val <- WildBootTests$p(wildboottest_res)
+ if (getci == TRUE) {
+ conf_int <- WildBootTests$ci(wildboottest_res)
+ } else {
+ conf_int <- NA
+ }
+ t_stat <- WildBootTests$teststat(wildboottest_res)
 
-  wildboottest_res <- do.call(WildBootTests$wildboottest, eval_list)
+ t_boot <- WildBootTests$dist(wildboottest_res)
 
-  # collect results:
-  p_val <- WildBootTests$p(wildboottest_res)
-  if (getci == TRUE) {
-    conf_int <- WildBootTests$ci(wildboottest_res)
-  } else {
-    conf_int <- NA
-  }
-  t_stat <- WildBootTests$teststat(wildboottest_res)
+ if (getauxweights == TRUE) {
+ getauxweights <- WildBootTests$auxweights(wildboottest_res)
+ }
 
-  t_boot <- WildBootTests$dist(wildboottest_res)
+ plotpoints <- WildBootTests$plotpoints(wildboottest_res)
+ plotpoints <- cbind(plotpoints$X[[1]], plotpoints$p)
 
-  if (getauxweights == TRUE) {
-    getauxweights <- WildBootTests$auxweights(wildboottest_res)
-  }
+ res_final <- list(
+ p_val = p_val,
+ conf_int = conf_int,
+ t_stat = as.vector(t_stat),
+ t_boot = as.vector(t_boot),
+ auxweights = getauxweights,
+ grid_vals = plotpoints[, 1],
+ p_grid_vals = plotpoints[, 2]
+)
 
-  plotpoints <- WildBootTests$plotpoints(wildboottest_res)
-  plotpoints <- cbind(plotpoints$X[[1]], plotpoints$p)
-
-  res_final <- list(
-    p_val = p_val,
-    conf_int = conf_int,
-    t_stat = as.vector(t_stat),
-    t_boot = as.vector(t_boot),
-    auxweights = getauxweights,
-    grid_vals = plotpoints[, 1],
-    p_grid_vals = plotpoints[, 2]
-  )
-
-  res_final
+ res_final
 }

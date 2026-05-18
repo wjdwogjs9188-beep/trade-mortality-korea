@@ -26,7 +26,7 @@
 
 | check | result | detail |
 |---|:---:|---|
-| V1 KOSIS 인구 합 보존 (pre vs post collapse) | PASS | pre=1,292,773,441.0  post=1,292,773,441.0  diff=0.000000 |
+| V1 KOSIS 인구 합 보존 (pre vs post collapse) | PASS | pre=1,292,773,441.0 post=1,292,773,441.0 diff=0.000000 |
 | V2 229 시군구 cover | PASS | distinct h_code = 229 |
 | V3 27 year cover (1997-2023) | PASS | n_years=27, range=1997-2023 |
 | V4 17 age band cover | PASS | bands=['01_02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18_19_20'] |

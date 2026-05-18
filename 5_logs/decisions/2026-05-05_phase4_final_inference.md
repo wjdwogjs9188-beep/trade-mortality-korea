@@ -6,16 +6,16 @@ _2026-05-05_
 
 - mortality: (31494, 8), IV: (226, 4), centroid: 251
 - baseline industry mode: 226 h_codes, 17 distinct industries
-  - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
+ - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
 [1m[1m[1mnon-precise type array(pyobject, 1d, C)[0m
 [0m[1mDuring: typing of argument at C:\Users\82103\anaconda3\Lib\site-packages\wildboottest\wildboottest.py (533)[0m
 [1m
 File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:[0m
-[1m  def get_denom(self):
-      <source elided>
-        # R to c++ gives good speed improvements
-[1m        @njit(parallel = self.parallel)
-[0m        [1m^[0m[0m
+[1m def get_denom(self):
+ <source elided>
+ # R to c++ gives good speed improvements
+[1m @njit(parallel = self.parallel)
+[0m [1m^[0m[0m
 
 [0m[1mDuring: Pass nopython_type_inference[0m
 
@@ -28,16 +28,16 @@ File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:
 - Conley 10km: SE=0.0335, t=-2.04
 - tF cutoff (F=19.65): |t| > 3.84
 - tF pass count: 0/4 SE layers
-  - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
+ - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
 [1m[1m[1mnon-precise type array(pyobject, 1d, C)[0m
 [0m[1mDuring: typing of argument at C:\Users\82103\anaconda3\Lib\site-packages\wildboottest\wildboottest.py (533)[0m
 [1m
 File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:[0m
-[1m  def get_denom(self):
-      <source elided>
-        # R to c++ gives good speed improvements
-[1m        @njit(parallel = self.parallel)
-[0m        [1m^[0m[0m
+[1m def get_denom(self):
+ <source elided>
+ # R to c++ gives good speed improvements
+[1m @njit(parallel = self.parallel)
+[0m [1m^[0m[0m
 
 [0m[1mDuring: Pass nopython_type_inference[0m
 
@@ -50,16 +50,16 @@ File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:
 - Conley 10km: SE=0.0262, t=-0.19
 - tF cutoff (F=19.65): |t| > 3.84
 - tF pass count: 0/4 SE layers
-  - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
+ - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
 [1m[1m[1mnon-precise type array(pyobject, 1d, C)[0m
 [0m[1mDuring: typing of argument at C:\Users\82103\anaconda3\Lib\site-packages\wildboottest\wildboottest.py (533)[0m
 [1m
 File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:[0m
-[1m  def get_denom(self):
-      <source elided>
-        # R to c++ gives good speed improvements
-[1m        @njit(parallel = self.parallel)
-[0m        [1m^[0m[0m
+[1m def get_denom(self):
+ <source elided>
+ # R to c++ gives good speed improvements
+[1m @njit(parallel = self.parallel)
+[0m [1m^[0m[0m
 
 [0m[1mDuring: Pass nopython_type_inference[0m
 
@@ -72,16 +72,16 @@ File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:
 - Conley 10km: SE=0.0288, t=-0.45
 - tF cutoff (F=19.65): |t| > 3.84
 - tF pass count: 0/4 SE layers
-  - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
+ - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
 [1m[1m[1mnon-precise type array(pyobject, 1d, C)[0m
 [0m[1mDuring: typing of argument at C:\Users\82103\anaconda3\Lib\site-packages\wildboottest\wildboottest.py (533)[0m
 [1m
 File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:[0m
-[1m  def get_denom(self):
-      <source elided>
-        # R to c++ gives good speed improvements
-[1m        @njit(parallel = self.parallel)
-[0m        [1m^[0m[0m
+[1m def get_denom(self):
+ <source elided>
+ # R to c++ gives good speed improvements
+[1m @njit(parallel = self.parallel)
+[0m [1m^[0m[0m
 
 [0m[1mDuring: Pass nopython_type_inference[0m
 
@@ -94,16 +94,16 @@ File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:
 - Conley 10km: SE=0.0451, t=-0.26
 - tF cutoff (F=19.65): |t| > 3.84
 - tF pass count: 0/4 SE layers
-  - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
+ - WCB error: Failed in nopython mode pipeline (step: nopython frontend)
 [1m[1m[1mnon-precise type array(pyobject, 1d, C)[0m
 [0m[1mDuring: typing of argument at C:\Users\82103\anaconda3\Lib\site-packages\wildboottest\wildboottest.py (533)[0m
 [1m
 File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:[0m
-[1m  def get_denom(self):
-      <source elided>
-        # R to c++ gives good speed improvements
-[1m        @njit(parallel = self.parallel)
-[0m        [1m^[0m[0m
+[1m def get_denom(self):
+ <source elided>
+ # R to c++ gives good speed improvements
+[1m @njit(parallel = self.parallel)
+[0m [1m^[0m[0m
 
 [0m[1mDuring: Pass nopython_type_inference[0m
 
@@ -121,12 +121,12 @@ File "..\..\anaconda3\Lib\site-packages\wildboottest\wildboottest.py", line 533:
 
 ## Romano-Wolf step-down (1000 boot, family of 5 outcomes)
 ```
-       outcome     t_HC1    p_raw  p_RW_adj  RW_sig
- despair_total -2.120511 0.033963     0.317   False
-        cancer -0.188915 0.850160     1.000   False
-cardiovascular -0.455480 0.648764     0.996   False
-   respiratory -0.267771 0.788875     1.000   False
-external_other  0.288900 0.772658     0.999   False
+ outcome t_HC1 p_raw p_RW_adj RW_sig
+ despair_total -2.120511 0.033963 0.317 False
+ cancer -0.188915 0.850160 1.000 False
+cardiovascular -0.455480 0.648764 0.996 False
+ respiratory -0.267771 0.788875 1.000 False
+external_other 0.288900 0.772658 0.999 False
 ```
 - saved: `4_results/regression/romano_wolf_pvalues.csv`
 

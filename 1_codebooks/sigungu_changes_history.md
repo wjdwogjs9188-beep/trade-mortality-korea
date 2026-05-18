@@ -125,7 +125,7 @@
 3. 2021 baseline 에 없는 pre-2021 raw_code (29건) — 위 표대로 successor entity 의 2021 코드로 매핑.
 4. 2022 raw_code = 2021 raw_code (forward-fill, 100% 매칭).
 5. 2023 raw_code (KOSTAT 코드집 별도 수신) — 2021 baseline 과 within-sido sigungu 명칭으로 매칭.
-   - 군 (county) 256건은 raw_code 이 +200 일괄 renumber → h_code 는 2021 코드 유지.
-   - 군위군 (경북→대구 2023.7.1): h_code 37310 유지, sido_code 만 2023부터 22.
-   - 미추홀구/세종/통합청주시/통합창원시: 명칭 normalization 으로 매칭.
+ - 군 (county) 256건은 raw_code 이 +200 일괄 renumber → h_code 는 2021 코드 유지.
+ - 군위군 (경북→대구 2023.7.1): h_code 37310 유지, sido_code 만 2023부터 22.
+ - 미추홀구/세종/통합청주시/통합창원시: 명칭 normalization 으로 매칭.
 6. 2023 sido name override: 강원도 → 강원특별자치도 (2023.6.11 변경).

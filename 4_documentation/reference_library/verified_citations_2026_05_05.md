@@ -1,11 +1,11 @@
 # Verified Citations — Track 1 본문 직접 inspect (2026-05-05) 본 paper PAP v4.5.1 의 citation 정확성을 paper PDF 본문 직접 inspect 결과 commit. direct text extraction (pdftotext) 으로 verify 한 specific values. --- ## ✅ Verified — v4.5.1 정확값 일치 ### 1. Lang, McManus, Schaur (2019) Health Economics 28(1):44-56 **Verified value**: First-stage F = **18.77** (Table 2, M.3 spec full controls) 본문 발췌:
-> "ΔIPW OTH_i ... Wk. instrument F stat ... 50.76 / 35.95 / **18.77**" → v4.5.1 § 5.4 의 "Lang 2019 F=18.77 published" framing 정확 ✅ ### 2. Pierce-Schott (2020) AERI 2(1):47-64 **Verified framing**: Drug overdose only (suicide + ARLD null) 본문 발췌:
+> "ΔIPW OTH_i... Wk. instrument F stat... 50.76 / 35.95 / **18.77**" → v4.5.1 § 5.4 의 "Lang 2019 F=18.77 published" framing 정확 ✅ ### 2. Pierce-Schott (2020) AERI 2(1):47-64 **Verified framing**: Drug overdose only (suicide + ARLD null) 본문 발췌:
 > "an interquartile shift in counties' exposure to PNTR is associated with a relative increase in mortality from overall deaths of despair of **2 to 3 per 100,000**"
 > "Within deaths of despair, **the link between PNTR and mortality is driven by drug overdoses**. For this cause of death, an interquartile shift in exposure is also associated with a relative increase of **2 to 3 per 100,000**, a sizable share of the **5 per 100,000 average death rate**"
 > "we find **little relationship between PNTR and mortality from either suicide or alcohol-related liver disease (ARLD)**" → v4.5.1 § 1.3 + § 2 정정 framing 정확 ✅ ### 3. Autor, Dorn, Hanson (2019) AERI 1(2):161-178 **Verified value**: D&A point estimate **19.5** (t=2.9) per 100,000 adults per decade 본문 발췌 (Panel B, column 4):
 > "The point estimate of **19.5 (t = 2.9)** accounts for **30 percent** of the total contribution of trade shocks to differential male mortality."
 > Background mortality rate: 936/100k decade Main result framing:
-> "differential and economically large rise in male mortality from drug and alcohol poisoning, HIV/AIDS, and homicide"
+> "differential and economically large rise in male mortality from drug and alcohol poisoning, HIV/DS, and homicide"
 > Title focus: marriage market value of young men → v4.5.1 § 1.3 정정 framing (main = marriage market, secondary = D&A mortality +19.5/100k) 정확 ✅ ### 4. Dippel, Gold, Heblich, Pinto (2017) NBER WP 23209 **Verified citation**: 4번째 author = **Pinto** (Pinkovskiy 아님) **Verified framework spec**:
 - Title: "Instrumental Variables and Causal Mechanisms: Unpacking the Effect of Trade on Workers and Voters"
 - JEL: F1, F6, J2

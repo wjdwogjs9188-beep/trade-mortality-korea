@@ -1,6 +1,6 @@
 """
 첫 reduced form (preliminary main result)
-================================================ Spec: Δ_long log(despair_total)_h = α + β · z_x_h^{KR-CN} + γ_t + ε_h Δ_long = log(rate_2010) - log(rate_2000) (10y change) z_x_h = `iv_z_x_bilateral.parquet` z_x_per_worker 5 outcome groups 모두 회귀: despair_total, cancer, cardiovascular, respiratory, external_other SE layers: - HC1 (sandwich) - cluster-sido (Korea 15-17 sido) - tF inference 의무화 (Phase B-x F=19.65 borderline) Output: 3_derived/regression/first_reduced_form_results.csv 5_logs/integrity_checks/<date>_first_reduced_form.md Author: Date : 2026-05-05
+================================================ Spec: Δ_long log(despair_total)_h = α + β · z_x_h^{KR-CN} + γ_t + ε_h Δ_long = log(rate_2010) - log(rate_2000) (10y change) z_x_h = `iv_z_x_bilateral.parquet` z_x_per_worker 5 outcome groups 모두 회귀: despair_total, cancer, cardiovascular, respiratory, external_other SE layers: - HC1 (sandwich) - cluster-sido (Korea 15-17 sido) - tF inference 의무화 (Phase B-x F=19.65 borderline) Output: 3_derived/regression/first_reduced_form_results.csv 5_logs/integrity_checks/<date>_first_reduced_form.md Author: Date: 2026-05-05
 """
 from __future__ import annotations import sys
 from datetime import date

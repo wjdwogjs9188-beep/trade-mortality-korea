@@ -38,4 +38,4 @@
 
 ## Next step
 - 11_mediator_mortality_rate.py: mortality numerator (혼인/교육 코드별 사망)
-  + mediator denominator merge → mediator-specific mortality rate panel
+ + mediator denominator merge → mediator-specific mortality rate panel

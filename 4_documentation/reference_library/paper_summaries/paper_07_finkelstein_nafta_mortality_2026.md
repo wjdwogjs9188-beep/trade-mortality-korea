@@ -13,68 +13,68 @@
 
 **Contribution** (역사적으로 중요):
 1. **처음으로 trade shock과 mortality의 직접적 인과관계 정량화**
-   - Prior work (ADH 2013): 고용, 실업, 정부 이전지출 (death는 암묵적)
-   - This paper: "deaths of despair" 명시적 측정 (자살, 약물, 알코올)
-   
+ - Prior work (ADH 2013): 고용, 실업, 정부 이전지출 (death는 암묵적)
+ - This paper: "deaths of despair" 명시적 측정 (자살, 약물, 알코올)
+
 2. **Shift-share IV의 "reduce-form" 적용**
-   - 직접 outcome (mortality)에 instrument 사용 (intermediate outcome 아님)
-   - 이전: ADH는 employment → transfers 경로 추정
-   - This: employment → health behavior → mortality pathway로 extend
-   
+ - 직접 outcome (mortality)에 instrument 사용 (intermediate outcome 아님)
+ - 이전: ADH는 employment → transfers 경로 추정
+ - This: employment → health behavior → mortality pathway로 extend
+
 3. **메커니즘 분해**: 경제 충격의 비약물 vs. 약물 경로
-   - Manufacturing decline (job losses) → 약물/알코올 사망 증가
-   - vs. Healthcare access 향상 → 모든 사망 감소
-   - Trade shock의 negative effect > positive effect (net: mortality 증가)
-   
+ - Manufacturing decline (job losses) → 약물/알코올 사망 증가
+ - vs. Healthcare access 향상 → 모든 사망 감소
+ - Trade shock의 negative effect > positive effect (net: mortality 증가)
+
 4. **Policy implication**: Trade의 "숨겨진 비용"을 재평가
-   - 기존: 무역이득 = consumer surplus (낮은 가격)
-   - This: 무역이득 vs. mortality cost (whose death? distributional issue)
+ - 기존: 무역이득 = consumer surplus (낮은 가격)
+ - This: 무역이득 vs. mortality cost (whose death? distributional issue)
 
 ## Data
 - **Source**:
-  - **Mortality**: CDC Mortality Detail Files (NCHS)
-    - All-cause deaths, cause-specific (ICD-10)
-    - Diseases of despair (suicide, alcohol-related, drug-related)
-    - Cancer, heart disease, other major causes
-  
-  - **Population estimates**: SEER (Surveillance, Epidemiology, End Results)
-    - National Cancer Institute
-    - Age-adjusted population denominators by county-year
-  
-  - **Labor market**: CPS (Current Population Survey)
-    - Unemployment, labor force participation
-    - Industry employment (by CZ)
-  
-  - **Trade data**: UN Comtrade, World Bank WITS
-    - Mexican exports (by 4-digit industry, 1990 baseline)
-    - US imports from Mexico (annual 1994-2007 and beyond)
-    - Rest-of-world exports to non-US-Mexico (control for global trends)
-  
-  - **Baseline characteristics**: 1980 Census
-    - Industry composition (for constructing vulnerability index)
-    - Demographics (education, age)
+ - **Mortality**: CDC Mortality Detail Files (NCHS)
+ - All-cause deaths, cause-specific (ICD-10)
+ - Diseases of despair (suicide, alcohol-related, drug-related)
+ - Cancer, heart disease, other major causes
+
+ - **Population estimates**: SEER (Surveillance, Epidemiology, End Results)
+ - National Cancer Institute
+ - Age-adjusted population denominators by county-year
+
+ - **Labor market**: CPS (Current Population Survey)
+ - Unemployment, labor force participation
+ - Industry employment (by CZ)
+
+ - **Trade data**: UN Comtrade, World Bank WITS
+ - Mexican exports (by 4-digit industry, 1990 baseline)
+ - US imports from Mexico (annual 1994-2007 and beyond)
+ - Rest-of-world exports to non-US-Mexico (control for global trends)
+
+ - **Baseline characteristics**: 1980 Census
+ - Industry composition (for constructing vulnerability index)
+ - Demographics (education, age)
 
 - **Geographic unit**: Commuting Zones (CZs), 722 in continental US
-  - Standard in US regional labor market studies (Autor et al. 2013)
-  - Aggregates counties into local labor markets (~100,000-500,000 person units)
+ - Standard in US regional labor market studies (Autor et al. 2013)
+ - Aggregates counties into local labor markets (~100,000-500,000 person units)
 
 - **Time period**:
-  - **NAFTA introduction**: 1994
-  - **Analysis sample**: 1993-2007 (pre: 1993-1994 as baseline, post: 1994-2007)
-  - **Extensions**: Some analysis to 2015-2019 (longer term)
+ - **NAFTA introduction**: 1994
+ - **Analysis sample**: 1993-2007 (pre: 1993-1994 as baseline, post: 1994-2007)
+ - **Extensions**: Some analysis to 2015-2019 (longer term)
 
 - **Sample size**:
-  - 722 CZs × ~15 years (1993-2007) = ~10,830 observations
-  - Mortality counts: varying (common for rare events in small areas)
-  - (Some CZ-years may have small counts → Poisson/negative binomial relevant)
+ - 722 CZs × ~15 years (1993-2007) = ~10,830 observations
+ - Mortality counts: varying (common for rare events in small areas)
+ - (Some CZ-years may have small counts → Poisson/negative binomial relevant)
 
 - **주요 변수**:
-  - **Dependent**: Age-adjusted all-cause mortality rate (per 100,000)
-    - Cause-specific: Suicide, drug-related, alcohol-related (despair deaths)
-    - Also: Cancer, heart disease, other causes
-  
-  - **Treatment/Instrument**: NAFTA vulnerability index
-    - $\tilde{V}_c$ = scaled measure from least to most vulnerable quartile
+ - **Dependent**: Age-adjusted all-cause mortality rate (per 100,000)
+ - Cause-specific: Suicide, drug-related, alcohol-related (despair deaths)
+ - Also: Cancer, heart disease, other causes
+
+ - **Treatment/Instrument**: NAFTA vulnerability index
+ - $\tilde{V}_c$ = scaled measure from least to most vulnerable quartile
 
 ## Identification Strategy
 
@@ -101,16 +101,16 @@ Where:
 
 **Conceptual critique** (author-acknowledged):
 1. **Global trends** (e.g., opioid epidemic): Might correlate with trade exposure
-   - Mitigation: Robustness controls for opioid introduction (Oxycontin 1996)
-   - But: Confounding by global health trends possible
-   
+ - Mitigation: Robustness controls for opioid introduction (Oxycontin 1996)
+ - But: Confounding by global health trends possible
+
 2. **NAFTA endogeneity**: Industries with lower productivity might have *both* exposure to Mexico *and* pre-existing health problems
-   - Mitigation: Pre-trends test (parallel trends in 1993-1994 before effect kicks in)
-   - Assumption: No anticipation effects pre-1994
-   
+ - Mitigation: Pre-trends test (parallel trends in 1993-1994 before effect kicks in)
+ - Assumption: No anticipation effects pre-1994
+
 3. **Manufacturing compositional shifts**: NAFTA affects industries, but which workers displace?
-   - Assumption: Share-based weighting captures average CZ exposure
-   - Heterogeneity: High-manufacturing CZs more vulnerable (testable)
+ - Assumption: Share-based weighting captures average CZ exposure
+ - Heterogeneity: High-manufacturing CZs more vulnerable (testable)
 
 ### IV Framework: Reduced-Form
 **Standard 2SLS setup** (Choi et al. 2024 style):
@@ -132,16 +132,16 @@ $$\text{Mortality}_{ct} = \beta_t (V_c \times \mathbf{1}(\text{Year}_t)) + \alph
 
 ### Validity & Testing
 1. **Parallel trends** (pre-1994 1993-1994 years):
-   - $\beta_{1993}, \beta_{1994}$ should be ≈ 0 (no pre-treatment effect)
-   - Testable via event study plot
-   
+ - $\beta_{1993}, \beta_{1994}$ should be ≈ 0 (no pre-treatment effect)
+ - Testable via event study plot
+
 2. **Overidentification** (if using multiple instruments):
-   - Hansen J-test (not detailed in abstract)
-   
+ - Hansen J-test (not detailed in abstract)
+
 3. **Alternative shocks** (Section 5):
-   - Non-NAFTA trade shocks (China, other)
-   - Manufacturing decline vs. non-manufacturing shocks
-   - Differential signs/magnitudes validate specificity
+ - Non-NAFTA trade shocks (China, other)
+ - Manufacturing decline vs. non-manufacturing shocks
+ - Differential signs/magnitudes validate specificity
 
 ## Empirical Specification
 
@@ -161,19 +161,19 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 ### Control Variables
 **$X_{ct}$ specification** (from Finkelstein et al.):
 1. **Initial characteristics** (1980):
-   - Manufacturing employment share (log)
-   - Education composition
-   - Age composition
-   - Race/ethnicity composition
-   
+ - Manufacturing employment share (log)
+ - Education composition
+ - Age composition
+ - Race/ethnicity composition
+
 2. **Time-varying**:
-   - Healthcare access measures (uninsured rate by CZ)
-   - Opioid epidemic indicator (post-1996)
-   - 3 k-means clusters of CZ characteristics (to avoid over-parameterization)
+ - Healthcare access measures (uninsured rate by CZ)
+ - Opioid epidemic indicator (post-1996)
+ - 3 k-means clusters of CZ characteristics (to avoid over-parameterization)
 
 3. **Alternative controls**:
-   - Industry-specific trends (non-traded goods exposure)
-   - Robustness: Various feature sets tested
+ - Industry-specific trends (non-traded goods exposure)
+ - Robustness: Various feature sets tested
 
 ### Standard Errors
 - **Clustering**: State level (51 categories)
@@ -201,12 +201,12 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 ### 2. Cause-Specific Decomposition
 **Expected pattern** (not explicitly in abstract, but from paper structure):
 - **Diseases of despair** (suicide, drugs, alcohol): Largest positive effect
-  - These are the "mechanism" channels
-  - Likely: Coefficient 2-3× larger than all-cause effect
-  
+ - These are the "mechanism" channels
+ - Likely: Coefficient 2-3× larger than all-cause effect
+
 - **Other causes** (cancer, heart disease): 
-  - May show negative effect (healthcare access improvements?)
-  - Or zero effect (not mechanistically linked to trade)
+ - May show negative effect (healthcare access improvements?)
+ - Or zero effect (not mechanistically linked to trade)
 
 **Example (hypothetical from mechanism logic)**:
 | Cause of death | Effect | Mechanism |
@@ -221,16 +221,16 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 ### 3. Heterogeneity
 **Regional differences** (from paper structure):
 - **High-manufacturing CZs**: Larger effect
-  - NAFTA vulnerability concentrated in manufacturing
-  - Coefficient: 1.5-2× baseline
-  
+ - NAFTA vulnerability concentrated in manufacturing
+ - Coefficient: 1.5-2× baseline
+
 - **Urban vs. rural**: 
-  - Rural likely larger (fewer alternative employment)
-  - Less service sector growth as offset
-  
+ - Rural likely larger (fewer alternative employment)
+ - Less service sector growth as offset
+
 - **Education levels**:
-  - Low-education workers: Larger dislocation
-  - (But analysis at CZ level, not individual)
+ - Low-education workers: Larger dislocation
+ - (But analysis at CZ level, not individual)
 
 ### 4. Time Dynamics (Event Study)
 **Expected pattern** (event-study structure):
@@ -251,68 +251,68 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 - **Pre-NAFTA years (1993-1994)**: Should show β ≈ 0 (as noted above)
 - **Alternative industries**: Non-NAFTA-exposed industries control
 - **Future shocks**: China shock (post-2000) should have different pattern
-  - Finkelstein tests: Non-NAFTA trade shocks have different mortality effects
-  - Validates specificity to NAFTA mechanism
+ - Finkelstein tests: Non-NAFTA trade shocks have different mortality effects
+ - Validates specificity to NAFTA mechanism
 
 ### 2. Alternative Specification
 - **Non-linear models**: Poisson (for count data)
-  - If mortality counts small in some CZ-years
-  - Results robust to linear specification (standard)
-  
+ - If mortality counts small in some CZ-years
+ - Results robust to linear specification (standard)
+
 - **Different weighting**: Huber robust regression
-  - For outlier CZs (very high mortality or very high exposure)
+ - For outlier CZs (very high mortality or very high exposure)
 
 ### 3. Mechanism robustness
 - **Opioid controls**: Explicit Oxycontin indicator (1996+)
-  - To partial out confounding opioid epidemic
-  - If effect persists: Not purely opioid-driven
-  
+ - To partial out confounding opioid epidemic
+ - If effect persists: Not purely opioid-driven
+
 - **Healthcare access controls**:
-  - Uninsured rate, hospital density
-  - To rule out that NAFTA → less healthcare access → mortality
+ - Uninsured rate, hospital density
+ - To rule out that NAFTA → less healthcare access → mortality
 
 ### 4. Sample robustness
 - **Geographic restriction**: 
-  - Continental US only (exclude Alaska, Hawaii)
-  - Mexican border CZs vs. interior (sensitivity to trade intensity)
-  
+ - Continental US only (exclude Alaska, Hawaii)
+ - Mexican border CZs vs. interior (sensitivity to trade intensity)
+
 - **Time period extension**: 2015-2019 data (if available)
-  - Longer-term persistence or recovery?
+ - Longer-term persistence or recovery?
 
 ## Heterogeneity
 
 ### 1. By manufacturing intensity
 - **High-manufacturing CZs** (>20% employment in 1980):
-  - Larger mortality effect (1.0-1.5%)
-  - Concentrated exposure to NAFTA
-  
+ - Larger mortality effect (1.0-1.5%)
+ - Concentrated exposure to NAFTA
+
 - **Low-manufacturing CZs** (<10%):
-  - Effect smaller (0.2-0.4%)
-  - Diversified economy, less NAFTA-vulnerable
+ - Effect smaller (0.2-0.4%)
+ - Diversified economy, less NAFTA-vulnerable
 
 ### 2. By demographic composition
 - **Age**: Mortality effects on working-age (25-65) > elderly
-  - Working-age: Direct link to job loss → despair
-  - Elderly: Retirement income unaffected by NAFTA
-  
+ - Working-age: Direct link to job loss → despair
+ - Elderly: Retirement income unaffected by NAFTA
+
 - **Education**: 
-  - Low education: Larger effect (higher trade vulnerability)
-  - College-educated: Smaller (skills less substitutable by Mexico)
-  - (Implication: Distributional, not economy-wide)
+ - Low education: Larger effect (higher trade vulnerability)
+ - College-educated: Smaller (skills less substitutable by Mexico)
+ - (Implication: Distributional, not economy-wide)
 
 ### 3. By geography
 - **Trade-hub CZs** (near ports, Mexico border):
-  - More exposed to direct Mexican import (larger β)
-  
+ - More exposed to direct Mexican import (larger β)
+
 - **Interior CZs**:
-  - Less direct exposure, but supply chain effects
-  - Smaller β
+ - Less direct exposure, but supply chain effects
+ - Smaller β
 
 ### 4. Dynamic heterogeneity
 - **By years post-NAFTA**:
-  - Year 1-2 (1994-1995): Minimal effect (information lag)
-  - Year 5-10 (1999-2004): Peak effect (accumulated displacement)
-  - Year 10-15 (2004-2009): Stabilized (survivor effect, adaptation?)
+ - Year 1-2 (1994-1995): Minimal effect (information lag)
+ - Year 5-10 (1999-2004): Peak effect (accumulated displacement)
+ - Year 10-15 (2004-2009): Stabilized (survivor effect, adaptation?)
 
 ## Mechanism: Trade Shock → Mortality Pathway
 
@@ -332,9 +332,9 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 **Stage 3: Health behavior & mortality**
 - Economic desperation (loss of income, status, health insurance)
 - Behavioral responses:
-  - **Substance abuse**: Alcohol, opioids (self-medication for stress, pain)
-  - **Psychological**: Suicide (hopelessness)
-  - **Medical**: Neglect preventive care (uninsured)
+ - **Substance abuse**: Alcohol, opioids (self-medication for stress, pain)
+ - **Psychological**: Suicide (hopelessness)
+ - **Medical**: Neglect preventive care (uninsured)
 - **Timeline**: 2-5 years (health behaviors change, acute events occur)
 
 **Stage 4: Realized mortality**
@@ -343,28 +343,28 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 
 ### Alternative mechanisms (ruled out)
 1. **Healthcare access**: 
-   - If NAFTA → lower income → less insurance → higher mortality
-   - But: US has public insurance (Medicaid) → should be partial offset
-   - Control variable: Uninsured rate
-   - Expected: Effect persists despite healthcare controls → Not pure access story
+ - If NAFTA → lower income → less insurance → higher mortality
+ - But: US has public insurance (Medicaid) → should be partial offset
+ - Control variable: Uninsured rate
+ - Expected: Effect persists despite healthcare controls → Not pure access story
 
 2. **Pollution/environmental**:
-   - If NAFTA → deindustrialization → Less pollution → Lower mortality
-   - Should show *negative* effect for all causes
-   - **Finding**: Positive for despair deaths → Environmental not driver
+ - If NAFTA → deindustrialization → Less pollution → Lower mortality
+ - Should show *negative* effect for all causes
+ - **Finding**: Positive for despair deaths → Environmental not driver
 
 3. **Migration**:
-   - If NAFTA → out-migration of affected workers → CZ mortality decreases
-   - **Counter-evidence**: ADH shows limited migration (<5% over decade)
-   - Control variable: Labor force participation (captures some migration)
+ - If NAFTA → out-migration of affected workers → CZ mortality decreases
+ - **Counter-evidence**: ADH shows limited migration (<5% over decade)
+ - Control variable: Labor force participation (captures some migration)
 
 ### Direct evidence for mechanism
 **From paper's Section 4** (inferred):
 - Unemployment rate increase in exposed CZs (first-stage-like evidence)
 - Conditional on unemployment, mortality increases
 - Mediation analysis (if performed): 
-  - Direct effect (NAFTA → mortality, not through unemployment): 30-40%
-  - Indirect effect (NAFTA → unemployment → mortality): 60-70%
+ - Direct effect (NAFTA → mortality, not through unemployment): 30-40%
+ - Indirect effect (NAFTA → unemployment → mortality): 60-70%
 
 ## 본 연구와의 Connection
 
@@ -374,62 +374,62 @@ $$y_{ct} = \beta_t [V_c \times \mathbf{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 - **ADH (2013)**: US trade shock + local labor markets + employment/transfers
 - **Finkelstein et al. (2026)**: US trade shock + local labor markets + mortality
 - **Korea PAP v3.4**: 무역 충격 + 지역 노동시장 + 사망(자살/약물)
-  - 동일한 geographic unit (commuting zones equivalent in Korea)
-  - 동일한 identification (shift-share IV)
-  - **결합**: ADH + Finkelstein = Korea PAP의 이론적/실증적 설계
+ - 동일한 geographic unit (commuting zones equivalent in Korea)
+ - 동일한 identification (shift-share IV)
+ - **결합**: ADH + Finkelstein = Korea PAP의 이론적/실증적 설계
 
 **2. Causal pathway 통합**:
 ```
 Trade Shock 
-    ↓ (ADH channel)
+ ↓ (ADH channel)
 Unemployment ↑ / Transfers ↑
-    ↓ (Finkelstein channel)  
+ ↓ (Finkelstein channel) 
 Despair (substance abuse, suicide)
-    ↓
+ ↓
 Mortality ↑ (Deaths of despair)
 ```
 
 Korea PAP:
 - **Stage 1**: Trade (export shocks, maybe import shocks) → Employment/unemployment
-  - IV: Shift-share (한국 산업 구성 × global trade shifts)
-  - Data: 고용, 실업, 노동력 참여 (CPS equivalent: 경제활동 microdata)
-  
+ - IV: Shift-share (한국 산업 구성 × global trade shifts)
+ - Data: 고용, 실업, 노동력 참여 (CPS equivalent: 경제활동 microdata)
+
 - **Stage 2**: Unemployment → Health outcomes
-  - Mediation: Government transfers (unemployment insurance, etc.)
-  - Data: 사망 원인별 (자살, 약물, 알코올) = Finkelstein의 "despair deaths"
-  
+ - Mediation: Government transfers (unemployment insurance, etc.)
+ - Data: 사망 원인별 (자살, 약물, 알코올) = Finkelstein의 "despair deaths"
+
 - **Combined**: Trade → labor market → deaths
-  - Finkelstein provides benchmark coefficients from US
-  - Korea: Potentially larger (less safety net, more despair) or smaller (cohort effects)
+ - Finkelstein provides benchmark coefficients from US
+ - Korea: Potentially larger (less safety net, more despair) or smaller (cohort effects)
 
 **3. Methodological 차용 및 개선**:
 - **ADH**: 고용 감소 coefficient -0.69 (per standard deviation trade exposure)
-  - PAP: 유사한 trade exposure measure 필요 (한국 산업 기반)
-  
+ - PAP: 유사한 trade exposure measure 필요 (한국 산업 기반)
+
 - **Finkelstein**: 사망 0.68% (NAFTA 노출도 1단위당)
-  - PAP: 사망률의 단위? 사망 수? Incidence rate ratio?
-  - Scale: 한국이 더 작으면 (사망 베이스 다름) coefficient magnitude 다를 수
-  - Example: Korea 자살률 20/100,000 (US all-cause 900/100,000보다 작음) → Elasticity 다를 수
+ - PAP: 사망률의 단위? 사망 수? Incidence rate ratio?
+ - Scale: 한국이 더 작으면 (사망 베이스 다름) coefficient magnitude 다를 수
+ - Example: Korea 자살률 20/100,000 (US all-cause 900/100,000보다 작음) → Elasticity 다를 수
 
 **4. Specification 설계**:
 - **Event study**:
-  - ADH: 1990-2000, 2000-2007 두 시기
-  - Finkelstein: 1993-1994 (pre), 1995-2007 (post) event-study coefficients
-  - PAP: 1990-2010 (long-run)? or 2000-2019 (event period)?
-  - **학습점**: Finkelstein의 event-study lag structure (mortality takes 2-5 years) 적용 가능
+ - ADH: 1990-2000, 2000-2007 두 시기
+ - Finkelstein: 1993-1994 (pre), 1995-2007 (post) event-study coefficients
+ - PAP: 1990-2010 (long-run)? or 2000-2019 (event period)?
+ - **학습점**: Finkelstein의 event-study lag structure (mortality takes 2-5 years) 적용 가능
 
 **5. Causal identification assumption**:
 - All three papers: Parallel trends
-  - Pre-treatment mortality/employment/transfers 동향이 exposed vs. unexposed CZs 유사
-  - Testable: Plot pre-period coefficients (should be ≈ 0)
-  - PAP: Korean 1980s-1990 (pre-major trade liberalization) 사용
+ - Pre-treatment mortality/employment/transfers 동향이 exposed vs. unexposed CZs 유사
+ - Testable: Plot pre-period coefficients (should be ≈ 0)
+ - PAP: Korean 1980s-1990 (pre-major trade liberalization) 사용
 
 **6. Control variable specification**:
 - ADH: 1990 industry composition, initial conditions
 - Finkelstein: 1980 industry composition + 1990 characteristics + k-means clusters
 - **PAP**: 1990 산업 구성? (Korea 1980 census data availability?)
-  - Also: Manufacturing share, education, age (if available in microdata)
-  - Recent: Opioid equivalent for Korea? (약물 사용 관련 규제 변화?)
+ - Also: Manufacturing share, education, age (if available in microdata)
+ - Recent: Opioid equivalent for Korea? (약물 사용 관련 규제 변화?)
 
 **7. Heterogeneity 전략**:
 | Dimension | ADH | Finkelstein | PAP target |
@@ -443,19 +443,19 @@ Korea PAP:
 - **ADH message**: Trade has distributional costs (not all workers equal); government transfers matter
 - **Finkelstein message**: Distributional costs include ultimate mortality; cost-benefit analysis must include health
 - **PAP message**: Trade + health = policy tradeoff (for Korea specifically)
-  - Korea's welfare state vs. US? (Better offset or not?)
-  - Korea's retraining programs vs. ADH's UI/DI comparison
+ - Korea's welfare state vs. US? (Better offset or not?)
+ - Korea's retraining programs vs. ADH's UI/DI comparison
 
 **9. Novelty claim in PAP v3.4**:
 - **Existing in Korea context**:
-  - Trade shocks: Documented (financial crisis 1997, global trade 2008, China rise 2000s)
-  - Regional inequality: Well-known (Seoul vs. region, manufacturing decline)
-  - Deaths of despair: Rising (suicide rate 30+/100k among elderly, drug-related rising)
-  
+ - Trade shocks: Documented (financial crisis 1997, global trade 2008, China rise 2000s)
+ - Regional inequality: Well-known (Seoul vs. region, manufacturing decline)
+ - Deaths of despair: Rising (suicide rate 30+/100k among elderly, drug-related rising)
+
 - **Novel contribution**:
-  - **Link**: Trade shock → regional labor market → deaths of despair
-  - Quantify: Elasticity of despair death w.r.t. trade shock (using Finkelstein + local labor market data)
-  - Mechanism: Unemployment → social safety net insufficiency → despair
+ - **Link**: Trade shock → regional labor market → deaths of despair
+ - Quantify: Elasticity of despair death w.r.t. trade shock (using Finkelstein + local labor market data)
+ - Mechanism: Unemployment → social safety net insufficiency → despair
 
 **10. Quote mapping for introduction**:
 
@@ -474,46 +474,46 @@ Translatable to Korea intro:
 - Finkelstein et al.는 명시적으로 논제를 **"Trading Goods for Lives"**로 제시
 - Trade gains (consumer surplus, producer efficiency) vs. mortality cost (whose death?)
 - 한국 맥락: Trade liberalization (2000s-2010s) vs. rising despair deaths (2000s-2010s)
-  - **시간적 일치**: Coincidence인가, Causation인가?
-  - Finkelstein의 방법론으로 test 가능
-  
+ - **시간적 일치**: Coincidence인가, Causation인가?
+ - Finkelstein의 방법론으로 test 가능
+
 - **PAP의 contribution**: Korean case study for trade-health tradeoff
-  - US NAFTA: 중국, 멕시코 경쟁
-  - Korea: 중국, 일본 경쟁 + global supply chain integration
-  - Potentially larger shock (smaller economy) → Larger health effect?
+ - US NAFTA: 중국, 멕시코 경쟁
+ - Korea: 중국, 일본 경쟁 + global supply chain integration
+ - Potentially larger shock (smaller economy) → Larger health effect?
 
 ### 2. Identification의 "Convincingness" 계층
 **교훈**:
 - ADH (2013): IV 기반 (2SLS), first-stage strong, exogeneity argued
 - Sufi (2023): 순수 cross-country pattern (IV 없음), predictive 강조
 - Finkelstein (2026): Reduced-form IV (direct outcome), event-study parallel trends
-  
+
 - **Hierarchy of conviction**:
-  1. **Strongest**: IV + strong first-stage + placebo (ADH style) = causal likely
-  2. **Moderate**: Reduced-form IV + event-study + robustness (Finkelstein) = causal possible
-  3. **Weakest**: Pattern + cross-sectional (Sufi) = association only, causal unclear
-  
+ 1. **Strongest**: IV + strong first-stage + placebo (ADH style) = causal likely
+ 2. **Moderate**: Reduced-form IV + event-study + robustness (Finkelstein) = causal possible
+ 3. **Weakest**: Pattern + cross-sectional (Sufi) = association only, causal unclear
+
 - **PAP 전략**: Finkelstein의 level에 목표 설정
-  - IV (shift-share) ✓
-  - Event-study + parallel trends ✓
-  - Mechanism tests (ADH pathway + Finkelstein pathway) ✓
-  - Then: Conclude "causal" with appropriate confidence interval
+ - IV (shift-share) ✓
+ - Event-study + parallel trends ✓
+ - Mechanism tests (ADH pathway + Finkelstein pathway) ✓
+ - Then: Conclude "causal" with appropriate confidence interval
 
 ### 3. "Deaths of Despair"의 정의 및 측정
 **교훈**:
 - Case-Deaton (2015): "Deaths of despair" (원래 정의) = suicide + poisoning (drug/alcohol) + liver disease (cirrhosis)
 - Finkelstein: All-cause mortality도 측정하지만, despair deaths를 highlight
 - **문제**: Cause-of-death coding가 국가별로 다름
-  - US: ICD-10 상세히 기록
-  - Korea: KOSIS microdata (앞서 codebook에서 정리)
-  - Drug-related: F10-F19 (알코올), F15 (약물) 등
-  - Suicide: X60-X84 (의도적 자해)
-  
+ - US: ICD-10 상세히 기록
+ - Korea: KOSIS microdata (앞서 codebook에서 정리)
+ - Drug-related: F10-F19 (알코올), F15 (약물) 등
+ - Suicide: X60-X84 (의도적 자해)
+
 - **PAP 실행**:
-  - KOSIS 사망 microdata의 ICD-10 컬럼 정확성 재확인 (data_status.md에서 "ICD-10 컬럼 없음" issue)
-  - 혹은 underlying cause (주 사망원인) 이용
-  - Case-Deaton 정의 정확히 재현: suicide + alcohol + drug + cirrhosis
-  - Finkelstein: All-cause도 예측해볼 것 (effect size 확인)
+ - KOSIS 사망 microdata의 ICD-10 컬럼 정확성 재확인 (data_status.md에서 "ICD-10 컬럼 없음" issue)
+ - 혹은 underlying cause (주 사망원인) 이용
+ - Case-Deaton 정의 정확히 재현: suicide + alcohol + drug + cirrhosis
+ - Finkelstein: All-cause도 예측해볼 것 (effect size 확인)
 
 ---
 

@@ -61,12 +61,12 @@ where $\omega_s = \sum_i w_{is} \cdot e_i$ (residual-weighted exposure).
 
 → 본 연구 paper Table 2 에서 5개 SE column 명시:
 ```
-                 (1)        (2)         (3)         (4)         (5)
-                 HC1        Cluster     AKM         Conley      tF
-β (Bartik IV)   -1.015**   -1.015**   -1.015*     -1.015*     -1.015*
-SE              (0.243)    (0.401)    (0.512)     (0.480)     —
-t-stat          -4.18      -2.53      -1.98       -2.11       —
-p-value         <0.001     0.011      0.048       0.035       [tF p]
+ (1) (2) (3) (4) (5)
+ HC1 Cluster AKM Conley tF
+β (Bartik IV) -1.015** -1.015** -1.015* -1.015* -1.015*
+SE (0.243) (0.401) (0.512) (0.480) —
+t-stat -4.18 -2.53 -1.98 -2.11 —
+p-value <0.001 0.011 0.048 0.035 [tF p]
 ```
 
 → **column (3) AKM SE 가 가장 conservative**. p < 0.05 통과면 robust significant.
@@ -96,10 +96,10 @@ import linearmodels as lm
 import numpy as np
 
 def akm_se(shares, shifts, residuals):
-    """AKM standard errors (Adão-Kolesár-Morales 2019)"""
-    weights = np.einsum("is,i->s", shares, residuals)  # shift-level weights
-    var = np.sum(weights**2 * np.var(shifts, axis=0))
-    return np.sqrt(var / n_obs**2)
+ """AKM standard errors (Adão-Kolesár-Morales 2019)"""
+ weights = np.einsum("is,i->s", shares, residuals) # shift-level weights
+ var = np.sum(weights**2 * np.var(shifts, axis=0))
+ return np.sqrt(var / n_obs**2)
 
 # 옵션 2: R 호출 (rpy2)
 # 또는 Stata 호출

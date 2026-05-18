@@ -16,11 +16,11 @@ cd C:\Users\82103\Downloads\trade_mortality_korea
 pip install -r requirements.txt
 
 # 다운로드 시작
-python 2_scripts\data_collection\01_ecos_explore.py            # 1. ECOS 후보 통계표 탐색
-python 2_scripts\data_collection\02_ecos_household_delinquency.py  # 2. 가계대출 연체율
-python 2_scripts\data_collection\03_comtrade_adh_china.py      # 3. ADH 8국 × China imports
-python 2_scripts\data_collection\04_comtrade_korea_china.py    # 4. Korea-China bilateral
-python 2_scripts\data_collection\05_comtrade_china_world.py    # 5. China-World (alt IV)
+python 2_scripts\data_collection\01_ecos_explore.py # 1. ECOS 후보 통계표 탐색
+python 2_scripts\data_collection\02_ecos_household_delinquency.py # 2. 가계대출 연체율
+python 2_scripts\data_collection\03_comtrade_adh_china.py # 3. ADH 8국 × China imports
+python 2_scripts\data_collection\04_comtrade_korea_china.py # 4. Korea-China bilateral
+python 2_scripts\data_collection\05_comtrade_china_world.py # 5. China-World (alt IV)
 ```
 
 ## API Key 위치
@@ -49,19 +49,19 @@ python 2_scripts\data_collection\05_comtrade_china_world.py    # 5. China-World 
 ```
 0_raw/
 ├── ecos_delinquency/
-│   ├── candidate_tables.csv
-│   ├── items_141Y005.csv
-│   └── (가계대출 연체율 STAT)_M_*.csv
+│ ├── candidate_tables.csv
+│ ├── items_141Y005.csv
+│ └── (가계대출 연체율 STAT)_M_*.csv
 ├── comtrade_adh_china/
-│   ├── _download_log.csv
-│   ├── AU_2000.csv  AU_2001.csv ...
-│   ├── DK_2000.csv  ...
-│   └── (8 국가 × 25 년 = 200 파일)
+│ ├── _download_log.csv
+│ ├── AU_2000.csv AU_2001.csv...
+│ ├── DK_2000.csv...
+│ └── (8 국가 × 25 년 = 200 파일)
 ├── comtrade_korea_china/
-│   ├── KR_imp_from_CN_2000.csv ~ 2024.csv
-│   └── KR_exp_to_CN_2000.csv ~ 2024.csv
+│ ├── KR_imp_from_CN_2000.csv ~ 2024.csv
+│ └── KR_exp_to_CN_2000.csv ~ 2024.csv
 └── comtrade_china_world/
-    └── CN_exp_world_2000.csv ~ 2024.csv
+ └── CN_exp_world_2000.csv ~ 2024.csv
 ```
 
 ## 다운로드 후 검증

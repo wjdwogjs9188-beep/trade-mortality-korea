@@ -54,7 +54,7 @@ v3.x 분석 시 발견:
 
 ### Test 1: Top-N Rotemberg weights
 - 어떤 산업들이 가장 큰 weight 를 가지는지
-- v3.x: top 5 = chemicals (95%), textiles (2%), electronics (1%), ...
+- v3.x: top 5 = chemicals (95%), textiles (2%), electronics (1%),...
 - **Diagnosis**: chemicals 단독 IV 결과와 비교
 
 ### Test 2: Industry-level β_k 분포
@@ -96,25 +96,25 @@ import pandas as pd
 import numpy as np
 
 def rotemberg_weights(panel, share_matrix, shifts, outcome):
-    """
-    panel: 시군구 × year × outcome
-    share_matrix: 시군구 × 산업 (1997)
-    shifts: 산업 × year (KR-CN net export shock)
-    """
-    # 산업별 just-identified IV
-    betas_k = []
-    weights_k = []
-    for k in range(n_industries):
-        z_k = share_matrix[:, k] * shifts[k, :]  # 산업 k 의 shift-share
-        beta_k = np.cov(panel[outcome], z_k) / np.var(z_k)
-        betas_k.append(beta_k)
-    
-    # Rotemberg weights
-    fitted_x = bartik_iv  # 전체 Bartik 의 fitted value
-    weights_k = np.array([np.cov(z_k, fitted_x) / np.var(fitted_x) for k in range(n_industries)])
-    weights_k /= weights_k.sum()  # normalize to 1
-    
-    return betas_k, weights_k
+ """
+ panel: 시군구 × year × outcome
+ share_matrix: 시군구 × 산업 (1997)
+ shifts: 산업 × year (KR-CN net export shock)
+ """
+ # 산업별 just-identified IV
+ betas_k = 
+ weights_k = 
+ for k in range(n_industries):
+ z_k = share_matrix[:, k] * shifts[k,:] # 산업 k 의 shift-share
+ beta_k = np.cov(panel[outcome], z_k) / np.var(z_k)
+ betas_k.append(beta_k)
+
+ # Rotemberg weights
+ fitted_x = bartik_iv # 전체 Bartik 의 fitted value
+ weights_k = np.array([np.cov(z_k, fitted_x) / np.var(fitted_x) for k in range(n_industries)])
+ weights_k /= weights_k.sum # normalize to 1
+
+ return betas_k, weights_k
 
 # 출력: 본 연구 paper 의 robustness table
 ```
@@ -140,9 +140,9 @@ def rotemberg_weights(panel, share_matrix, shifts, outcome):
 paper 에 명시:
 1. **Main Bartik IV result**: $\hat{\beta} = -1.015$
 2. **Rotemberg analysis**:
-   - Top 3 산업 weight: chemicals 0.45, automobile 0.25, electronics 0.15
-   - 이 3개 산업의 just-identified β_k: -0.9, -1.1, -0.8 (모두 음, 비슷한 magnitude)
-   - → IV가 한 산업에 의존 안 함 (v3.x 의 95% 집중과 대조)
+ - Top 3 산업 weight: chemicals 0.45, automobile 0.25, electronics 0.15
+ - 이 3개 산업의 just-identified β_k: -0.9, -1.1, -0.8 (모두 음, 비슷한 magnitude)
+ - → IV가 한 산업에 의존 안 함 (v3.x 의 95% 집중과 대조)
 
 **이런 결과가 나오면 본 연구의 robustness 가 매우 강해짐.**
 
@@ -207,16 +207,16 @@ library(ssaggregate)
 
 # Bartik IV
 bartik_results <- bartik_estimate(
-  outcome = mortality_panel$ln_mortality_despair,
-  shares = sigungu_industry_share_1997,
-  shifts = kr_cn_net_export_shocks
+ outcome = mortality_panel$ln_mortality_despair,
+ shares = sigungu_industry_share_1997,
+ shifts = kr_cn_net_export_shocks
 )
 
 # Rotemberg weights
 rot_weights <- rotemberg_decomposition(bartik_results)
 
 # 결과 표
-print(rot_weights[order(-weight)][1:10, ])  # top 10 산업
+print(rot_weights[order(-weight)][1:10, ]) # top 10 산업
 ```
 
 ---

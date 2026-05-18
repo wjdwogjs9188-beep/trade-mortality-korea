@@ -253,7 +253,7 @@ baseline_shares_1997과 무역 충격 panel을 ksic2 키로 결합한다. 시군
 
 KR-CN main IV와 ADH robustness IV를 따로 계산해서 두 컬럼으로 저장한다.
 
-5-year stacked IV도 계산한다. period 정의 (1997-2002, 2002-2007, ...)에 따라 시작 시점과 끝 시점의 Bartik IV 차이를 구한다. delta_bartik_krcn, delta_bartik_adh 컬럼을 만든다.
+5-year stacked IV도 계산한다. period 정의 (1997-2002, 2002-2007,...)에 따라 시작 시점과 끝 시점의 Bartik IV 차이를 구한다. delta_bartik_krcn, delta_bartik_adh 컬럼을 만든다.
 
 `processed/bartik/bartik_iv_panel.parquet`에 저장한다.
 

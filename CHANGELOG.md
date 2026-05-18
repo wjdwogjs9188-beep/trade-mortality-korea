@@ -39,13 +39,13 @@
 ### Added
 - 프로젝트 폴더 구조 (`trade_mortality_korea/`)
 - 메타 문서: README.md, METHODOLOGY.md, CHANGELOG.md, DATA_SOURCES.md
-- requirements.txt, Makefile, .gitignore
+- requirements.txt, Makefile,.gitignore
 - 5개 zip 파일 → `0_raw/` 압축 해제
-  - 지역별 자살 데이터 (사망 microdata 28년 + 시군구코드집 24개 + ICD 코드집)
-  - 산업 비중 데이터 (사업체조사 31년 + 조사·파일설계서 53개)
-  - 연구 자료 (Census 2% + 27 paper + 복지 + 미국 무역 + crosswalk)
-  - 연구용 (KSIC 연계표 + KOSIS 시군구 + HIRA 분기별 + 추가 raw)
-  - ssaggregate-main (BHJ R 패키지)
+ - 지역별 자살 데이터 (사망 microdata 28년 + 시군구코드집 24개 + ICD 코드집)
+ - 산업 비중 데이터 (사업체조사 31년 + 조사·파일설계서 53개)
+ - 연구 자료 (Census 2% + 27 paper + 복지 + 미국 무역 + crosswalk)
+ - 연구용 (KSIC 연계표 + KOSIS 시군구 + HIRA 분기별 + 추가 raw)
+ - ssaggregate-main (BHJ R 패키지)
 - INVENTORY.csv 자동 생성 (모든 raw 파일의 md5/행수/컬럼/인코딩)
 - git 초기화 + 첫 commit
 
@@ -95,7 +95,7 @@
 ### 폴더 정리 (root → sub-folder)
 - REVIEWER 5 문서 → `4_documentation/reviewer/`
 - RESEARCH_PROGRESS 2 + next_prompt → `4_documentation/status_reports/`
-- 실행 스크립트 6 (.bat, .ps1) → `2_scripts/run/`
+- 실행 스크립트 6 (.bat,.ps1) → `2_scripts/run/`
 - PAP 7 archive 버전 → `4_documentation/PAP/archive/`
 - inventory csv → `4_documentation/pipeline_docs/`
 - root: 9 파일만 유지 (메타 entry)

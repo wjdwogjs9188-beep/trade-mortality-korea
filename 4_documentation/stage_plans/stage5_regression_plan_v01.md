@@ -6,14 +6,14 @@
 ``` --- ## § 2. Data Preparation Spec ### 2.1 Panel merge ```stata
 * Stata pseudocode
 use "panel/mortality_rate_panel_v02_1.dta", clear
-* h_code, year, sex_code, outcome_group, deaths, population, asr_kr2010_per_100k, ln_asr_kr2010, ... merge m:1 h_code year using "panel/trade_panel_long.dta"
+* h_code, year, sex_code, outcome_group, deaths, population, asr_kr2010_per_100k, ln_asr_kr2010,... merge m:1 h_code year using "panel/trade_panel_long.dta"
 * h_code, year, trade_shock, IV (Bartik 8 OHIE) merge m:1 h_code using "panel/baseline_industry_shares.dta"
-* h_code, ksic4_share_1995, ksic4_share_1996, ..., ksic4_share_1999 merge m:1 h_code year using "panel/family_mediators.dta"
+* h_code, ksic4_share_1995, ksic4_share_1996,..., ksic4_share_1999 merge m:1 h_code year using "panel/family_mediators.dta"
 * h_code, year, divorce_rate, marriage_rate, fertility_rate, single_parent_rate merge m:1 h_code year using "panel/medical_infrastructure.dta"
-* h_code, year, n_general_hospital, n_clinic, vaccination_proxy, ... merge m:1 h_code year using "panel/foreign_residents.dta"
+* h_code, year, n_general_hospital, n_clinic, vaccination_proxy,... merge m:1 h_code year using "panel/foreign_residents.dta"
 * h_code, year, foreign_pop, foreign_share * 회귀용 5-year stacked first-difference
 gen year_5yr = floor((year - 2000) / 5) * 5 + 2000
-collapse (mean) ..., by(h_code year_5yr sex_code outcome_group) * Δ5 outcome
+collapse (mean)..., by(h_code year_5yr sex_code outcome_group) * Δ5 outcome
 xtset h_code year_5yr
 gen d5_ln_asr = ln_asr_kr2010 - L.ln_asr_kr2010
 gen d5_trade = trade_shock - L.trade_shock
@@ -60,7 +60,7 @@ weakivtest, level(0.05) tau(0.10)
 * 5% TSLS bias threshold = 23.1 (single endogenous + single IV)
 ``` **합격 기준**: F > 23.1 → strong IV. F < 23.1 → weak IV → AR+tF inference. ### 4.3 Rotemberg HHI (PAP § 4.4 #2) ```stata
 ssc install bartik_weight // GPSS 2020 path
-bartik_weight d5_trade d5_IV (share_h_k = ksic4_emp), z(d5_value_k) ...
+bartik_weight d5_trade d5_IV (share_h_k = ksic4_emp), z(d5_value_k)...
 * HHI = Σ α_k^2 ≤ 0.20 (pass)
 ``` ### 4.4 Share balance (PAP § 4.4 #3) ```stata
 * baseline industry shares vs sigungu characteristics
@@ -83,7 +83,7 @@ foreach outcome in suicide_102 drug_101 psych_057 liver_081 despair_total cardio
 ```
 suicide_102: β = 0.45, SE_HC1 = 0.12, p < 0.001 WCB-sigungu CI: [0.18, 0.72] AKM SE = 0.15, p = 0.003 Conley CI: [0.20, 0.70] AR+tF CI: [0.15, 0.75]
 ``` --- ## § 6. 5-Layer SE Spec ### 6.1 HC1 robust (default) ```stata
-ivregress 2sls ..., robust
+ivregress 2sls..., robust
 ``` ### 6.2 WCB-sigungu (229 cluster) ```stata
 ssc install boottest
 boottest d5_trade, cluster(h_code) reps(9999) seed(20260503)
@@ -96,11 +96,11 @@ boottest d5_trade, cluster(sido) reps(9999) seed(20260503)
 * BHJ ssaggregate R package via Stata interop
 * 또는 reg_ss (Borusyak github)
 ssc install reg_ss // 또는 github 직접
-reg_ss d5_trade ..., shift(d5_value_k)
+reg_ss d5_trade..., shift(d5_value_k)
 * J = ~200 KSIC4 → BHJ 2022 small-J inference 적용
 ``` ### 6.5 Conley spatial SE ```stata
 ssc install acreg
-acreg d5_ln_asr (d5_trade = d5_IV) X, latitude(lat) longitude(lon) dist(100) ...
+acreg d5_ln_asr (d5_trade = d5_IV) X, latitude(lat) longitude(lon) dist(100)...
 * 100km radius spatial correlation
 ``` ### 6.6 AR + tF (weak IV robust) ```stata
 ssc install weakiv

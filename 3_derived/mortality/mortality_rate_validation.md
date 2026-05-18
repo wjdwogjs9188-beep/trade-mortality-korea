@@ -27,7 +27,7 @@
 | check | result | detail |
 |---|:---:|---|
 | V6 despair ASR historical pattern (2015<2010, 2023<1997) | PASS | weighted ASR/100k by year: 1997=58.84, 2000=52.40, 2003=55.58, 2010=46.99, 2015=37.90, 2017=34.98, 2020=35.18, 2023=35.32 | despair=suicide+drug+psych+liver; 간질환 1997 정점 후 급락이 suicide 상승을 압도 → 전체 감소 추세 정상 |
-| V7 mortality × pop join coverage > 99.5% | PASS | joined=1,261,332 / mort_band=1,261,332 = 100.0000%  (pop_missing=0) |
+| V7 mortality × pop join coverage > 99.5% | PASS | joined=1,261,332 / mort_band=1,261,332 = 100.0000% (pop_missing=0) |
 | V8 age band 매핑 deaths 합 보존 | PASS | orig=7,297,865 band=7,297,865 |
 
 ## National despair_total ASR (population-weighted, /100k by year)

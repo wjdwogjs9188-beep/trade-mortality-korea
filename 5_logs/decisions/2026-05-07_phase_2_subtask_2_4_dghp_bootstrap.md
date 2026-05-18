@@ -51,7 +51,7 @@
 - paper § 7.3 + § 7.4 + § 7.5 narrative draft ### 6.3 Long-term - PAP v4.6 update (sub-task 2.4 cumulative findings)
 - Cover letter draft for KER July 2026 submission
 - Replication archive --- **Audit-after-action 결과** (2026-05-07 self-audit):
-- 사용자 측 Spyder/automated tooling paste 결과 위 cumulative substantive 정합 ✅
+- 사용자 측 Spyder/ paste 결과 위 cumulative substantive 정합 ✅
 - ACME = -0.0247, β_RF = -0.185, 13.4% proportion ✅ (직전 cumulative form 정합)
 - bootstrap CI [-0.046, +0.015] + sign stability 89.4% ✅
 - cluster-SE p_cluster = 0.0021 (N05BA univariate) ✅

@@ -57,7 +57,7 @@ How does trade-induced economic shocks affect violent crime? Can regional variat
 
 ### Instrumental Variable: Regional Tariff Change (RTC)
 
-$$\text{RTC}_r = \sum_j \frac{E^{1991}_{rj}}{E^{1991}_r} \left( \tau^{pre}_{j} - \tau^{post}_{j} \right)$$
+$$\text{RTC}_r = \sum_j \frac{E^{1991}_{rj}}{E^{1991}_r} \left(\tau^{pre}_{j} - \tau^{post}_{j} \right)$$
 
 where:
 - $r$ = micro-region
@@ -108,8 +108,8 @@ where:
 
 **Robustness**:
 - State-period FE specification: Coefficient **increases by >50%** when controlling for state-specific time-varying characteristics
-  - Interpretation: Some high-tariff-reduction states had other crime-reducing policies → initial negative bias
-  - Corrected estimate: Even larger crime-increasing effect
+ - Interpretation: Some high-tariff-reduction states had other crime-reducing policies → initial negative bias
+ - Corrected estimate: Even larger crime-increasing effect
 
 **Pre-trends**: No significant relationship between RTC and crime changes pre-1990 (validates parallel trends assumption)
 
@@ -170,9 +170,9 @@ Upper bound: 93%
 ### By Mechanism
 - **Employment channel**: 75-93% of total effect
 - **Other channels**: Residual 7-25%
-  - Public safety (minimal independent effect)
-  - Inequality (contributes but secondary)
-  - Education (weak independent effect)
+ - Public safety (minimal independent effect)
+ - Inequality (contributes but secondary)
+ - Education (weak independent effect)
 
 ---
 

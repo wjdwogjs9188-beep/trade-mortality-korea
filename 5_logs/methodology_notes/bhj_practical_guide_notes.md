@@ -100,10 +100,10 @@ library(ssaggregate)
 
 # Step 1: 시군구 → 산업 변환
 shift_data <- ssaggregate(
-  y = mortality_panel$ln_mortality_despair,
-  x = mortality_panel$bartik_kr_cn_net,
-  s = sigungu_industry_share_matrix,  # 256 시군구 × 24 KSIC
-  controls = sigungu_controls
+ y = mortality_panel$ln_mortality_despair,
+ x = mortality_panel$bartik_kr_cn_net,
+ s = sigungu_industry_share_matrix, # 256 시군구 × 24 KSIC
+ controls = sigungu_controls
 )
 
 # Step 2: shift-level regression
@@ -224,17 +224,17 @@ y_{ct} = β × Bartik_c + α_c + τ_t + sum_t (γ_t × Bartik_c × pre_2000_dumm
 
 ```
 Outcome: ln(mortality_despair)
-                                Specification
-                    (1)         (2)         (3)         (4)         (5)
-                    OLS         IV(Bartik)  IV+AKM      IV+Conley   IV+tF
-β (Bartik IV)       -0.041*     -1.015**    -1.015**    -1.015**    -1.015*
-HC1 SE              (0.012)     (0.243)     —           —           —
-Cluster sido SE     —           —           (0.401)     —           —
-AKM SE              —           —           (0.378)     —           —
-Conley SE           —           —           —           (0.412)     —
-tF p-value          —           —           —           —           [0.045]
-First-stage F       —           7.2         7.2         7.2         7.2
-N                   6,723       6,723       6,723       6,723       6,723
+ Specification
+ (1) (2) (3) (4) (5)
+ OLS IV(Bartik) IV+AKM IV+Conley IV+tF
+β (Bartik IV) -0.041* -1.015** -1.015** -1.015** -1.015*
+HC1 SE (0.012) (0.243) — — —
+Cluster sido SE — — (0.401) — —
+AKM SE — — (0.378) — —
+Conley SE — — — (0.412) —
+tF p-value — — — — [0.045]
+First-stage F — 7.2 7.2 7.2 7.2
+N 6,723 6,723 6,723 6,723 6,723
 ```
 
 → paper Table 2-3 의 baseline. v3.x 결과를 그대로 가져온 게 아니라 새로운 무역 IV (KR-CN bilateral 50개) 로 다시 계산.

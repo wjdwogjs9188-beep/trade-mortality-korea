@@ -21,14 +21,14 @@
 ## Weight distribution
 
 ```
-count    9868.000000
-mean        0.698723
-std         0.295437
-min         0.250000
-25%         0.500000
-50%         0.500000
-75%         1.000000
-max         1.000000
+count 9868.000000
+mean 0.698723
+std 0.295437
+min 0.250000
+25% 0.500000
+50% 0.500000
+75% 1.000000
+max 1.000000
 ```
 
 ## KSIC2-level coverage
@@ -75,26 +75,26 @@ max         1.000000
 ### Manufacturing (KSIC2 10–33) check
 
 - Mapped KSIC2 in 10–33: 24 / 24
-- KSIC2 (10–33) with **0 HS6 mapped**: []
+- KSIC2 (10–33) with **0 HS6 mapped**: 
 
 ## Top 20 unmatched HS6 (productcode shows what missed)
 
 | hs6 | productcode | lvl1 | lvl2 | lvl3 |
 |---|---|---|---|---|
-| 242400 |  |  |  |  |
-| 300402 |  |  |  |  |
-| 383775 |  |  |  |  |
-| 392421 |  |  |  |  |
-| 490100 |  |  |  |  |
-| 490520 | Maps and hydrographic or similar charts of all kinds, includ |  |  |  |
-| 490590 | Maps and hydrographic or similar charts of all kinds, includ |  |  |  |
-| 610530 |  |  |  |  |
-| 747989 |  |  |  |  |
-| 771719 |  |  |  |  |
-| 840422 | Auxiliary plant for use with boilers of heading 84.02 or 84. |  |  |  |
-| 843140 | Parts suitable for use solely or principally with the machin |  |  |  |
-| 845099 | Household or laundry-type washing machines, including machin |  |  |  |
-| 848171 | Taps, cocks, valves and similar appliances for pipes, boiler |  |  |  |
+| 242400 | | | | |
+| 300402 | | | | |
+| 383775 | | | | |
+| 392421 | | | | |
+| 490100 | | | | |
+| 490520 | Maps and hydrographic or similar charts of all kinds, includ | | | |
+| 490590 | Maps and hydrographic or similar charts of all kinds, includ | | | |
+| 610530 | | | | |
+| 747989 | | | | |
+| 771719 | | | | |
+| 840422 | Auxiliary plant for use with boilers of heading 84.02 or 84. | | | |
+| 843140 | Parts suitable for use solely or principally with the machin | | | |
+| 845099 | Household or laundry-type washing machines, including machin | | | |
+| 848171 | Taps, cocks, valves and similar appliances for pipes, boiler | | | |
 
 ### Unmatched HS6 by 레벨1 code
 

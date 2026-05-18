@@ -14,11 +14,11 @@ _2026-05-04_
 - KR-CN bilateral year rows: **25** (2000-2024)
 - regression sample: **18** years
 
-## d5_log_M ~ d5_surprise_avg  (HAC SE, maxlags=4)
+## d5_log_M ~ d5_surprise_avg (HAC SE, maxlags=4)
 - N=18, β=-0.0489, SE=0.1452, p=0.7365, R²=0.001
 - [PASS] p > 0.10 → WEO surprise 가 bilateral 예측 X → 외생성 robust 신호
 
-## d5_log_X ~ d5_surprise_avg  (HAC SE, maxlags=4)
+## d5_log_X ~ d5_surprise_avg (HAC SE, maxlags=4)
 - N=18, β=-0.1056, SE=0.1499, p=0.4812, R²=0.005
 - [PASS] p > 0.10 → WEO surprise 가 bilateral 예측 X → 외생성 robust 신호
 

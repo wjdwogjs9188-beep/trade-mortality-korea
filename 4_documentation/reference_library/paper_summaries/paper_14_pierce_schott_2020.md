@@ -110,8 +110,8 @@ where:
 - **Pre-PNTR (1991-2000)**: 95% CI bands centered at zero, flat trajectory → no pre-existing differential trend
 - **Post-PNTR (2001-2013)**: Step change up; significant positive effect emerging after 2001
 - **Magnitude**: Interquartile shift in NTR gap (8.3 pp) associated with **2-3 additional deaths per 100,000** per year post-PNTR
-  - 2000 baseline drug overdose rate: 5 per 100,000 → effect is **40-60% of baseline**
-  - Statistically significant at conventional levels
+ - 2000 baseline drug overdose rate: 5 per 100,000 → effect is **40-60% of baseline**
+ - Statistically significant at conventional levels
 
 **Other Deaths of Despair** (Figure 1, Panels B-C, D):
 - **Suicide**: No significant relationship with PNTR (p-value not significant)
@@ -175,17 +175,17 @@ where:
 
 **Labor Market Outcomes** (Figure 5):
 1. **Unemployment rate** (Panel A): 
-   - IQR NTR gap increase → +1 to +2 percentage point increase in unemployment
-   - Effect centered ~zero pre-2000, diverges post-2001
-   
+ - IQR NTR gap increase → +1 to +2 percentage point increase in unemployment
+ - Effect centered ~zero pre-2000, diverges post-2001
+
 2. **Labor force participation** (Panel B):
-   - IQR increase → -1 to -2 pp decline in LFPR
-   - Large standard errors; effect less precisely estimated than unemployment
+ - IQR increase → -1 to -2 pp decline in LFPR
+ - Large standard errors; effect less precisely estimated than unemployment
 
 3. **Disability transfer take-up** (Panels C-D):
-   - Log disability transfers: +0.1-0.2 log points
-   - Log disabled workers: +0.02-0.06 log points
-   - Effect post-2000; hampered by data unavailability pre-1999
+ - Log disability transfers: +0.1-0.2 log points
+ - Log disabled workers: +0.02-0.06 log points
+ - Effect post-2000; hampered by data unavailability pre-1999
 
 ### Proposed Mechanism Chain
 Trade shock → **Unemployment + wage loss** → **Disability application** → **Opioid prescription** (painkillers for disability-related pain) → **Drug overdose death**
@@ -213,10 +213,10 @@ Trade shock → **Unemployment + wage loss** → **Disability application** → 
 
 ### Identification Strategy Parallel
 - **Your approach**: 5-year stacked first-difference DID (following Pierce-Schott 2020 exactly)
-  - "Section 6. Identification" → directly maps to Pierce-Schott structure
-  - County-level analysis with time-invariant instrument → same as PNTR
-  - Your IV: sectoral Bartik + lagged exposure (analogous to NTR gap)
-  
+ - "Section 6. Identification" → directly maps to Pierce-Schott structure
+ - County-level analysis with time-invariant instrument → same as PNTR
+ - Your IV: sectoral Bartik + lagged exposure (analogous to NTR gap)
+
 ### Trade Shock Context
 - Pierce-Schott = PNTR 2000 (import shock)
 - Your paper = 무역충격 × 사망률 Korea (homemade likely)

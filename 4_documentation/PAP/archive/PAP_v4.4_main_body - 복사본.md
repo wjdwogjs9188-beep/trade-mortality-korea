@@ -82,7 +82,7 @@ y_h = α + β_direct · z_x_h + ζ · m_h + γ X_h + ν (direct + indirect via m
 **DGHP 2017 (Dippel-Gold-Heblich-Pinkovskiy)**:
 - (a) **Treatment exogeneity**: z_x_h ⊥ ε (Bartik IV 의 standard assumption)
 - (b) **Mediator unconfoundedness given treatment**: m_h | z_x_h ⊥ ν **DFH 2020 (Dippel-Ferrara-Heblich)** ivmediate Stata package:
-- Identical assumption + bootstrap CI implementation #### 9.5.3 Implementation (P2 Stage B automated tooling 위임)
+- Identical assumption + bootstrap CI implementation #### 9.5.3 Implementation (P2 Stage B 위임)
 - Stata `ivmediate` package 또는 Python `linearmodels` + bootstrap
 - 1000 cluster-시도 wild bootstrap
 - Sobel test 도 별도 보고 (parametric, restrictive 가정) #### 9.5.4 6 mediator 별 channel
@@ -131,15 +131,15 @@ y_h = α + β_direct · z_x_h + ζ · m_h + γ X_h + ν (direct + indirect via m
 | 18 | § 11 references 27편 = 19편 + 8편 명시 (P3.D) | ✅ commit | **v4.4 의 코드 실행 pending list (paper draft Stage C 진입 전 commit 필수)**: | # | Pending | 처리 방식 | Effort | Stage |
 |---|---|---|---|---|
 | **P1** | n=222 vs n=251 정합성 | derived panel build code 검증 + 5 시군구 drop list | direct 1-2h | **Stage A** |
-| **P2** | AKM (BHJ industry-mode) 정식 implementation | R `ShiftShareSE` `reg_ss` 적용 | automated tooling 위임 3-4h | **Stage B** |
-| **P3** | AR-CI 산출 | linearmodels AR_test + ConfidenceSet | automated tooling 위임 2-3h | **Stage B** |
+| **P2** | AKM (BHJ industry-mode) 정식 implementation | R `ShiftShareSE` `reg_ss` 적용 | 위임 3-4h | **Stage B** |
+| **P3** | AR-CI 산출 | linearmodels AR_test + ConfidenceSet | 위임 2-3h | **Stage B** |
 | **P4** | WCB cluster-시도 G=16 결과 재산출 | Phase 4 5-layer SE script 재실행 | direct 1h | **Stage A** |
 | **P5** | DGHP 2017 + DFH 2020 분리 인용 file | 별도 markdown citation | direct 30분 | **Stage A** |
 | **P6** (NEW) | Conley centroid SE 산출 (1km/5km/10km) | spatial cluster SE script | direct 1h | **Stage A** |
 | **P7** | (renumber, prev P6) — § 9.0 PCA reasoning + § 9.5 DGHP spec — already commit in v4.4 | already done | — | done |
 | **P8** (NEW) | Pre-WTO 추가 sub-period sensitivity (1992-1995, 1990-1994) | placebo regression script | direct 1h | **Stage A** |
 | **P9** (NEW) | KOSIS 사망원인 50항목 시군구별 statistics search (despair 4 component 외부 검증) | KOSIS DT search | 사용자 측 다운 1h | **사용자** |
-| **P10** (NEW) | Comtrade Switzerland 1국 25 시점 fetch (ADH-7 → ADH-8 회복) | Comtrade fetch script | 사용자 측 다운 1-2일 | **사용자** | **Stage A 합계 (direct)**: P1 + P4 + P5 + P6 + P8 = 4-5h, 다음 turn 단일 가능 **Stage B 합계 (automated tooling 위임)**: P2 + P3 = 5-6h, 차차 turn 단일 위임 **사용자 측 (P9 + P10)**: P9 (KOSIS search 1h) + P10 (Comtrade Switzerland 1-2일) — 병렬 가능 → Stage A·B + 사용자 측 (P9·P10) 모두 commit 후 v4.5 → paper draft Stage C (KER full paper format 25-35 page) 진입 --- ## § 13. Outcome external validation (Pre-draft 3 정정) ### 13.1-13.3 (v4.3 그대로) ### 13.4 (NEW v4.4) — KOSIS DT_1B34E13 단독 = 자살 1 component only 한계 **v4.3 → v4.4 정정 (Pre-draft 3)**: KOSIS DT_1B34E13 = despair_total 4 component (자살 + 약물 + 정신활성물질 + 간질환) 중 **자살 1 component only**. 나머지 3 component 외부 검증 source pending. **Plan**:
+| **P10** (NEW) | Comtrade Switzerland 1국 25 시점 fetch (ADH-7 → ADH-8 회복) | Comtrade fetch script | 사용자 측 다운 1-2일 | **사용자** | **Stage A 합계 (direct)**: P1 + P4 + P5 + P6 + P8 = 4-5h, 다음 turn 단일 가능 **Stage B 합계 (위임)**: P2 + P3 = 5-6h, 차차 turn 단일 위임 **사용자 측 (P9 + P10)**: P9 (KOSIS search 1h) + P10 (Comtrade Switzerland 1-2일) — 병렬 가능 → Stage A·B + 사용자 측 (P9·P10) 모두 commit 후 v4.5 → paper draft Stage C (KER full paper format 25-35 page) 진입 --- ## § 13. Outcome external validation (Pre-draft 3 정정) ### 13.1-13.3 (v4.3 그대로) ### 13.4 (NEW v4.4) — KOSIS DT_1B34E13 단독 = 자살 1 component only 한계 **v4.3 → v4.4 정정 (Pre-draft 3)**: KOSIS DT_1B34E13 = despair_total 4 component (자살 + 약물 + 정신활성물질 + 간질환) 중 **자살 1 component only**. 나머지 3 component 외부 검증 source pending. **Plan**:
 - KOSIS 사망원인 50항목 시군구별 통계 (DT_1B34E14 등) 추가 search (P9, 사용자 측)
 - 받은 후 약물 (101) + 정신활성물질 (057) + 간질환 (081) 의 시군구 ASMR 외부 검증 commit
 - 4 component 모두 외부 검증 일치율 > 95% 시 main outcome 신뢰성 입증 ### 13.5 (NEW v4.4) — Despair 4 component 외부 검증 plan | Component | 사망원인 코드 | ICD-10 | KOSIS 외부 source | 상태 |
@@ -152,7 +152,7 @@ y_h = α + β_direct · z_x_h + ζ · m_h + γ X_h + ν (direct + indirect via m
 - P4: WCB cluster-시도 G=16 재산출
 - P5: DGHP/DFH 분리 인용 file
 - P6: Conley centroid SE 산출
-- P8: Pre-WTO sub-period sensitivity ### Stage B (차차 turn, automated tooling 위임 5-6h)
+- P8: Pre-WTO sub-period sensitivity ### Stage B (차차 turn, 위임 5-6h)
 - P2: AKM 정식 BHJ 2022 implementation (R `ShiftShareSE`)
 - P3: AR-CI 산출 (linearmodels AR_test) ### 사용자 측 병렬 (Stage A·B 와 동시)
 - P9: KOSIS 사망원인 50항목 시군구별 search (1h)
@@ -176,7 +176,7 @@ y_h = α + β_direct · z_x_h + ζ · m_h + γ X_h + ν (direct + indirect via m
 - Online appendix: full robustness tables + mechanism details + 4 baseline sensitivity --- ## 결론 (PAP v4.4 commit) 본 PAP v4.4 = audit 의 framing-only 정정 12 항목 즉시 commit + 코드 실행 7 pending (P1·P4·P5·P6·P8·P2·P3 + 사용자 측 P9·P10) Stage A·B 분담 명시. **Target venue**: KER **full paper format** (25-35 page main + online appendix) — AER:I short-form 압축 부담 회피, § 9 mechanism 6 mediator 모두 main 포함 가능. **timeline**:
 - v4.4 commit: ✅ (본 turn)
 - Stage A (direct 4-5h): 다음 turn
-- Stage B (automated tooling 위임 5-6h): 차차 turn
+- Stage B (위임 5-6h): 차차 turn
 - 사용자 측 P9·P10: 병렬, Stage B 완료 시점에 일치
 - v4.5 commit: 차차차 turn
 - paper draft Stage C 진입: v4.5 commit 후

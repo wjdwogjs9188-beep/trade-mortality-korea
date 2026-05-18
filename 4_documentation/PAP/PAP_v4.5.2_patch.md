@@ -14,7 +14,7 @@
 | Colantone £270/yr | published 값 | ✅ Abstract verified (working paper £200 → published £270) |
 | McManus +12% smallest plant | round 2 정독 | ✅ Specific decile estimate verified |
 | Sullivan 50-100% short / 10-15% long | abstract | ✅ | → § 1.3 anchor 비교 표의 "verify pending" 표기 모두 제거 (Finkelstein 만 partial pending). ### 3. § 5.4 — Lang 2019 F=18.77 verified 본문 직접 verify:
-> "ΔIPW OTH_i ... Wk. instrument F stat ... 50.76 / 35.95 / **18.77**" → § 5.4 의 "F 약 18-20 (paper 본문 verify pending)" hedged 표기 제거. **F=18.77 (Lang 2019 Table 2, M.3 spec full controls)** 정확 commit. | 이전 (v4.5.1) | 정정 (v4.5.2) |
+> "ΔIPW OTH_i... Wk. instrument F stat... 50.76 / 35.95 / **18.77**" → § 5.4 의 "F 약 18-20 (paper 본문 verify pending)" hedged 표기 제거. **F=18.77 (Lang 2019 Table 2, M.3 spec full controls)** 정확 commit. | 이전 (v4.5.1) | 정정 (v4.5.2) |
 |---|---|
 | ADH-8 published (Lang 2019 Health Economics 28(1):44-56): F 약 18-20 (paper 본문 verify pending) | ADH-8 published (Lang 2019 Health Economics 28(1):44-56, **Table 2 col M.3**): **F = 18.77** (Wk. instrument F stat, full controls). 본 paper F=19.65 와 거의 동일 IV strength + 동일 8 OECD list (AU·CH·DE·DK·ES·FI·JP·NZ) | ### 4. § 9.5 — DGHP 2017 framework spec 정확화 (Pinto 정정 + Framework 정밀) 본문 직접 verify (NBER WP 23209): **§ 9.5 정정 (v4.5.2)**: > "**Single-IV mediation framework (Dippel-Gold-Heblich-Pinto 2017, NBER WP 23209)**:
 > > 본 paper 는 single Bartik IV (z_x_h) 만 보유. Frölich-Huber 2017 의 dual-IV requirement (mediator 의 별도 instrument) 부적용. DGHP 2017 의 single-IV mediation framework 적용.
@@ -32,7 +32,7 @@
 > > **Implementation**: Standard 2SLS estimator. Bootstrap CI (1000 cluster-시도 wild bootstrap).
 > > **Bounds option** (DGHP 2017 의 추가 contribution): identifying assumption 을 relax 시 bounds 보고 가능 (Conley-Hansen-Rossi 2012 spirit).
 > > **6 mediator 별 separate channel decomposition**:
-> Channel k (k = 1, ..., 6): SSRI 처방률, 이혼률, 출생률, 혼인률, z_m_marital, z_m_education
+> Channel k (k = 1,..., 6): SSRI 처방률, 이혼률, 출생률, 혼인률, z_m_marital, z_m_education
 > 각 channel 의 indirect effect = ζ_k · β_k, direct effect = β_direct, total = β_total" → § 11 references 의 cite 정확화:
 - "Dippel C, Gold R, Heblich S, **Pinto R** (2017). Instrumental Variables and Causal Mechanisms: Unpacking the Effect of Trade on Workers and Voters. NBER Working Paper **23209**. March 2017, Revised June 2018." --- ## v4.5.2 미정정 항목 (Track 2·3 + 추가 inspect) ### Track 2 — z_m_education 검증
 - 사용자 제공 학교 list (대학교 + 전문대학 + 교육대학 + 산업대학 + 과학기술원) + universities_4year_pre1990_clean.csv (175 학교) parse

@@ -2,11 +2,11 @@
 # 분산된 raw data 를 trade_mortality_korea/0_raw/ 로 복사
 #
 # 실행:
-#   cd C:\Users\82103\Downloads\trade_mortality_korea
-#   powershell -ExecutionPolicy Bypass -File 2_scripts\data_organization\copy_raw_data.ps1
+# cd C:\Users\82103\Downloads\trade_mortality_korea
+# powershell -ExecutionPolicy Bypass -File 2_scripts\data_organization\copy_raw_data.ps1
 #
 # 또는 PowerShell 에서 직접:
-#   .\2_scripts\data_organization\copy_raw_data.ps1
+#.\2_scripts\data_organization\copy_raw_data.ps1
 
 # UTF-8 설정 (한글 처리)
 $OutputEncoding = [System.Text.Encoding]::UTF8
@@ -14,16 +14,16 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 chcp 65001 | Out-Null
 
 # Source paths
-$Desktop      = "C:\Users\82103\Desktop"
-$Industry     = "$Desktop\산업 비중 데이터"
-$Research     = "$Desktop\연구 자료"
-$ResearchUse  = "$Desktop\연구용"
-$Lda          = "L:\da\_paper_raw"
-$RefMd        = "$Desktop\연구 자료\참고논문\md"
+$Desktop = "C:\Users\82103\Desktop"
+$Industry = "$Desktop\산업 비중 데이터"
+$Research = "$Desktop\연구 자료"
+$ResearchUse = "$Desktop\연구용"
+$Lda = "L:\da\_paper_raw"
+$RefMd = "$Desktop\연구 자료\참고논문\md"
 
 # Destination root
 $ProjectRoot = "C:\Users\82103\Downloads\trade_mortality_korea"
-$Root        = "$ProjectRoot\0_raw"
+$Root = "$ProjectRoot\0_raw"
 
 Write-Host ("=" * 72)
 Write-Host "Stage 0 - Raw Data 통합 정리 시작"
@@ -34,49 +34,49 @@ Write-Host ("=" * 72)
 # ---------------------------------------------------------------------------
 
 function MakeDir {
-    param($Path)
-    if (-not (Test-Path $Path)) {
-        New-Item -ItemType Directory -Force -Path $Path | Out-Null
-        Write-Host "  [mkdir] $Path"
-    }
+ param($Path)
+ if (-not (Test-Path $Path)) {
+ New-Item -ItemType Directory -Force -Path $Path | Out-Null
+ Write-Host " [mkdir] $Path"
+ }
 }
 
 function CopySafe {
-    param($Source, $Dest, $Label = "")
-    if (Test-Path $Source) {
-        try {
-            Copy-Item -Path $Source -Destination $Dest -Force -ErrorAction Stop
-            $script:CopyCount++
-            return $true
-        } catch {
-            Write-Host "  [FAIL] $Label : $($_.Exception.Message)" -ForegroundColor Red
-            $script:FailCount++
-            return $false
-        }
-    } else {
-        Write-Host "  [SKIP] $Source (not found)" -ForegroundColor Yellow
-        $script:SkipCount++
-        return $false
-    }
+ param($Source, $Dest, $Label = "")
+ if (Test-Path $Source) {
+ try {
+ Copy-Item -Path $Source -Destination $Dest -Force -ErrorAction Stop
+ $script:CopyCount++
+ return $true
+ } catch {
+ Write-Host " [FL] $Label: $($_.Exception.Message)" -ForegroundColor Red
+ $script:FailCount++
+ return $false
+ }
+ } else {
+ Write-Host " [SKIP] $Source (not found)" -ForegroundColor Yellow
+ $script:SkipCount++
+ return $false
+ }
 }
 
 function CopyByFilter {
-    param($SourceDir, $DestDir, $Filter, $Label = "")
-    if (-not (Test-Path $SourceDir)) {
-        Write-Host "  [SKIP] $SourceDir (not found)" -ForegroundColor Yellow
-        return
-    }
-    $Files = Get-ChildItem -Path $SourceDir -Filter $Filter -File -ErrorAction SilentlyContinue
-    foreach ($f in $Files) {
-        try {
-            Copy-Item -Path $f.FullName -Destination $DestDir -Force
-            $script:CopyCount++
-        } catch {
-            Write-Host "  [FAIL] $($f.Name)" -ForegroundColor Red
-            $script:FailCount++
-        }
-    }
-    Write-Host "  [copy] $($Files.Count) files matching '$Filter' from $Label"
+ param($SourceDir, $DestDir, $Filter, $Label = "")
+ if (-not (Test-Path $SourceDir)) {
+ Write-Host " [SKIP] $SourceDir (not found)" -ForegroundColor Yellow
+ return
+ }
+ $Files = Get-ChildItem -Path $SourceDir -Filter $Filter -File -ErrorAction SilentlyContinue
+ foreach ($f in $Files) {
+ try {
+ Copy-Item -Path $f.FullName -Destination $DestDir -Force
+ $script:CopyCount++
+ } catch {
+ Write-Host " [FL] $($f.Name)" -ForegroundColor Red
+ $script:FailCount++
+ }
+ }
+ Write-Host " [copy] $($Files.Count) files matching '$Filter' from $Label"
 }
 
 # Counters
@@ -99,15 +99,15 @@ CopyByFilter -SourceDir $Industry -DestDir "$Root\kosis_business_survey\microdat
 # Codebook (조사 및 파일설계서)
 $CodebookSrc = "$Industry\조사 및 파일설계서"
 if (Test-Path $CodebookSrc) {
-    Copy-Item -Path "$CodebookSrc\*" -Destination "$Root\kosis_business_survey\codebook" -Recurse -Force -ErrorAction SilentlyContinue
-    $script:CopyCount += (Get-ChildItem -Path $CodebookSrc -Recurse -File).Count
-    Write-Host "  [copy] codebook directory (recursive)"
+ Copy-Item -Path "$CodebookSrc\*" -Destination "$Root\kosis_business_survey\codebook" -Recurse -Force -ErrorAction SilentlyContinue
+ $script:CopyCount += (Get-ChildItem -Path $CodebookSrc -Recurse -File).Count
+ Write-Host " [copy] codebook directory (recursive)"
 }
 
 # KSIC version 연계표
-CopySafe "$Industry\8차_9차개정 연계표.xls"                                 "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 8->9"
-CopySafe "$Industry\KSIC연계표(9차_10차).xlsx"                              "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 9->10"
-CopySafe "$Industry\한국표준산업분류 제11차-제10차 연계표.xlsx"            "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 11->10"
+CopySafe "$Industry\8차_9차개정 연계표.xls" "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 8->9"
+CopySafe "$Industry\KSIC연계표(9차_10차).xlsx" "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 9->10"
+CopySafe "$Industry\한국표준산업분류 제11차-제10차 연계표.xlsx" "$Root\kosis_business_survey\ksic_version_concordance\" "KSIC 11->10"
 
 # ---------------------------------------------------------------------------
 # B. HS-ISIC4 concordance
@@ -116,15 +116,15 @@ Write-Host "`n[B] hs_isic4_concordance/ - Stage 4B 매핑용"
 
 MakeDir "$Root\hs_isic4_concordance"
 
-CopySafe "$Research\cpc21-hs2012.txt"                                       "$Root\hs_isic4_concordance\" "CPC-HS"
-CopySafe "$Research\cpc21-isic4.txt"                                        "$Root\hs_isic4_concordance\" "CPC-ISIC4"
+CopySafe "$Research\cpc21-hs2012.txt" "$Root\hs_isic4_concordance\" "CPC-HS"
+CopySafe "$Research\cpc21-isic4.txt" "$Root\hs_isic4_concordance\" "CPC-ISIC4"
 
-# Stata .do 파일 3 개
+# Stata.do 파일 3 개
 $HSdoDir = "$ResearchUse\hs 연계표"
 if (Test-Path $HSdoDir) {
-    Copy-Item "$HSdoDir\*.do" -Destination "$Root\hs_isic4_concordance\" -Force
-    $script:CopyCount += (Get-ChildItem -Path $HSdoDir -Filter "*.do" -File).Count
-    Write-Host "  [copy] HS-ISIC4 .do scripts (3 files)"
+ Copy-Item "$HSdoDir\*.do" -Destination "$Root\hs_isic4_concordance\" -Force
+ $script:CopyCount += (Get-ChildItem -Path $HSdoDir -Filter "*.do" -File).Count
+ Write-Host " [copy] HS-ISIC4.do scripts (3 files)"
 }
 
 # KSIC11-ISIC4 연계표
@@ -137,9 +137,9 @@ Write-Host "`n[C] kosis_family_mediators/ - 이혼·결혼·출산"
 
 MakeDir "$Root\kosis_family_mediators"
 
-CopySafe "$ResearchUse\시군구 혼인.xls"     "$Root\kosis_family_mediators\" "시군구 혼인"
-CopySafe "$ResearchUse\시군구 이혼.xls"     "$Root\kosis_family_mediators\" "시군구 이혼"
-CopySafe "$ResearchUse\시군구 출생아.xls"   "$Root\kosis_family_mediators\" "시군구 출생아"
+CopySafe "$ResearchUse\시군구 혼인.xls" "$Root\kosis_family_mediators\" "시군구 혼인"
+CopySafe "$ResearchUse\시군구 이혼.xls" "$Root\kosis_family_mediators\" "시군구 이혼"
+CopySafe "$ResearchUse\시군구 출생아.xls" "$Root\kosis_family_mediators\" "시군구 출생아"
 CopySafe "$ResearchUse\시군구_출생아수__합계출산율_20260419183410.xlsx" "$Root\kosis_family_mediators\시군구_합계출산율.xlsx" "합계출산율"
 
 # ---------------------------------------------------------------------------
@@ -151,9 +151,9 @@ MakeDir "$Root\kosis_welfare_recipients"
 
 $WelfareDir = "$Research\복지사업 시군구별 수급권자 현황(2012년 12월)"
 if (Test-Path $WelfareDir) {
-    Copy-Item -Path "$WelfareDir\*" -Destination "$Root\kosis_welfare_recipients" -Recurse -Force -ErrorAction SilentlyContinue
-    $script:CopyCount += (Get-ChildItem -Path $WelfareDir -Recurse -File).Count
-    Write-Host "  [copy] welfare recipients directory (recursive)"
+ Copy-Item -Path "$WelfareDir\*" -Destination "$Root\kosis_welfare_recipients" -Recurse -Force -ErrorAction SilentlyContinue
+ $script:CopyCount += (Get-ChildItem -Path $WelfareDir -Recurse -File).Count
+ Write-Host " [copy] welfare recipients directory (recursive)"
 }
 
 # ---------------------------------------------------------------------------
@@ -163,9 +163,9 @@ Write-Host "`n[E] ecos_household_credit/ - other channel"
 
 MakeDir "$Root\ecos_household_credit"
 
-CopySafe "$ResearchUse\bok_household_가계대출_은행.csv"   "$Root\ecos_household_credit\" "가계대출 은행"
+CopySafe "$ResearchUse\bok_household_가계대출_은행.csv" "$Root\ecos_household_credit\" "가계대출 은행"
 CopySafe "$ResearchUse\bok_household_가계대출_비은행.csv" "$Root\ecos_household_credit\" "가계대출 비은행"
-CopySafe "$ResearchUse\bok_household_연체율.csv"          "$Root\ecos_household_credit\" "연체율"
+CopySafe "$ResearchUse\bok_household_연체율.csv" "$Root\ecos_household_credit\" "연체율"
 
 # ---------------------------------------------------------------------------
 # F. NHIS 건강 데이터
@@ -178,28 +178,28 @@ MakeDir "$Root\nhis_health\국민건강통계_2024_한글"
 
 $NHISDir = "$Lda\07_mechanisms\nhis"
 if (Test-Path $NHISDir) {
-    # microdata + manuals
-    Get-ChildItem -Path $NHISDir -File -ErrorAction SilentlyContinue | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$Root\nhis_health\" -Force -ErrorAction SilentlyContinue
-        $script:CopyCount++
-    }
+ # microdata + manuals
+ Get-ChildItem -Path $NHISDir -File -ErrorAction SilentlyContinue | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$Root\nhis_health\" -Force -ErrorAction SilentlyContinue
+ $script:CopyCount++
+ }
 
-    # 국민건강통계 2024 엑셀 (28 분야)
-    $HKExcel = "$NHISDir\2024국민건강통계(ver.엑셀)"
-    if (Test-Path $HKExcel) {
-        Copy-Item -Path "$HKExcel\*" -Destination "$Root\nhis_health\국민건강통계_2024_엑셀\" -Force -ErrorAction SilentlyContinue
-        $script:CopyCount += (Get-ChildItem -Path $HKExcel -File).Count
-        Write-Host "  [copy] 국민건강통계 2024 엑셀 28 분야"
-    }
+ # 국민건강통계 2024 엑셀 (28 분야)
+ $HKExcel = "$NHISDir\2024국민건강통계(ver.엑셀)"
+ if (Test-Path $HKExcel) {
+ Copy-Item -Path "$HKExcel\*" -Destination "$Root\nhis_health\국민건강통계_2024_엑셀\" -Force -ErrorAction SilentlyContinue
+ $script:CopyCount += (Get-ChildItem -Path $HKExcel -File).Count
+ Write-Host " [copy] 국민건강통계 2024 엑셀 28 분야"
+ }
 
-    # 국민건강통계 2024 한글
-    $HKHwp = "$NHISDir\2024국민건강통계(ver.한글)"
-    if (Test-Path $HKHwp) {
-        Copy-Item -Path "$HKHwp\*" -Destination "$Root\nhis_health\국민건강통계_2024_한글\" -Force -ErrorAction SilentlyContinue
-        $script:CopyCount += (Get-ChildItem -Path $HKHwp -File).Count
-    }
+ # 국민건강통계 2024 한글
+ $HKHwp = "$NHISDir\2024국민건강통계(ver.한글)"
+ if (Test-Path $HKHwp) {
+ Copy-Item -Path "$HKHwp\*" -Destination "$Root\nhis_health\국민건강통계_2024_한글\" -Force -ErrorAction SilentlyContinue
+ $script:CopyCount += (Get-ChildItem -Path $HKHwp -File).Count
+ }
 } else {
-    Write-Host "  [SKIP] L:\da NHIS dir not accessible" -ForegroundColor Yellow
+ Write-Host " [SKIP] L:\da NHIS dir not accessible" -ForegroundColor Yellow
 }
 
 # ---------------------------------------------------------------------------
@@ -227,12 +227,12 @@ MakeDir "$Root\kosis_industry_summary"
 
 $IndSumDir = "$ResearchUse\그외 지표"
 if (Test-Path $IndSumDir) {
-    # 주택매매가격지수 제외하고 나머지 모든 csv
-    Get-ChildItem -Path $IndSumDir -Filter "*.csv" -File | Where-Object { $_.Name -notlike "*주택매매*" } | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$Root\kosis_industry_summary\" -Force
-        $script:CopyCount++
-    }
-    Write-Host "  [copy] 산업분류 csv files"
+ # 주택매매가격지수 제외하고 나머지 모든 csv
+ Get-ChildItem -Path $IndSumDir -Filter "*.csv" -File | Where-Object { $_.Name -notlike "*주택매매*" } | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$Root\kosis_industry_summary\" -Force
+ $script:CopyCount++
+ }
+ Write-Host " [copy] 산업분류 csv files"
 }
 
 # ---------------------------------------------------------------------------
@@ -245,11 +245,11 @@ MakeDir "$Root\kostat_mortality_aggregated"
 # 시도 사망원인 표준화 사망률 1996+
 $Mort01Dir = "$Lda\01_mortality"
 if (Test-Path $Mort01Dir) {
-    Get-ChildItem -Path $Mort01Dir -Filter "*.csv" -File | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$Root\kostat_mortality_aggregated\" -Force
-        $script:CopyCount++
-    }
-    Write-Host "  [copy] 시도 사망원인 표준화 사망률"
+ Get-ChildItem -Path $Mort01Dir -Filter "*.csv" -File | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$Root\kostat_mortality_aggregated\" -Force
+ $script:CopyCount++
+ }
+ Write-Host " [copy] 시도 사망원인 표준화 사망률"
 }
 
 # 시군구 사망원인.csv (이전 reference)
@@ -264,11 +264,11 @@ MakeDir "$Root\crosswalks"
 
 $CWDir = "$Lda\05_crosswalks"
 if (Test-Path $CWDir) {
-    Get-ChildItem -Path $CWDir -File | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$Root\crosswalks\" -Force
-        $script:CopyCount++
-    }
-    Write-Host "  [copy] crosswalks (법정동코드, country)"
+ Get-ChildItem -Path $CWDir -File | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$Root\crosswalks\" -Force
+ $script:CopyCount++
+ }
+ Write-Host " [copy] crosswalks (법정동코드, country)"
 }
 
 # ---------------------------------------------------------------------------
@@ -283,22 +283,22 @@ MakeDir "$RefDir\md_converted"
 # 참고논문 폴더의 md / docx
 $RefSrc = "$Research\참고논문"
 if (Test-Path $RefSrc) {
-    Get-ChildItem -Path $RefSrc -Filter "*.md" -File -ErrorAction SilentlyContinue | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$RefDir\" -Force
-        $script:CopyCount++
-    }
-    Get-ChildItem -Path $RefSrc -Filter "*.docx" -File -ErrorAction SilentlyContinue | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination "$RefDir\" -Force
-        $script:CopyCount++
-    }
-    Write-Host "  [copy] *.md / *.docx from 참고논문/"
+ Get-ChildItem -Path $RefSrc -Filter "*.md" -File -ErrorAction SilentlyContinue | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$RefDir\" -Force
+ $script:CopyCount++
+ }
+ Get-ChildItem -Path $RefSrc -Filter "*.docx" -File -ErrorAction SilentlyContinue | ForEach-Object {
+ Copy-Item -Path $_.FullName -Destination "$RefDir\" -Force
+ $script:CopyCount++
+ }
+ Write-Host " [copy] *.md / *.docx from 참고논문/"
 }
 
 # md 별도 폴더 (사용자가 mounted 한 것)
 if (Test-Path $RefMd) {
-    Copy-Item -Path "$RefMd\*" -Destination "$RefDir\md_converted\" -Recurse -Force -ErrorAction SilentlyContinue
-    $script:CopyCount += (Get-ChildItem -Path $RefMd -Recurse -File).Count
-    Write-Host "  [copy] md_converted directory (recursive)"
+ Copy-Item -Path "$RefMd\*" -Destination "$RefDir\md_converted\" -Recurse -Force -ErrorAction SilentlyContinue
+ $script:CopyCount += (Get-ChildItem -Path $RefMd -Recurse -File).Count
+ Write-Host " [copy] md_converted directory (recursive)"
 }
 
 # ---------------------------------------------------------------------------
@@ -307,24 +307,24 @@ if (Test-Path $RefMd) {
 Write-Host "`n" + ("=" * 72)
 Write-Host "복사 완료 - 통계"
 Write-Host ("=" * 72)
-Write-Host "  성공:  $($script:CopyCount) 파일"
-Write-Host "  실패:  $($script:FailCount) 파일"
-Write-Host "  SKIP:  $($script:SkipCount) 파일 (source 부재)"
+Write-Host " 성공: $($script:CopyCount) 파일"
+Write-Host " 실패: $($script:FailCount) 파일"
+Write-Host " SKIP: $($script:SkipCount) 파일 (source 부재)"
 
 # 최종 0_raw/ 통계
 $TotalFiles = (Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue).Count
-$TotalSize  = (Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum / 1GB
+$TotalSize = (Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum / 1GB
 Write-Host "`n0_raw/ 최종:"
-Write-Host "  총 파일 수: $TotalFiles"
-Write-Host "  총 크기:    $([math]::Round($TotalSize, 2)) GB"
+Write-Host " 총 파일 수: $TotalFiles"
+Write-Host " 총 크기: $([math]::Round($TotalSize, 2)) GB"
 
 # Inventory CSV 생성
 $InventoryPath = "$ProjectRoot\0_raw_inventory_2026_05_03.csv"
 Get-ChildItem -Path $Root -Recurse -File -ErrorAction SilentlyContinue |
-    Select-Object @{N='RelativePath';E={$_.FullName.Replace("$Root\","")}},
-                  @{N='SizeKB';E={[math]::Round($_.Length / 1KB, 2)}},
-                  LastWriteTime |
-    Export-Csv -Path $InventoryPath -NoTypeInformation -Encoding UTF8
+ Select-Object @{N='RelativePath';E={$_.FullName.Replace("$Root\","")}},
+ @{N='SizeKB';E={[math]::Round($_.Length / 1KB, 2)}},
+ LastWriteTime |
+ Export-Csv -Path $InventoryPath -NoTypeInformation -Encoding UTF8
 
 Write-Host "`nInventory: $InventoryPath"
 Write-Host ("=" * 72)

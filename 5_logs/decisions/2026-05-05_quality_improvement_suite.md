@@ -10,7 +10,7 @@ Canonical formula: Y_k = Σ_r s_{r,k} y_r where s_{r,k} = within-region share
 - N = 222, β = -0.0685, t (HC1) = -2.12
 
 - canonical S (within-region share): shape (222, 22)
-- S column sum (across regions): [59.88911049  0.         19.27832483 24.06116957  5.3031223 ]...
+- S column sum (across regions): [59.88911049 0. 19.27832483 24.06116957 5.3031223 ]...
 - S row sum (across industries, should be ≤1): mean=1.000
 - industries: 22 → 21 after drop zero-exposure
 
@@ -20,7 +20,6 @@ Canonical formula: Y_k = Σ_r s_{r,k} y_r where s_{r,k} = within-region share
 
 ## Industry-level OLS (unweighted, comparison)
 - β = +0.3231, t = +2.22
-
 
 # Option B — Drop-C26 (전자) sensitivity
 
@@ -36,7 +35,6 @@ Q: 본 paper 의 result β=−0.069 가 C26 (전자, Rotemberg weight 80.7%) 단
 
 ## Drop top-3 (C26 + C24 + C20)
 - N = 222, β = -0.0713, t = -2.08
-
 
 # Option C — Anderson-Rubin CI (weak-IV-robust inference)
 
@@ -59,7 +57,6 @@ AR test: weak-IV 하 valid inference (Anderson-Rubin 1949 + Andrews-Stock-Sun 20
 - AR-CI 95%: [-0.497, +0.013]
 - ⚠️ AR-CI includes 0 → cannot reject β_IV = 0 (weak inference)
 
-
 # Option D — Suicide-only alternative outcome (cause 102 만)
 
 Q: 본 paper 의 despair_total 결과가 suicide-only 에서도 같은 부호?
@@ -71,7 +68,6 @@ Q: 본 paper 의 despair_total 결과가 suicide-only 에서도 같은 부호?
 - cardiovascular: N=222, β=-0.0129, t=-0.46
 - respiratory: N=198, β=-0.0118, t=-0.27
 - external_other: N=222, β=+0.0135, t=+0.29
-
 
 # 종합 verdict
 

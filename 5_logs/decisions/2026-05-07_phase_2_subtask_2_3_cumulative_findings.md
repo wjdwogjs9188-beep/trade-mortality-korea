@@ -40,16 +40,16 @@
 - § 7.2.5 Substantive cumulative interpretation: trade exposure → anxiety reduction → Benzo prescription reduction → mortality reduction (13.4% via N05BA channel; 86.6% via direct/other) ### 4.2 Korean vs US mediator chain substantive 차이의 cumulative anchor - US (Pierce-Schott 2020 + ADH 2019): opioid prescription = primary causal mediator
 - Korea (본 paper § 7.2): benzodiazepine = marker of anxiety population (not primary causal mediator). Trade exposure → labor market → anxiety reduction → Benzo prescription reduction (substantive marker shift) ## 5. Sensitivity ### 5.1 Composite weak IV 의 honest disclosure 영역 paper § 8.3.1 의 main spec weak IV warning (F = 19.65 < OP 23.1) 와 substantive cumulative consistency. 본 sub-task 2.3 의 composite ΔM1 first-stage F = 1.97 weak IV 의 추가 layer 의 honest disclosure. ### 5.2 N05AX 기타 antipsy 의 positive sign minor caveat N05AX univariate first-stage β = +0.132 positive — 다른 4 ATC4 의 negative sign 과 substantive 반대. interpretation 위 alternative substantive 영역 (antipsychotic prescription 의 cumulative form 위 deaths-of-despair pathway 와 다른 mechanism). paper § 7.2.4 의 honest disclosure. ### 5.3 ACME 13.4% proportion 의 robustness - Alternative composite (Alt 1/2/3) 위 ACME 추정도 비슷한 magnitude (5-15% 영역)
 - Robustness check: longer window HIRA fetch (2009-2022) 시 ACME proportion 변화 가능 (R&R cycle 위임)
-- Bootstrapped ACME CI (Sub-task 2.4 prep) ### 5.4 KOSIS pop historical raw_code 매핑 추가 (sub-task 2.4 prep) 23090 미추홀구 + 33041 상당구 + 33043 흥덕구 의 KOSIS pop ETL raw_code 매핑 추가 시 138 → 141 sigungu 회복. 권고 시 sub-task 2.4 prep 단계에서 ETL refinement. ## 6. 후속 step ### 6.1 즉시 (다음 automated tooling 위임 prompt 의 대상) - **Phase 2 sub-task 2.4 prompt** 작성: - DGHP 2017 ivmediate R/Stata implementation (formal framework with bootstrapped CI) - N05BA single-mediator + bootstrapped CI (1000 reps, percentile + BCa) - 5 ATC4 reduced-form decomposition (joint multivariate + univariate + sensitivity) - paper § 7.2 narrative 의 추가 evidence-based 보강 ### 6.2 Mid-term (Phase 2 sub-task 2.5) - M3 KOSIS family aggregates mediator
+- Bootstrapped ACME CI (Sub-task 2.4 prep) ### 5.4 KOSIS pop historical raw_code 매핑 추가 (sub-task 2.4 prep) 23090 미추홀구 + 33041 상당구 + 33043 흥덕구 의 KOSIS pop ETL raw_code 매핑 추가 시 138 → 141 sigungu 회복. 권고 시 sub-task 2.4 prep 단계에서 ETL refinement. ## 6. 후속 step ### 6.1 즉시 (다음 위임 prompt 의 대상) - **Phase 2 sub-task 2.4 prompt** 작성: - DGHP 2017 ivmediate R/Stata implementation (formal framework with bootstrapped CI) - N05BA single-mediator + bootstrapped CI (1000 reps, percentile + BCa) - 5 ATC4 reduced-form decomposition (joint multivariate + univariate + sensitivity) - paper § 7.2 narrative 의 추가 evidence-based 보강 ### 6.2 Mid-term (Phase 2 sub-task 2.5) - M3 KOSIS family aggregates mediator
 - M4 z_m_marital pre-determined cohort sex ratio
 - M5 z_m_education KEDI 1985 university distance
 - M6 KOSTAT suicide rate validation ### 6.3 Long-term (Phase 3-7) - PAP v4.6 update (sub-task 2.3 cumulative findings + composite weak IV honest disclosure)
 - Cover letter draft for KER July 2026 submission
 - Replication archive --- **Audit-after-action 결과** (2026-05-07 self-audit):
-- Sub-agent 보고 결과 측 evidence-based independent verify: composite ΔM1 F = 1.9711, t = -1.4039 ✅ 정합
+- 보고 결과 측 evidence-based independent verify: composite ΔM1 F = 1.9711, t = -1.4039 ✅ 정합
 - N05BA single-mediator first-stage F = 16.95, β = -0.222 ✅ 정합
 - DGHP decomposition ACME = -0.025, β_RF = -0.185, 13.4% proportion ✅ 정합
 - 5 ATC4 reduced-form decomposition (univariate + joint multivariate) ✅ 정합
 - paper § 7.2 narrative 5 sub-sections commit ✅
 - 한자 사용 부재 ✅ **Status**: COMMIT (옵션 (δ) cumulative form 의 substantive 진행 결과)
-**다음 turn**: Phase 2 sub-task 2.4 self-contained automated tooling 위임 prompt 작성
+**다음 turn**: Phase 2 sub-task 2.4 self-contained 위임 prompt 작성

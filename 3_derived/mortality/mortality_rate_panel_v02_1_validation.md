@@ -6,21 +6,21 @@
 ## v02.1 변경점 (v02 → v02.1)
 
 1. **외국인 빼기 step 제거** — 분모 = `population_panel_v01.parquet` 그대로.
-   - KOSIS DT_1B040M5 = 행정안전부 주민등록인구 = Korean only by definition. v01 V5 이미 49,410,000 official 과 0.000% 일치.
-   - v02 의 외국인 차감은 over-correction (Korean - Korean·foreign·overlap) → 분모 ~2% 추가 차감 → ASR ~2% 인플레이션.
+ - KOSIS DT_1B040M5 = 행정안전부 주민등록인구 = Korean only by definition. v01 V5 이미 49,410,000 official 과 0.000% 일치.
+ - v02 의 외국인 차감은 over-correction (Korean - Korean·foreign·overlap) → 분모 ~2% 추가 차감 → ASR ~2% 인플레이션.
 2. Component decomposition (10 outcomes) **유지**.
 3. 3 ASR baselines (kr2010 + WHO 2000 + Eurostat 2013) **유지**.
 4. mediator panel (marriage / education / occupation) **유지**.
 
 ## Population panel v01 (재확인)
 
-- 2010 total: 49,879,812  (official Korean = 49,410,000, diff = 0.9508%)
+- 2010 total: 49,879,812 (official Korean = 49,410,000, diff = 0.9508%)
 - 외국인 빼기 미적용: pop_v01 already excludes foreigners (KOSIS DT_1B040M5 source = 행정안전부 주민등록통계 = Korean only).
 
 ## ASR sanity
 
 - National despair_total ASR 2010 (KR2010 baseline) = **46.99/100k**
-  (= suicide ~31 + drug ~5 + psych ~2 + liver ~10 합산. 한국 historical pattern 일치.)
+ (= suicide ~31 + drug ~5 + psych ~2 + liver ~10 합산. 한국 historical pattern 일치.)
 
 ## Validation
 

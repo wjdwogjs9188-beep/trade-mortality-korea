@@ -88,7 +88,7 @@
 | 폴더/파일 | 내용 |
 |---|---|
 | 연계표/ | KSIC 8차_9차, 9차_10차, 10차_11차 |
-| hs 연계표/ | HS 1996/2002/2007 → ISIC Rev 4 stata .do |
+| hs 연계표/ | HS 1996/2002/2007 → ISIC Rev 4 stata.do |
 | 시군구 사망원인.csv | KOSIS DT_1B34E13 (87,480 행) |
 | 시군구 혼인/이혼/출생.xls | XML SpreadsheetML |
 | 시군구_출생아수_합계출산율.xlsx | 출산율 |
@@ -122,13 +122,13 @@
 
 ```python
 def validate_mortality_panel(df, year):
-    KOSTAT_OFFICIAL = {
-        2010: 255_405, 2019: 295_110, 2023: 352_511, ...
-    }
-    actual = len(df)
-    official = KOSTAT_OFFICIAL[year]
-    ratio = actual / official
-    assert 0.99 <= ratio <= 1.01, f"{year}: {actual} vs official {official}"
+ KOSTAT_OFFICIAL = {
+ 2010: 255_405, 2019: 295_110, 2023: 352_511,...
+ }
+ actual = len(df)
+ official = KOSTAT_OFFICIAL[year]
+ ratio = actual / official
+ assert 0.99 <= ratio <= 1.01, f"{year}: {actual} vs official {official}"
 ```
 
 검증 통과 결과는 `5_logs/validation_log.csv` 에 자동 기록.

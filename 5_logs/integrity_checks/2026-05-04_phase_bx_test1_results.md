@@ -4,7 +4,6 @@ _timestamp: 2026-05-04T23:02:08.034932_
 ## bilateral coverage
 - years 2000-2024, n=25
 
-
 ## Test 1 — bilateral M change ~ lagged macro
 
 - obs: 19
@@ -12,4 +11,4 @@ _timestamp: 2026-05-04T23:02:08.034932_
 - **Joint F-stat**: 129.957
 - **Joint p-value**: 0.0000
 - **결정**:
-  - p < 0.05 → **bilateral 외생성 의심** → C.ii branch 진입 위험
+ - p < 0.05 → **bilateral 외생성 의심** → C.ii branch 진입 위험

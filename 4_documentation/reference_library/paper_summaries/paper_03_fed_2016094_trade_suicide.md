@@ -20,42 +20,42 @@
 
 ## Data
 - **Data Source**: 
-  - 종속변수: CDC (Centers for Disease Control & Prevention) Mortality Data (1989-2015)
-  - 독립변수: U.S. Census of Manufactures (1989, 2000, 2010)
-  - 무역 정책: U.S. International Trade Commission (USITC) 데이터, NTR gap 계산
-  - 노동시장: BLS (Bureau of Labor Statistics) Local Area Unemployment Statistics, QCEW (Quarterly Census of Employment & Wages)
+ - 종속변수: CDC (Centers for Disease Control & Prevention) Mortality Data (1989-2015)
+ - 독립변수: U.S. Census of Manufactures (1989, 2000, 2010)
+ - 무역 정책: U.S. International Trade Commission (USITC) 데이터, NTR gap 계산
+ - 노동시장: BLS (Bureau of Labor Statistics) Local Area Unemployment Statistics, QCEW (Quarterly Census of Employment & Wages)
 
 - **Sample Period**: 1989-2015 (26년, 하지만 PNTR shock은 2000)
 
 - **Analysis Level**: 미국 카운티(county) 단위
-  - 총 3,142개 카운티 (미국 주(states)의 세부 행정단위)
-  - 1990 Commuting Zones 기준으로도 보고
+ - 총 3,142개 카운티 (미국 주(states)의 세부 행정단위)
+ - 1990 Commuting Zones 기준으로도 보고
 
 - **Sample Size**: 약 3,142 counties × 27 years = 약 85,000 관측치 (정확한 unbalanced panel size는 다를 수 있음)
 
 - **종속변수**:
-  - **주요**: 자살 사망률 (Suicide mortality rate) per 100,000 population, age-adjusted
-  - **보조**: 
-    - ARLD (Alcohol-related liver disease)
-    - Accidental poisoning (약물 중독 포함)
-    - 기타 사망원인 (암, 심혈관질환, 교통사고 등) - placebo test로 사용
-  - **추가**: 구체적 자살 방법별 (firearm vs non-firearm)
-  - **생인구학적 분층**: 자살 → white males, white females, black males, black females별 분리
+ - **주요**: 자살 사망률 (Suicide mortality rate) per 100,000 population, age-adjusted
+ - **보조**: 
+ - ARLD (Alcohol-related liver disease)
+ - Accidental poisoning (약물 중독 포함)
+ - 기타 사망원인 (암, 심혈관질환, 교통사고 등) - placebo test로 사용
+ - **추가**: 구체적 자살 방법별 (firearm vs non-firearm)
+ - **생인구학적 분층**: 자살 → white males, white females, black males, black females별 분리
 
 - **독립변수**:
-  - **NTR gap** (Normal Trade Relations exposure): 카운티 c의 PNTR shock exposure를 측정
-    - 정의: 카운티의 산업별 초기 고용 구성(1990)과 PNTR 이후 중국으로부터의 수입 증가를 shift-share 형식으로 결합
-    - 수식: NTR_c = Σ_j (L_cj0 / L_c0) × ΔIm_{China, j, 2000-2007}
-    - 이는 Autor et al.(2013)의 "China shock" 측정과 동일 구조
-  - **Surrounding-county NTR gap**: 같은 commuting zone 내 인접 카운티들의 가중 평균 NTR gap (spillover effect 측정)
-  - **연도별 더미**: 시간 고정효과
-  - **카운티 고정효과**: 카운티별 상수항
+ - **NTR gap** (Normal Trade Relations exposure): 카운티 c의 PNTR shock exposure를 측정
+ - 정의: 카운티의 산업별 초기 고용 구성(1990)과 PNTR 이후 중국으로부터의 수입 증가를 shift-share 형식으로 결합
+ - 수식: NTR_c = Σ_j (L_cj0 / L_c0) × ΔIm_{China, j, 2000-2007}
+ - 이는 Autor et al.(2013)의 "China shock" 측정과 동일 구조
+ - **Surrounding-county NTR gap**: 같은 commuting zone 내 인접 카운티들의 가중 평균 NTR gap (spillover effect 측정)
+ - **연도별 더미**: 시간 고정효과
+ - **카운티 고정효과**: 카운티별 상수항
 
 - **Covariates**:
-  - 정책 변수: 주(state)의 firearm 관련 정책, 정신 건강 정책, 약물 관련 정책 (시간 변동)
-  - 인구통계: 카운티의 인구 동학(자연증가, 이민), 교육 수준, 산업 구성 변화
-  - 경제: 실업률, 노동력 참여율, 평균 임금 변화
-  - 지역: 도시화 수준, 빈곤율
+ - 정책 변수: 주(state)의 firearm 관련 정책, 정신 건강 정책, 약물 관련 정책 (시간 변동)
+ - 인구통계: 카운티의 인구 동학(자연증가, 이민), 교육 수준, 산업 구성 변화
+ - 경제: 실업률, 노동력 참여율, 평균 임금 변화
+ - 지역: 도시화 수준, 빈곤율
 
 ## Identification strategy
 **Difference-in-Differences (DiD) 기반 비교**:
@@ -173,63 +173,63 @@ Black populations: less clear effect or not significant
 ## Robustness
 
 1. **Placebo tests**:
-   - 무관한 사망원인(예: 암, 심혈관질환)으로 회귀 → 유의하지 않아야 함
-   - 결과: 암과 자동차 사고는 NTR gap과 무관, 심장질환은 약한 양의 상관만
-   - 해석: 유의한 결과가 spurious가 아닌 것 시사
+ - 무관한 사망원인(예: 암, 심혈관질환)으로 회귀 → 유의하지 않아야 함
+ - 결과: 암과 자동차 사고는 NTR gap과 무관, 심장질환은 약한 양의 상관만
+ - 해석: 유의한 결과가 spurious가 아닌 것 시사
 
 2. **시간 주기 변경**:
-   - PNTR 충격을 2000 vs 2001-2007 or 2000-2015로 정의 → 결과 robust
-   - 사전 추세(1989-1999)와 사후 추세(2001-2015) 비교 → parallel trends 확인
+ - PNTR 충격을 2000 vs 2001-2007 or 2000-2015로 정의 → 결과 robust
+ - 사전 추세(1989-1999)와 사후 추세(2001-2015) 비교 → parallel trends 확인
 
 3. **Geographic specification**:
-   - County-level vs commuting zone-level → 매우 유사 결과
-   - State-level clustering vs county-level → SE는 다르지만 부호/유의성 일관
+ - County-level vs commuting zone-level → 매우 유사 결과
+ - State-level clustering vs county-level → SE는 다르지만 부호/유의성 일관
 
 4. **표본 제한**:
-   - 특정 주(state) 제외 → robust
-   - 특정 산업 비중 높은 카운티 제외 → robust (예: textile-dependent regions)
+ - 특정 주(state) 제외 → robust
+ - 특정 산업 비중 높은 카운티 제외 → robust (예: textile-dependent regions)
 
 5. **실업 및 다른 경제 변수 동시 통제**:
-   - 실업률 추가 → NTR 계수 감소하지만 여전히 유의
-   - 임금 추가 → 유사
-   - 해석: **경제 변수가 일부 경로를 설명하지만, 모두를 설명하진 못함** (→ 심리사회적 channel 중요)
+ - 실업률 추가 → NTR 계수 감소하지만 여전히 유의
+ - 임금 추가 → 유사
+ - 해석: **경제 변수가 일부 경로를 설명하지만, 모두를 설명하진 못함** (→ 심리사회적 channel 중요)
 
 ## Heterogeneity (이미 위에서 일부 언급)
 
 1. **Gender x Race (Table 5)**:
-   - White male > white female > black male ≈ black female
-   - Firearm 자살 vs 다른 수단 자살 분리: firearm 에서만 유의 (아마 접근성 때문)
+ - White male > white female > black male ≈ black female
+ - Firearm 자살 vs 다른 수단 자살 분리: firearm 에서만 유의 (아마 접근성 때문)
 
 2. **Occupational (암묵적, Table mentions)**:
-   - Manufacturing-intensive vs service economy regions: 전자에서 큰 효과
+ - Manufacturing-intensive vs service economy regions: 전자에서 큰 효과
 
 3. **Geographic**:
-   - Rural vs urban: rural에서 더 큰 효과 가능 (안전망 약함)
+ - Rural vs urban: rural에서 더 큰 효과 가능 (안전망 약함)
 
 ## Mechanism (저자들이 탐색한 channel)
 
 1. **노동시장 메커니즘** (주요):
-   - PNTR → 중국 수입 증가 → 미국 제조업 경쟁 심화 → 고용 감소 또는 임금 하락
-   - 실업/임금 감소 → 경제적 stress → 자살 위험 증가
-   - Evidence: PNTR과 실업 증가 간 양의 상관, 실업과 자살 간 양의 상관 (기존 문헌)
+ - PNTR → 중국 수입 증가 → 미국 제조업 경쟁 심화 → 고용 감소 또는 임금 하락
+ - 실업/임금 감소 → 경제적 stress → 자살 위험 증가
+ - Evidence: PNTR과 실업 증가 간 양의 상관, 실업과 자살 간 양의 상관 (기존 문헌)
 
 2. **약물 시장 변화** (보조):
-   - 실업 → 약물/알코올 남용 증가 (coping mechanism)
-   - 동시에 2000년대 중후반 opioid epidemic 발생 (처방약 오용)
-   - ARLD와 accidental poisoning 효과가 자살보다 크다는 점이 이 메커니즘 시사
+ - 실업 → 약물/알코올 남용 증가 (coping mechanism)
+ - 동시에 2000년대 중후반 opioid epidemic 발생 (처방약 오용)
+ - ARLD와 accidental poisoning 효과가 자살보다 크다는 점이 이 메커니즘 시사
 
 3. **심리사회적 충격** (명시하지는 않지만 암묵):
-   - 실업/임금 손실 자체보다, **예상 외의 충격과 통제감 상실**이 중요
-   - 특히 white working-class males: 제조업 일자리가 직업 정체성의 중심 → 상실감 크고 회복력 낮음
+ - 실업/임금 손실 자체보다, **예상 외의 충격과 통제감 상실**이 중요
+ - 특히 white working-class males: 제조업 일자리가 직업 정체성의 중심 → 상실감 크고 회복력 낮음
 
 4. **가족/지역 구조 붕괴**:
-   - 경제 충격 → 혼인율 감소, 이혼율 증가, 아동 양육 문제
-   - 지역 사회 자본(social capital) 약화
+ - 경제 충격 → 혼인율 감소, 이혼율 증가, 아동 양육 문제
+ - 지역 사회 자본(social capital) 약화
 
 5. **메커니즘 분해 (진행 여부 확인 필요)**:
-   - 직접효과: PNTR → 사망률 (경제 변수 통제 후에도 남는 부분)
-   - 간접효과: PNTR → 실업 → 사망률
-   - 이 논문이 명시적으로 mediation 분석했는지는 확인 필요
+ - 직접효과: PNTR → 사망률 (경제 변수 통제 후에도 남는 부분)
+ - 간접효과: PNTR → 실업 → 사망률
+ - 이 논문이 명시적으로 mediation 분석했는지는 확인 필요
 
 ## 본 paper와의 connection
 
@@ -240,16 +240,16 @@ Black populations: less clear effect or not significant
 
 ### 5-layer SE와의 매핑:
 1. **Layer 1 (Main IV)**: Shift-share IV (NTR gap) + DiD structure 복합
-   - 본 논문: 비슷한 shift-share but Korea context
+ - 본 논문: 비슷한 shift-share but Korea context
 
 2. **Layer 2 (DGHP ivmediate)**: Pierce & Schott은 명시적 mediation 분석 미흡
-   - 본 논문이 **개선할 부분**: 고용 → 사망률 경로를 명시적으로 분해
+ - 본 논문이 **개선할 부분**: 고용 → 사망률 경로를 명시적으로 분해
 
 3. **Layer 3 (Romano-Wolf)**: Multiple outcomes (suicide, ARLD, poisoning) 동시 분석 → MHT correction 필수
-   - 본 논문은 일부 구현했을 가능성
+ - 본 논문은 일부 구현했을 가능성
 
 4. **Layer 4 (OP test)**: 이 논문은 shift-share 강건성 검증이 약할 수 있음
-   - 본 논문: IMF 1806 paper의 leave-one-out/OP test 추가
+ - 본 논문: IMF 1806 paper의 leave-one-out/OP test 추가
 
 5. **Layer 5 (Final integration)**: 본 논문은 이미 trade × mortality를 보였으므로, 더 정교한 mediation + robust testing 버전으로 진화
 
@@ -261,10 +261,10 @@ Black populations: less clear effect or not significant
 ### Novelty claim:
 - **이 논문의 contribution**: Trade policy → Health/mortality 연결의 **최초** 증거
 - **본 논문의 차별성**: 
-  - 미국 county-level을 **한국 시군구(county equivalent)** 수준으로 적응
-  - Pierce-Schott의 미국 자살만 → 한국의 **다양한 사망원인** (자살, ARLD, 약물, 심혈관 등) 분석
-  - 메커니즘을 **고용 감소**뿐 아니라 **음주/약물**, **심리사회적 변수** (가족 구조 등) 추가 분석
-  - Novelty: 이는 **비선진국/transition economy context** (한국)에서의 첫 분석일 가능성
+ - 미국 county-level을 **한국 시군구(county equivalent)** 수준으로 적응
+ - Pierce-Schott의 미국 자살만 → 한국의 **다양한 사망원인** (자살, ARLD, 약물, 심혈관 등) 분석
+ - 메커니즘을 **고용 감소**뿐 아니라 **음주/약물**, **심리사회적 변수** (가족 구조 등) 추가 분석
+ - Novelty: 이는 **비선진국/transition economy context** (한국)에서의 첫 분석일 가능성
 
 ## Quality assessment
 

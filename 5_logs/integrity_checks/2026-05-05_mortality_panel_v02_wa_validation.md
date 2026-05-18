@@ -35,4 +35,4 @@ _2026-05-05_
 - ⚠️ skip 2023_사망_연간자료_B형_20260410_64844.csv: missing year or cause_104
 - ⚠️ skip 2024_사망_연간자료_B형_20260410_64844.csv: missing year or cause_104
 
-[FAIL] no mortality data
+[FL] no mortality data

@@ -20,14 +20,14 @@
 - **Analysis Level**: 지역(region) 단위, 지역-산업 쌍(region-industry pair) 단위
 - **Sample Size**: 수백~수천 지역 관측치
 - **종속변수**:
-  - 지역별 임금 변화 (log wage change)
-  - 지역별 고용 비율 변화 (employment rate change)
-  - 지역별 노동력 참여율 변화
+ - 지역별 임금 변화 (log wage change)
+ - 지역별 고용 비율 변화 (employment rate change)
+ - 지역별 노동력 참여율 변화
 - **독립변수** (shift-share 구조):
-  - 지역-산업 shift: 산업 g의 전국 노동 수요 변화 (Δ D_g)
-  - 지역 share: 지역 i의 산업 g 초기 고용 비중 (L_ig0 / L_i0)
-  - SSI (Shift-Share Index): X_i = Σ_g (L_ig0 / L_i0) × Δ D_g
-  - Alternative specification: 분모를 전국 산업 고용(E_g0)으로 정규화하는 경우도 존재
+ - 지역-산업 shift: 산업 g의 전국 노동 수요 변화 (Δ D_g)
+ - 지역 share: 지역 i의 산업 g 초기 고용 비중 (L_ig0 / L_i0)
+ - SSI (Shift-Share Index): X_i = Σ_g (L_ig0 / L_i0) × Δ D_g
+ - Alternative specification: 분모를 전국 산업 고용(E_g0)으로 정규화하는 경우도 존재
 
 ## Identification strategy
 **이론적 프레임워크**: 지역 노동시장 모형
@@ -99,7 +99,7 @@ Y_i = β_0 + β_1 × X_i + ε_i
 공통 component의 분산을 명시적으로 모델링:
 ```
 Var(X_i) = Var(Σ_g (L_ig0 / L_i0) × Δ D_g) 
-         = Σ_g Σ_{g'} (L_ig0 / L_i0) × (L_ig'0 / L_i0) × Cov(Δ D_g, Δ D_{g'})
+ = Σ_g Σ_{g'} (L_ig0 / L_i0) × (L_ig'0 / L_i0) × Cov(Δ D_g, Δ D_{g'})
 ```
 
 표준오차를 이 **공동 분산 구조**를 반영하도록 재계산:
@@ -156,19 +156,19 @@ Y_i = β_0 + β_1 × X_i + β_2 × W_i + ε_i
 저자들은 시뮬레이션과 실증 분석을 통해:
 
 1. **표준 OLS 표준오차 vs 올바른 표준오차**:
-   - Ratio: 1.5 ~ 3.0 (데이터에 따라)
-   - 의미: 만약 표준 OLS t-stat = 2.5라면, 올바른 t-stat = 1.2~1.7로 감소
-   - 결과: 일부 "유의"한 것으로 보이는 계수가 실제로는 "유의하지 않을" 수 있음
+ - Ratio: 1.5 ~ 3.0 (데이터에 따라)
+ - 의미: 만약 표준 OLS t-stat = 2.5라면, 올바른 t-stat = 1.2~1.7로 감소
+ - 결과: 일부 "유의"한 것으로 보이는 계수가 실제로는 "유의하지 않을" 수 있음
 
 2. **첫번째 단계(First-stage) vs 축소형(Reduced-form) 비교**:
-   - SSI를 직접 사용하는 reduced-form: overestimate
-   - SSI로 instrument하는 2SLS first-stage: 더 견고
+ - SSI를 직접 사용하는 reduced-form: overestimate
+ - SSI로 instrument하는 2SLS first-stage: 더 견고
 
 3. **크기 효과(Magnitude)**:
-   - 저자들이 예시한 노동 공급 탄성도 추정에서:
-     - Naive OLS (표준오차 미조정): β = 0.5 (t-stat = 3.2)
-     - 조정 후 추정치: β = 0.45 (t-stat = 1.8)
-   - 즉, 경제적 크기는 크게 바뀌지 않지만 신뢰도(precision)가 하락
+ - 저자들이 예시한 노동 공급 탄성도 추정에서:
+ - Naive OLS (표준오차 미조정): β = 0.5 (t-stat = 3.2)
+ - 조정 후 추정치: β = 0.45 (t-stat = 1.8)
+ - 즉, 경제적 크기는 크게 바뀌지 않지만 신뢰도(precision)가 하락
 
 ### Overidentification test:
 
@@ -190,61 +190,61 @@ J-test = N × e'Z(Z'Z)^{-1}Z'e / σ^2
 ## Robustness
 
 1. **Alternative shift-share specification**:
-   - Denominator: L_i0 (region total) vs E_g0 (national industry) → 결과 비슷
-   - Weights: employment vs value added → 크기에는 영향이지만 부호는 일관
+ - Denominator: L_i0 (region total) vs E_g0 (national industry) → 결과 비슷
+ - Weights: employment vs value added → 크기에는 영향이지만 부호는 일관
 
 2. **Placebo test**:
-   - 임의의 산업 shift 생성 후 회귀 → 계수가 0에 가까워야 함
-   - 표준 SE 사용 시: 약 5-10%가 "유의"하게 나옴 (잘못된 SE 때문)
-   - 조정 SE 사용 시: 약 1-2% (기대 수준으로 근접)
+ - 임의의 산업 shift 생성 후 회귀 → 계수가 0에 가까워야 함
+ - 표준 SE 사용 시: 약 5-10%가 "유의"하게 나옴 (잘못된 SE 때문)
+ - 조정 SE 사용 시: 약 1-2% (기대 수준으로 근접)
 
 3. **시간 주기 변경**:
-   - 5년, 10년, 20년 shifts 사용 → 결과 stable
+ - 5년, 10년, 20년 shifts 사용 → 결과 stable
 
 4. **공간 clustering vs 산업 clustering**:
-   - 표준: commuting zone 또는 state 수준 clustering
-   - 대안: 산업 클러스터링도 고려 (같은 산업에 노출된 지역들은 공통 shock 받음)
+ - 표준: commuting zone 또는 state 수준 clustering
+ - 대안: 산업 클러스터링도 고려 (같은 산업에 노출된 지역들은 공통 shock 받음)
 
 ## Heterogeneity
 
 1. **지역 규모별**:
-   - 큰 지역 (population > 1M): shift-share effect 더 큼
-   - 작은 지역: 더 큰 표본 변동성
+ - 큰 지역 (population > 1M): shift-share effect 더 큼
+ - 작은 지역: 더 큰 표본 변동성
 
 2. **산업 집중도별**:
-   - HHI (Herfindahl index) 높은 지역: SSI 편차 크고, 표준오차 조정도 큼
-   - HHI 낮은 지역: 더 분산된 구조
+ - HHI (Herfindahl index) 높은 지역: SSI 편차 크고, 표준오차 조정도 큼
+ - HHI 낮은 지역: 더 분산된 구조
 
 3. **초기 고용 구조**:
-   - Manufacturing-intensive regions: more exposed to industrial shocks
-   - Service-dominant regions: less variation in shifts
+ - Manufacturing-intensive regions: more exposed to industrial shocks
+ - Service-dominant regions: less variation in shifts
 
 ## Mechanism
 
 저자들은 **purely statistical** 메커니즘 설명:
 
 1. **Common component 분해**:
-   ```
-   X_i = Σ_g (L_ig0 / L_i0) × Δ D_g
-       = (1/n) Σ_g Δ D_g × [n × (L_ig0 / L_i0)]   [평균 재정렬]
-       = X̄ + X̃_i
-   ```
-   여기서 X̄는 공통 component, X̃_i는 지역별 고유 component
-   
-   공통 component의 variance:
-   ```
-   Var(X̄) = Var(Σ_g (L_ig0 / L_i0) × Δ D_g)
-   ```
-   이는 모든 지역에 공유되므로, 잔차 상관을 증가
+ ```
+ X_i = Σ_g (L_ig0 / L_i0) × Δ D_g
+ = (1/n) Σ_g Δ D_g × [n × (L_ig0 / L_i0)] [평균 재정렬]
+ = X̄ + X̃_i
+ ```
+ 여기서 X̄는 공통 component, X̃_i는 지역별 고유 component
+
+ 공통 component의 variance:
+ ```
+ Var(X̄) = Var(Σ_g (L_ig0 / L_i0) × Δ D_g)
+ ```
+ 이는 모든 지역에 공유되므로, 잔차 상관을 증가
 
 2. **Mechanical correlation**:
-   - 같은 산업에 높은 share를 가진 지역들은, 그 산업의 shift 방향에 모두 영향받음
-   - 따라서 Cov(X_i, X_j)가 >0 even if regions are uncorrelated
+ - 같은 산업에 높은 share를 가진 지역들은, 그 산업의 shift 방향에 모두 영향받음
+ - 따라서 Cov(X_i, X_j)가 >0 even if regions are uncorrelated
 
 3. **표준오차의 과소평가**:
-   - OLS 표준오차 = sqrt(Var(ε) / Var(X))
-   - 하지만 Var(X)가 measurement noise 없이 **공동 성분**이 대부분이면, 실제 precision은 훨씬 낮음
-   - 따라서 correction factor가 필요
+ - OLS 표준오차 = sqrt(Var(ε) / Var(X))
+ - 하지만 Var(X)가 measurement noise 없이 **공동 성분**이 대부분이면, 실제 precision은 훨씬 낮음
+ - 따라서 correction factor가 필요
 
 ## 본 paper와의 connection
 
@@ -255,15 +255,15 @@ J-test = N × e'Z(Z'Z)^{-1}Z'e / σ^2
 
 ### 5-layer SE와의 직접 매핑:
 1. **Layer 1 (Main IV)**: DFS의 IV + 이 paper의 표준오차 correction 결합
-   - Specification: Equation (3) with HC3/HC4 robust SE
-   
+ - Specification: Equation (3) with HC3/HC4 robust SE
+
 2. **Layer 2 (DGHP mediation)**: 이 paper의 framework는 mediation 직접 다루지 않으나, SSI 신뢰도가 높아야 mediation 분석도 신뢰가능
-   
+
 3. **Layer 3 (Romano-Wolf)**: 이 paper가 제시한 **OP overidentification test**를 Romano-Wolf correction과 결합
-   - 다중 가설 검증 시 이 paper의 method 4 (leave-one-out)와 OP test로 robust inference
-   
+ - 다중 가설 검증 시 이 paper의 method 4 (leave-one-out)와 OP test로 robust inference
+
 4. **Layer 4**: 이 paper의 method 1 (shares-based correlation adjustment) 적용
-   
+
 5. **Layer 5**: 모든 layer를 통합한 최종 Bartik + mediation + robust testing
 
 ### 직접 인용 가능 quote:

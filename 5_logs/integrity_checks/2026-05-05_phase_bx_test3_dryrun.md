@@ -1,7 +1,6 @@
 # Phase B-x Test 3 — Pierce-Schott pre-trend exogeneity
 _2026-05-05_
 
-
 ## ⚠️ Pending upstream Phase 2 outputs:
 - mort
 

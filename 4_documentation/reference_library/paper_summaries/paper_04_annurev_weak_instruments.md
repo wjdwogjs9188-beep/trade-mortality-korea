@@ -25,26 +25,26 @@
 ## Data
 - **주요 방법론 논문 (theory)**이므로, 구체 데이터셋은 없음
 - 대신 **Illustrative simulations**에서 여러 상황 시뮬레이션:
-  - 동분산(homoskedastic) vs 비동분산(heteroskedastic) 오차
-  - 무상관(i.i.d.) vs clustering (regional, sectoral) vs 시계열 상관
-  - 약한 vs 강한 instrument
+ - 동분산(homoskedastic) vs 비동분산(heteroskedastic) 오차
+ - 무상관(i.i.d.) vs clustering (regional, sectoral) vs 시계열 상관
+ - 약한 vs 강한 instrument
 - **Empirical survey**: 2014-2018 AER에 게재된 IV 사용 논문들 (약 100+ 논문)을 수집하여 분석
-  - First-stage F-statistic 보고 관행
-  - Weak instrument 인식 정도
-  - 사용된 inference 방법
+ - First-stage F-statistic 보고 관행
+ - Weak instrument 인식 정도
+ - 사용된 inference 방법
 
 ## Identification strategy
 **이론적 framework**: Linear IV model with multiple instruments
 
 ### Model specification:
 ```
-Y_i = β_0 + β_1 × X_i + W_i' × γ + ε_i          ... (1) [Structural equation]
-X_i = π_0 + Z_i' × π + W_i' × δ + V_i            ... (2) [First stage]
+Y_i = β_0 + β_1 × X_i + W_i' × γ + ε_i... (1) [Structural equation]
+X_i = π_0 + Z_i' × π + W_i' × δ + V_i... (2) [First stage]
 ```
 
 또는 reduced form으로:
 ```
-Y_i = δ_0 + Z_i' × δ + W_i' × λ + U_i            ... (3) [Reduced form]
+Y_i = δ_0 + Z_i' × δ + W_i' × λ + U_i... (3) [Reduced form]
 ```
 
 관계: δ = π × β (reduced form coefficient = first-stage × structural coefficient)
@@ -79,25 +79,25 @@ F = [(β̂ estimated from 2SLS) / SE(β̂)]^2
 
 ### Identification assumption:
 1. **Exogeneity of Z_i** (Instrument validity):
-   ```
-   E[Z_i' × ε_i] = 0
-   ```
-   즉, instrument은 종속변수의 오차와 무관해야 함
+ ```
+ E[Z_i' × ε_i] = 0
+ ```
+ 즉, instrument은 종속변수의 오차와 무관해야 함
 
 2. **Relevance of Z_i** (First-stage significance):
-   ```
-   E[Z_i' × X_i] ≠ 0  (rank condition)
-   ```
-   또는 더 강한 조건:
-   ```
-   π ≠ 0 (first-stage coefficient non-zero)
-   ```
+ ```
+ E[Z_i' × X_i] ≠ 0 (rank condition)
+ ```
+ 또는 더 강한 조건:
+ ```
+ π ≠ 0 (first-stage coefficient non-zero)
+ ```
 
 3. **No weak identification** (Weak instrument 회피):
-   ```
-   F-statistic sufficiently large
-   또는 conditional on first-stage results, the estimand is identifiable
-   ```
+ ```
+ F-statistic sufficiently large
+ 또는 conditional on first-stage results, the estimand is identifiable
+ ```
 
 ## Empirical specification
 
@@ -129,7 +129,7 @@ F_cluster = adjusted F taking into account within-cluster correlation
 검정통계량:
 ```
 AR(β_0) = (Y - β_0 X)' Z (Z'Z)^{-1} Z' (Y - β_0 X) / σ̂^2
-         ~ χ^2_m under H_0 (under weak instrument, exactly valid)
+ ~ χ^2_m under H_0 (under weak instrument, exactly valid)
 ```
 
 장점:
@@ -176,19 +176,19 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 **기본 규칙** (저자들의 추천):
 
 1. **절대 하지 말 것**: Standard 2SLS SE (동분산 가정 하)
-   ```
-   SE_2SLS = σ̂^2 (X'Z(Z'Z)^{-1}Z'X)^{-1}
-   ```
-   이것은 heteroskedasticity나 clustering에 대해 무시
+ ```
+ SE_2SLS = σ̂^2 (X'Z(Z'Z)^{-1}Z'X)^{-1}
+ ```
+ 이것은 heteroskedasticity나 clustering에 대해 무시
 
 2. **최소한**: HC3 robust SE (White, 1980)
-   ```
-   SE_HC3 = (X'Z(Z'Z)^{-1}Z'X)^{-1} (X'Z(Z'Z)^{-1} Σ_i Z_i Z_i' û_i^2 (Z'Z)^{-1}Z'X) (X'Z(Z'Z)^{-1}Z'X)^{-1}
-   ```
+ ```
+ SE_HC3 = (X'Z(Z'Z)^{-1}Z'X)^{-1} (X'Z(Z'Z)^{-1} Σ_i Z_i Z_i' û_i^2 (Z'Z)^{-1}Z'X) (X'Z(Z'Z)^{-1}Z'X)^{-1}
+ ```
 
 3. **Best practice** (clustering 있을 때):
-   - Cluster-robust SE (각 cluster 내 correlation 허용)
-   - 또는 two-way clustering (지역 + 시간)
+ - Cluster-robust SE (각 cluster 내 correlation 허용)
+ - 또는 two-way clustering (지역 + 시간)
 
 ## Main findings
 
@@ -196,21 +196,21 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 
 #### 가상의 numerical example (저자들 시뮬레이션 기반):
 - **Scenario A (Strong instrument)**: F = 100
-  - 2SLS 계수와 true 계수 오차: < 5%
-  - Normal approximation 잘 작동
-  - Standard SE와 robust SE 비슷
+ - 2SLS 계수와 true 계수 오차: < 5%
+ - Normal approximation 잘 작동
+ - Standard SE와 robust SE 비슷
 
 - **Scenario B (Moderate instrument)**: F = 10
-  - 2SLS 계수 편향: 5~15%
-  - Normal approximation 부정확
-  - Confidence interval이 symmetric하지 않음
-  - AR test와 standard test 결과 다름
+ - 2SLS 계수 편향: 5~15%
+ - Normal approximation 부정확
+ - Confidence interval이 symmetric하지 않음
+ - AR test와 standard test 결과 다름
 
 - **Scenario C (Weak instrument)**: F = 3
-  - 2SLS 계수 편향: 20~50%
-  - Normal approximation 크게 부정확
-  - Standard CI에서 true value가 95% 수준에서 벗어날 수 있음
-  - AR test 필수
+ - 2SLS 계수 편향: 20~50%
+ - Normal approximation 크게 부정확
+ - Standard CI에서 true value가 95% 수준에서 벗어날 수 있음
+ - AR test 필수
 
 #### 비동분산/Clustering 영향:
 - **Homoskedastic assumption으로 계산한 F**: 실제보다 높게 보임
@@ -250,21 +250,21 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 ### 저자들이 검증한 상황:
 
 1. **동분산 vs 비동분산**:
-   - Homoskedastic F와 heteroskedastic-robust F의 차이 시뮬레이션
-   - 결과: robust F는 평균 20-40% 더 낮을 수 있음
+ - Homoskedastic F와 heteroskedastic-robust F의 차이 시뮬레이션
+ - 결과: robust F는 평균 20-40% 더 낮을 수 있음
 
 2. **Clustering의 영향**:
-   - 단순 robust SE vs cluster-robust SE
-   - Many clusters (M > 100) vs few clusters (M < 10)
-   - 결과: 클러스터 수가 적으면 F-stat critical value 조정 필요
+ - 단순 robust SE vs cluster-robust SE
+ - Many clusters (M > 100) vs few clusters (M < 10)
+ - 결과: 클러스터 수가 적으면 F-stat critical value 조정 필요
 
 3. **여러 endogenous variables & many weak instruments**:
-   - 단일 endogenous variable 상황과 다름
-   - Rank condition 더 엄격해질 수 있음
+ - 단일 endogenous variable 상황과 다름
+ - Rank condition 더 엄격해질 수 있음
 
 4. **Time-series AR(1) structure**:
-   - i.i.d. 가정 vs 시계열 상관 존재
-   - 결과: Newey-West SE가 robust SE보다 큼 (상관 반영)
+ - i.i.d. 가정 vs 시계열 상관 존재
+ - 결과: Newey-West SE가 robust SE보다 큼 (상관 반영)
 
 ## Heterogeneity
 
@@ -286,18 +286,18 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 ### Why weak instruments matter:
 
 1. **Distribution 왜곡**:
-   - Strong IV: β̂ ~ N(β, SE^2) (asymptotically normal)
-   - Weak IV: β̂의 분포가 non-normal, multimodal일 수 있음
-   - Delta method (linear approximation)이 작동 불가
+ - Strong IV: β̂ ~ N(β, SE^2) (asymptotically normal)
+ - Weak IV: β̂의 분포가 non-normal, multimodal일 수 있음
+ - Delta method (linear approximation)이 작동 불가
 
 2. **Bias-variance tradeoff**:
-   - Weak IV → large variance (낮은 precision)
-   - But also → potential bias (if instrument slightly invalid)
-   - Strong IV → low bias and variance (but requires validity)
+ - Weak IV → large variance (낮은 precision)
+ - But also → potential bias (if instrument slightly invalid)
+ - Strong IV → low bias and variance (but requires validity)
 
 3. **Confidence interval distortion**:
-   - Standard CI (symmetric around point estimate) → may not contain true value even at 95% confidence
-   - AR-based CI → asymmetric, wider, but coverage 정확
+ - Standard CI (symmetric around point estimate) → may not contain true value even at 95% confidence
+ - AR-based CI → asymmetric, wider, but coverage 정확
 
 ## 본 paper와의 connection
 
@@ -311,8 +311,8 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 **Layer 1 (Main IV, DFS-style shift-share)**:
 - First-stage F-statistic 반드시 계산 & 보고
 - 본 논문: DFS의 shift-share IV가 충분히 강한지 확인
-  - 예상: F > 10~15 (because shift-share usually strong)
-  - 실제 계산 필수
+ - 예상: F > 10~15 (because shift-share usually strong)
+ - 실제 계산 필수
 
 **Layer 2 (DGHP mediation)**:
 - Mediation analysis도 IV structure를 가짐
@@ -347,30 +347,30 @@ SE_clustered = sqrt[ (M/(M-1)) × (K/(K-L)) × (1/N) Σ_g ĝ_g ĝ_g' ]
 ### Novelty claim:
 - **이 논문의 contribution**: Weak instruments에 대한 **가장 실용적이고 완전한 guide**
 - **본 논문의 차별성**:
-  - DFS & Pierce-Schott을 따르는 shift-share IV 사용
-  - BUT 한국 데이터에서 instrument strength 확보가 더 어려울 수 있음 (작은 지역 개수)
-  - 따라서 Andrews-Stock-Sun의 robust inference가 **필수적**
-  - 특히 cluster-robust SE와 AR-based CI가 key methodological contribution
+ - DFS & Pierce-Schott을 따르는 shift-share IV 사용
+ - BUT 한국 데이터에서 instrument strength 확보가 더 어려울 수 있음 (작은 지역 개수)
+ - 따라서 Andrews-Stock-Sun의 robust inference가 **필수적**
+ - 특히 cluster-robust SE와 AR-based CI가 key methodological contribution
 
 ## Quality assessment
 
 ### 본 논문 writer가 알아야 할 핵심 lesson 3개:
 
 1. **"First-stage F > 10"은 충분하지 않을 수 있음, 특히 cluster된 데이터에서**: 
-   - 한국 시군구 데이터는 (a) 표본 크기 작음 (~ 250 시군구), (b) 강한 clustering (시도 내) 존재
-   - 따라서 Andrews-Stock-Sun의 권장 critical value (F > 13.91 for 5% bias, 또는 F > 9.08 for 10% bias)를 적용할 것
-   - 만약 F가 낮으면, point estimate를 과신하지 말고 Anderson-Rubin CI 보고 필수
+ - 한국 시군구 데이터는 (a) 표본 크기 작음 (~ 250 시군구), (b) 강한 clustering (시도 내) 존재
+ - 따라서 Andrews-Stock-Sun의 권장 critical value (F > 13.91 for 5% bias, 또는 F > 9.08 for 10% bias)를 적용할 것
+ - 만약 F가 낮으면, point estimate를 과신하지 말고 Anderson-Rubin CI 보고 필수
 
 2. **Heteroskedasticity-robust & cluster-robust SE는 선택이 아닌 필수**:
-   - 본 논문: 시도(state-level), 지역(region-level), 시간(annual)의 3중 clustering 가능성
-   - 따라서 최소한 **two-way clustering (지역 + 시간)**을 사용할 것
-   - 또는 더 안전하게 **all clustering** (지역 중심)
+ - 본 논문: 시도(state-level), 지역(region-level), 시간(annual)의 3중 clustering 가능성
+ - 따라서 최소한 **two-way clustering (지역 + 시간)**을 사용할 것
+ - 또는 더 안전하게 **all clustering** (지역 중심)
 
 3. **Overidentified case에서 AR-based J-test 사용**:
-   - 여러 산업/무역상대국별 shift-share를 동시에 사용하면 overidentified
-   - 전통적 J-test (Sargan test)는 weak instrument에 sensitive
-   - 대신 **Anderson-Rubin의 overidentification test** 또는 **Kleibergen-Paap test** 사용
-   - 이를 Romano-Wolf correction과 결합하여 multiple testing 문제 해결
+ - 여러 산업/무역상대국별 shift-share를 동시에 사용하면 overidentified
+ - 전통적 J-test (Sargan test)는 weak instrument에 sensitive
+ - 대신 **Anderson-Rubin의 overidentification test** 또는 **Kleibergen-Paap test** 사용
+ - 이를 Romano-Wolf correction과 결합하여 multiple testing 문제 해결
 
 ---
 

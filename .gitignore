@@ -111,3 +111,22 @@ desktop.ini
 
 # Local cache / personal scripts
 *.local.*
+
+# ============================================================
+# Submission docs ??already at journals, not for public GitHub
+# ============================================================
+7_paper/submission_KER_2026-05-10/
+8_submission/paper_v01_submission/
+7_paper/cover_letter_KER_*.md
+7_paper/title_page_KER_*.md
+7_paper/manuscript_blind_KER_*.md
+7_paper/manuscript_unblinded_socarxiv_*.md
+7_paper/paper_draft_v01_*.md
+7_paper/compute_*.py
+7_paper/compute_*.R
+_scrub_*.py
+_final_cleanup.ps1
+_cleanup_for_git.ps1
+_push_to_github.ps1
+_remove_*.ps1
+_remove_*.py

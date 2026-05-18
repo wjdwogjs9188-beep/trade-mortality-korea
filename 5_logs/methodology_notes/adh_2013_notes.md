@@ -174,7 +174,7 @@ v3.x 의 ADH-style IV 적용 시도 결과:
 
 ### Weak instrument problem
 ```
-First-stage F (ADH 8국 → 한국 시군구):  F < 2  ⚠️
+First-stage F (ADH 8국 → 한국 시군구): F < 2 ⚠️
 권장: F > 10
 ```
 
@@ -196,16 +196,16 @@ First-stage F (ADH 8국 → 한국 시군구):  F < 2  ⚠️
 Outcome: ln(mortality_despair)
 Period: 1997-2023 (27년 panel)
 
-                  (1)        (2)         (3)         (4)         (5)
-                  ADH IV     KR-CN IV    + AKM SE    + Conley    + tF correct
-β (Bartik)       -0.04*     -1.015**    -1.015**    -1.015**    -1.015*
-SE (HC1)         (0.012)    (0.243)     —           —           —
-SE (sido cluster)—          —           (0.401)     —           —
-SE (AKM)         —          —           (0.378)     —           —
-SE (Conley)      —          —           —           (0.412)     —
-tF p-value       —          —           —           —           [0.045]
-First-stage F     1.7        12.3        12.3        12.3        12.3
-N                6,723      6,723       6,723       6,723       6,723
+ (1) (2) (3) (4) (5)
+ ADH IV KR-CN IV + AKM SE + Conley + tF correct
+β (Bartik) -0.04* -1.015** -1.015** -1.015** -1.015*
+SE (HC1) (0.012) (0.243) — — —
+SE (sido cluster)— — (0.401) — —
+SE (AKM) — — (0.378) — —
+SE (Conley) — — — (0.412) —
+tF p-value — — — — [0.045]
+First-stage F 1.7 12.3 12.3 12.3 12.3
+N 6,723 6,723 6,723 6,723 6,723
 ```
 
 → **column (1) = ADH-style (weak)**, **column (2) = KR-CN bilateral (preferred)**, columns (3)-(5) = robustness.

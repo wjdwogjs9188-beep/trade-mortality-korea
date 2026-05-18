@@ -3,7 +3,7 @@ pushd "%~dp0"
 
 echo === Step 0/5: Install packages ===
 python -m pip install -r requirements.txt
-if errorlevel 1 goto :err
+if errorlevel 1 goto:err
 
 echo.
 echo === Step 1/5: ECOS explore ===
@@ -27,7 +27,7 @@ python 2_scripts\data_collection\05_comtrade_china_world.py
 
 echo.
 echo === ALL DONE ===
-goto :end
+goto:end
 
 :err
 echo.

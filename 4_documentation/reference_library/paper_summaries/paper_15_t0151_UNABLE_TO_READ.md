@@ -1,4 +1,4 @@
-# [#15] NBER Technical Working Paper 0151 — FILE SIZE CONSTRAINT
+# [#15] NBER Technical Working Paper 0151 — FILE SIZE CONSTRNT
 
 ## Status: UNABLE TO COMPLETE SUMMARY
 
@@ -46,13 +46,13 @@ Your mention of "NBER technical working paper 0151" alongside "Wooldridge" and "
 
 **Action items**:
 - If this t0151 paper is critical for your § 6 (standard errors), consult directly:
-  - Original NBER working paper at www.nber.org/papers/t0151
-  - Or access full PDF version (may have better parseability than Markdown conversion)
-  
+ - Original NBER working paper at www.nber.org/papers/t0151
+ - Or access full PDF version (may have better parseability than Markdown conversion)
+
 - **Fallback**: Three empirical papers provide sufficient guidance on:
-  - Clustering standard errors (Pierce-Schott uses state-level; Dix-Carneiro uses meso-region-level)
-  - Robust inference (both use dual clustering: unit + time)
-  - Methods citation (Arellano & Bond, Gonçalves 2011 cited explicitly)
+ - Clustering standard errors (Pierce-Schott uses state-level; Dix-Carneiro uses meso-region-level)
+ - Robust inference (both use dual clustering: unit + time)
+ - Methods citation (Arellano & Bond, Gonçalves 2011 cited explicitly)
 
 ---
 

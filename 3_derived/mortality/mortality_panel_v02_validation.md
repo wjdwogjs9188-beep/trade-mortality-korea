@@ -2,9 +2,9 @@
 
 - Generated: 2026-05-03
 - v02 changes vs v01:
-  1. **A.1 Component decomposition**: 6 → 10 outcomes. despair_total split into suicide_102 / drug_101 / psych_057 / liver_081 (각각 separate row), despair_total 보존 (overlap row).
-  2. **mutually exclusive 가 아님**: 한 record (예: 102 자살) 가 2 row 로 표시 (suicide_102 + despair_total).
-  3. 회귀 spec 마다 다른 outcome 사용 (component 만 vs 합산만). panel cell 합 ≠ total deaths.
+ 1. **A.1 Component decomposition**: 6 → 10 outcomes. despair_total split into suicide_102 / drug_101 / psych_057 / liver_081 (각각 separate row), despair_total 보존 (overlap row).
+ 2. **mutually exclusive 가 아님**: 한 record (예: 102 자살) 가 2 row 로 표시 (suicide_102 + despair_total).
+ 3. 회귀 spec 마다 다른 outcome 사용 (component 만 vs 합산만). panel cell 합 ≠ total deaths.
 - Output: `3_derived/mortality/mortality_panel_v02.parquet` (2,102,220 rows)
 
 ## Outcome groups (10 total, despair_total overlap)

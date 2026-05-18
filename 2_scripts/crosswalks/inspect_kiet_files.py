@@ -17,15 +17,15 @@ xl = pd.ExcelFile(F_HS)
 print('sheets:', xl.sheet_names)
 df_hs = pd.read_excel(F_HS, sheet_name=xl.sheet_names[0], dtype=str)
 print('shape:', df_hs.shape)
-print('columns:', df_hs.columns.tolist())
+print('columns:', df_hs.columns.tolist)
 print('---head---')
-print(df_hs.head(5).to_string())
+print(df_hs.head(5).to_string)
 print('---hsc length distrib---')
-print(df_hs['hsc'].dropna().str.len().value_counts().sort_index())
+print(df_hs['hsc'].dropna.str.len.value_counts.sort_index)
 print('---hsc sample by length---')
-for L in sorted(df_hs['hsc'].dropna().str.len().unique()):
-    sub = df_hs[df_hs['hsc'].str.len() == L]['hsc'].head(5).tolist()
-    print(f'  len={L}: {sub}')
+for L in sorted(df_hs['hsc'].dropna.str.len.unique):
+ sub = df_hs[df_hs['hsc'].str.len == L]['hsc'].head(5).tolist
+ print(f' len={L}: {sub}')
 
 # --- KSIC mapping file ---
 print('\n' + '=' * 70)
@@ -35,8 +35,8 @@ xl2 = pd.ExcelFile(F_KS)
 print('sheets:', xl2.sheet_names)
 
 for s in xl2.sheet_names:
-    print(f'\n--- sheet: {s} ---')
-    d = pd.read_excel(F_KS, sheet_name=s, dtype=str)
-    print('shape:', d.shape)
-    print('columns:', d.columns.tolist())
-    print(d.head(20).to_string())
+ print(f'\n--- sheet: {s} ---')
+ d = pd.read_excel(F_KS, sheet_name=s, dtype=str)
+ print('shape:', d.shape)
+ print('columns:', d.columns.tolist)
+ print(d.head(20).to_string)

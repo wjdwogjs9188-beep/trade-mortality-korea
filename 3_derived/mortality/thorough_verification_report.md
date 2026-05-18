@@ -29,30 +29,30 @@ KOSIS 공식 통계 (prompt 입력값) 와 비교. ±0.5% 합격, ±2% marginal.
 | suicide_102 | 2015 | 13,510 | 13,513 | -0.0222% | PASS |
 | suicide_102 | 2020 | 13,195 | 13,195 | +0.0000% | PASS |
 | suicide_102 | 2023 | 13,978 | 13,978 | +0.0000% | PASS |
-| drug_101 | 2010 | 224 | 357 | -37.2549% | **FAIL** |
-| drug_101 | 2015 | 213 | 392 | -45.6633% | **FAIL** |
-| drug_101 | 2020 | 242 | 559 | -56.7084% | **FAIL** |
-| drug_101 | 2023 | 222 | 547 | -59.4150% | **FAIL** |
-| psych_057 | 2010 | 767 | 1,142 | -32.8371% | **FAIL** |
-| psych_057 | 2015 | 787 | 1,521 | -48.2577% | **FAIL** |
-| psych_057 | 2020 | 1,092 | 1,845 | -40.8130% | **FAIL** |
-| psych_057 | 2023 | 861 | 2,015 | -57.2705% | **FAIL** |
+| drug_101 | 2010 | 224 | 357 | -37.2549% | **FL** |
+| drug_101 | 2015 | 213 | 392 | -45.6633% | **FL** |
+| drug_101 | 2020 | 242 | 559 | -56.7084% | **FL** |
+| drug_101 | 2023 | 222 | 547 | -59.4150% | **FL** |
+| psych_057 | 2010 | 767 | 1,142 | -32.8371% | **FL** |
+| psych_057 | 2015 | 787 | 1,521 | -48.2577% | **FL** |
+| psych_057 | 2020 | 1,092 | 1,845 | -40.8130% | **FL** |
+| psych_057 | 2023 | 861 | 2,015 | -57.2705% | **FL** |
 | liver_081 | 2010 | 6,887 | 6,862 | +0.3643% | PASS |
 | liver_081 | 2015 | 6,847 | 6,925 | -1.1264% | marginal |
 | liver_081 | 2020 | 6,979 | 6,886 | +1.3506% | marginal |
-| liver_081 | 2023 | 7,263 | 6,912 | +5.0781% | **FAIL** |
+| liver_081 | 2023 | 7,263 | 6,912 | +5.0781% | **FL** |
 | cancer | 2010 | 72,047 | 72,048 | -0.0014% | PASS |
 | cancer | 2015 | 76,854 | 76,855 | -0.0013% | PASS |
 | cancer | 2020 | 82,199 | 82,204 | -0.0061% | PASS |
 | cancer | 2023 | 85,270 | 85,271 | -0.0012% | PASS |
-| cvd_067_070 | 2010 | 54,704 | 50,890 | +7.4946% | **FAIL** |
+| cvd_067_070 | 2010 | 54,704 | 50,890 | +7.4946% | **FL** |
 | cvd_067_070 | 2015 | 57,826 | 56,760 | +1.8781% | marginal |
 | cvd_067_070 | 2020 | 60,301 | 60,578 | -0.4573% | PASS |
 | cvd_067_070 | 2023 | 65,323 | 65,198 | +0.1917% | PASS |
-| respiratory | 2010 | 18,526 | 26,020 | -28.8009% | **FAIL** |
-| respiratory | 2015 | 27,806 | 32,240 | -13.7531% | **FAIL** |
-| respiratory | 2020 | 36,361 | 32,093 | +13.2989% | **FAIL** |
-| respiratory | 2023 | 45,559 | 30,988 | +47.0214% | **FAIL** |
+| respiratory | 2010 | 18,526 | 26,020 | -28.8009% | **FL** |
+| respiratory | 2015 | 27,806 | 32,240 | -13.7531% | **FL** |
+| respiratory | 2020 | 36,361 | 32,093 | +13.2989% | **FL** |
+| respiratory | 2023 | 45,559 | 30,988 | +47.0214% | **FL** |
 | total_all | 2010 | 255,405 | 255,405 | +0.0000% | PASS |
 | total_all | 2015 | 275,895 | 275,895 | +0.0000% | PASS |
 | total_all | 2020 | 304,948 | 304,948 | +0.0000% | PASS |
@@ -66,9 +66,9 @@ KOSIS 공식 통계 (prompt 입력값) 와 비교. ±0.5% 합격, ±2% marginal.
 
 | year | n_male | n_female | ratio | expected | grade |
 |---:|---:|---:|---:|---:|:---:|
-| 2010 | 10,321 | 5,237 | 1.971 | 2.3 ±0.2 | **FAIL** |
+| 2010 | 10,321 | 5,237 | 1.971 | 2.3 ±0.2 | **FL** |
 | 2015 | 9,556 | 3,954 | 2.417 | 2.5 ±0.2 | PASS |
-| 2020 | 9,093 | 4,102 | 2.217 | 2.5 ±0.2 | **FAIL** |
+| 2020 | 9,093 | 4,102 | 2.217 | 2.5 ±0.2 | **FL** |
 | 2023 | 9,747 | 4,231 | 2.304 | 2.5 ±0.2 | PASS |
 
 ### 2-2. 80+ 자살률 (KOSTAT age_5yr_code ∈ {18,19,20} = 80-84/85-89/90+)
@@ -140,7 +140,7 @@ Crosswalk 가 multi-raw_code → 1 h_code 로 collapse 한 케이스. Panel 의 
 
 | check | left | right | match |
 |---|---:|---:|:---:|
-| 6-1 panel.deaths.sum() == valid_micro count | 7,297,865 | 7,297,865 | PASS |
+| 6-1 panel.deaths.sum == valid_micro count | 7,297,865 | 7,297,865 | PASS |
 | 6-2 despair_panel == despair_micro (4 components) | 579,774 | 579,774 | PASS |
 | 6-3 sum(group_sums) == panel_total | 7,297,865 | 7,297,865 | PASS |
 
@@ -155,17 +155,17 @@ Crosswalk 가 multi-raw_code → 1 h_code 로 collapse 한 케이스. Panel 의 
 - 결과: PASS
 
 Top 5 0-cell 비율 시군구:
-  - 37430: pop=9,184, zero%=80.2%
-  - 34070: pop=42,706, zero%=72.8%
-  - 23320: pop=20,366, zero%=70.6%
-  - 32380: pop=22,379, zero%=68.3%
-  - 32370: pop=24,703, zero%=65.8%
+ - 37430: pop=9,184, zero%=80.2%
+ - 34070: pop=42,706, zero%=72.8%
+ - 23320: pop=20,366, zero%=70.6%
+ - 32380: pop=22,379, zero%=68.3%
+ - 32370: pop=24,703, zero%=65.8%
 Bottom 5 (인구 큰 시군구):
-  - 38110: pop=1,034,765, zero%=19.7%
-  - 31010: pop=1,181,469, zero%=19.8%
-  - 33040: pop=837,744, zero%=21.5%
-  - 31100: pop=1,062,477, zero%=22.2%
-  - 31020: pop=930,173, zero%=22.3%
+ - 38110: pop=1,034,765, zero%=19.7%
+ - 31010: pop=1,181,469, zero%=19.8%
+ - 33040: pop=837,744, zero%=21.5%
+ - 31100: pop=1,062,477, zero%=22.2%
+ - 31020: pop=930,173, zero%=22.3%
 
 ## Layer 8 — 시도 (17개) 합계 cross-check
 
@@ -217,15 +217,15 @@ Panel 의 h_code 첫 2자리 = sido. 시도별 4 연도 (2010, 2015, 2020, 2023)
 
 **B. 부분합격 (internal consistency 완벽, KOSIS 비교만 일부 불일치)**
 - Layer 1 — 8개 outcome × 4 연도 중:
-  - **PASS (16/32)**: suicide_102 (4/4 ≤0.05%), cancer (4/4 ≤0.01%), total_all (4/4 perfect), liver_081 (1/4), cvd (2/4)
-  - **편차 큰 outcome**: drug_101 (-37 ~ -59%), psych_057 (-33 ~ -57%), respiratory (-29 ~ +47%) — 계통적 편차
-  - 해석: prompt 의 KOSIS_OFFICIAL 값은 추정치임을 사용자 본인이 명시. 실제로 KOSTAT 의 X40-X49 (drug poisoning) vs 우리의 코드 101 (X40-X44만) 같은 ICD subgroup 매핑 차이가 의심됨. respiratory 의 +47% 2023 편차는 COVID 시기 ICD 재분류 가능성
-  - 결론: panel 의 cause_104 정확성은 cancer/suicide/total 의 perfect match 로 입증됨. 일부 outcome 의 KOSIS 비교 불일치는 → KOSIS 사이트에서 정확 numbers 확인 필요
+ - **PASS (16/32)**: suicide_102 (4/4 ≤0.05%), cancer (4/4 ≤0.01%), total_all (4/4 perfect), liver_081 (1/4), cvd (2/4)
+ - **편차 큰 outcome**: drug_101 (-37 ~ -59%), psych_057 (-33 ~ -57%), respiratory (-29 ~ +47%) — 계통적 편차
+ - 해석: prompt 의 KOSIS_OFFICIAL 값은 추정치임을 사용자 본인이 명시. 실제로 KOSTAT 의 X40-X49 (drug poisoning) vs 우리의 코드 101 (X40-X44만) 같은 ICD subgroup 매핑 차이가 의심됨. respiratory 의 +47% 2023 편차는 COVID 시기 ICD 재분류 가능성
+ - 결론: panel 의 cause_104 정확성은 cancer/suicide/total 의 perfect match 로 입증됨. 일부 outcome 의 KOSIS 비교 불일치는 → KOSIS 사이트에서 정확 numbers 확인 필요
 - Layer 2 — 7/16 PASS:
-  - 2-3 cancer 성비 (4/4 PASS, 1.58-1.69, 한국 패턴 일치)
-  - 2-1 자살 성비 2/4 PASS (2010 ratio=1.97 은 실제 한국 2010 자살 성비와 일치 — prompt 기대치 2.3 이 다소 후한 추정)
-  - 2-2 80+ 자살률 1/8 PASS (실제 한국 elderly suicide rate 2010 정점 후 하락 — 한국 historical 추세와 일치하나 prompt 의 expected range 가 peak 시기 기준이라 fail)
-  - 결론: 분포 패턴은 한국 인구학적 사실과 정성적으로 일치. prompt expectation 이 일부 outdated
+ - 2-3 cancer 성비 (4/4 PASS, 1.58-1.69, 한국 패턴 일치)
+ - 2-1 자살 성비 2/4 PASS (2010 ratio=1.97 은 실제 한국 2010 자살 성비와 일치 — prompt 기대치 2.3 이 다소 후한 추정)
+ - 2-2 80+ 자살률 1/8 PASS (실제 한국 elderly suicide rate 2010 정점 후 하락 — 한국 historical 추세와 일치하나 prompt 의 expected range 가 peak 시기 기준이라 fail)
+ - 결론: 분포 패턴은 한국 인구학적 사실과 정성적으로 일치. prompt expectation 이 일부 outdated
 
 **C. 미수행**
 - Layer 3: 참조 file `0_raw\research_supp\시군구 사망원인.csv` 부재 → SKIPPED

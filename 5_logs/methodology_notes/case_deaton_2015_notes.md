@@ -46,10 +46,10 @@
 ### 본 연구의 한국 매핑 (이미 1_codebooks/kosis_104_to_icd10.yaml 에 정의)
 ```yaml
 despair_total:
-  - 102  # 자살 (X60-X84)
-  - 101  # 약물 중독 (X40-X49)
-  - 057  # 정신활성물질 (F10-F19)
-  - 081  # 간 질환 (K70-K77)
+ - 102 # 자살 (X60-X84)
+ - 101 # 약물 중독 (X40-X49)
+ - 057 # 정신활성물질 (F10-F19)
+ - 081 # 간 질환 (K70-K77)
 ```
 
 ### 본 연구의 한계 — F17 담배 처리
@@ -88,11 +88,11 @@ Case-Deaton **명시적 제외**: tobacco-related deaths
 
 본 연구의 5가지 outcome group:
 ```
-despair_total    = 102 + 101 + 057 + 081  ← Case-Deaton 정의 ⭐
-cardiovascular   = 067-070
-cancer           = 027-048
-respiratory      = 073-078
-external_other   = 097-104 minus 102
+despair_total = 102 + 101 + 057 + 081 ← Case-Deaton 정의 ⭐
+cardiovascular = 067-070
+cancer = 027-048
+respiratory = 073-078
+external_other = 097-104 minus 102
 ```
 
 `despair_total` 이 **Case-Deaton 2015 정의의 한국판** 임을 paper 에 명시.
@@ -175,8 +175,8 @@ external_other   = 097-104 minus 102
 ```python
 # Phase 2-A 의 출력 mortality_panel 에서:
 df_panel.groupby("year")[
-    ["mort_102_suicide", "mort_101_drug", "mort_057_substance", "mort_081_liver"]
-].mean().plot()
+ ["mort_102_suicide", "mort_101_drug", "mort_057_substance", "mort_081_liver"]
+].mean.plot
 ```
 
 기대:

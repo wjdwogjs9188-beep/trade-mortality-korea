@@ -22,23 +22,23 @@
 
 **Contribution** (문헌에서의 위치):
 1. **방법론 발전 경로 정리**:
-   - Freeman (1975, 1980): Origin (노동경제학)
-   - Bartik (1991): In-sample Bartik instrument (regional labor demand)
-   - Card (2009): Cuban boatlift (exogenous shares)
-   - ADH (2013): China syndrome (shift-share + causal inference)
-   - DGHP (2017): Shift-share IV validity critique (exposure & shift orthogonality)
-   - Borusyak et al. (2025): Unified practical framework
-   
+ - Freeman (1975, 1980): Origin (노동경제학)
+ - Bartik (1991): In-sample Bartik instrument (regional labor demand)
+ - Card (2009): Cuban boatlift (exogenous shares)
+ - ADH (2013): China syndrome (shift-share + causal inference)
+ - DGHP (2017): Shift-share IV validity critique (exposure & shift orthogonality)
+ - Borusyak et al. (2025): Unified practical framework
+
 2. **새로운 이해**:
-   - Shift-share = K개의 single-instrument estimates의 pooled version
-   - 어떤 shares가 driving인지 확인 가능 (transparency)
-   - Weak instruments는 instrument strength로 판정 가능 (F-stats)
-   - HTE 존재 시, coefficient = weighted average of heterogeneous parameters (LATE-like interpretation)
+ - Shift-share = K개의 single-instrument estimates의 pooled version
+ - 어떤 shares가 driving인지 확인 가능 (transparency)
+ - Weak instruments는 instrument strength로 판정 가능 (F-stats)
+ - HTE 존재 시, coefficient = weighted average of heterogeneous parameters (LATE-like interpretation)
 
 3. **Practical guidance**:
-   - 체크리스트: Valid shift-share를 위한 필수 검증
-   - Implementation guide: R/Stata code
-   - Common pitfalls: 무엇을 피해야 하는가
+ - 체크리스트: Valid shift-share를 위한 필수 검증
+ - Implementation guide: R/Stata code
+ - Common pitfalls: 무엇을 피해야 하는가
 
 ## Data & Applications
 **이 논문은 methodological guide** → 원본 data 없음
@@ -82,20 +82,20 @@ $$\text{Cov}[\varepsilon_i, s_{ik}] = 0 \quad \text{for all } k$$
 
 **When this breaks**:
 1. **Exposure to multiple shocks**: 
-   - If shares capture exposure to multiple shocks (global trade, tech adoption, supply chain reorg)
-   - But treatment only measures one (trade)
-   - → Omitted variables bias: Corr(shares, unobserved shocks) > 0
-   - **Solution**: Control for exposure to other (competing) shocks in robustness
+ - If shares capture exposure to multiple shocks (global trade, tech adoption, supply chain reorg)
+ - But treatment only measures one (trade)
+ - → Omitted variables bias: Corr(shares, unobserved shocks) > 0
+ - **Solution**: Control for exposure to other (competing) shocks in robustness
 
 2. **Anticipatory behavior**:
-   - If agents anticipate future shocks and adjust baseline shares
-   - Example: Firms move plants away from soon-to-fail industries
-   - **Requires**: Argument that anticipation timing was impossible or negligible
+ - If agents anticipate future shocks and adjust baseline shares
+ - Example: Firms move plants away from soon-to-fail industries
+ - **Requires**: Argument that anticipation timing was impossible or negligible
 
 3. **Selective sorting**:
-   - If workers with different health/ability sort into regions with different sector exposure
-   - → Shares correlated with unobserved heterogeneity
-   - **Solution**: Use historical period far enough removed from outcome period
+ - If workers with different health/ability sort into regions with different sector exposure
+ - → Shares correlated with unobserved heterogeneity
+ - **Solution**: Use historical period far enough removed from outcome period
 
 ### The Exogenous Shifts Perspective
 **Alternative framing** (useful for intuition):
@@ -142,20 +142,20 @@ $$y_i = \beta x_i + \mathbf{w}_i \gamma + \varepsilon_i$$
 $$x_i = \pi z_i + \mathbf{w}_i \delta + \nu_i$$
 
 - First stage: Regress treatment on instrument + controls
-  - $x_i$ = Actual treatment (e.g., import penetration, employment growth)
-  - $z_i$ = Shift-share IV
-  
+ - $x_i$ = Actual treatment (e.g., import penetration, employment growth)
+ - $z_i$ = Shift-share IV
+
 - Second stage: Estimate treatment effect
-  - $y_i$ = Outcome (e.g., mortality, unemployment)
-  
+ - $y_i$ = Outcome (e.g., mortality, unemployment)
+
 - Controls $\mathbf{w}_i$: Baseline characteristics, do NOT include shares themselves (collinear with z_i)
 
 ### Standard Errors & Clustering
 - **Clustering level**: Should match application
-  - Regional analysis (ADH): Cluster by state (accounts for geographic correlation)
-  - Network analysis: Cluster by network group
-  - **Korea application**: Cluster by region (시도) or by sector, depending on shock source
-  
+ - Regional analysis (ADH): Cluster by state (accounts for geographic correlation)
+ - Network analysis: Cluster by network group
+ - **Korea application**: Cluster by region (시도) or by sector, depending on shock source
+
 - **Robust SE**: Standard Huber-White (sandwich)
 - **Wild bootstrap**: For small number of clusters (e.g., 10 states)
 
@@ -164,43 +164,43 @@ $$x_i = \pi z_i + \mathbf{w}_i \delta + \nu_i$$
 ### 1. Validity Checklist (Table in paper)
 **Borusyak et al. propose researchers verify**:
 
-- [ ] **Shares predetermined**: Baseline period chosen far enough before treatment/outcome
-  - Example: 1990 shares for 1990-2007 analysis (ADH) ✓
-  - Counter-example: 2000 shares for 1990-2000 analysis ✗
-  
-- [ ] **Shifts exogenous to outcome**: Argument for why shifts (global trade, tech) are exogenous
-  - Check: Compare to falsification (prior shifts shouldn't affect post outcomes)
-  - ADH placebo: 1980-1990 shifts don't predict 1990-2000 outcomes ✓
-  
-- [ ] **Only relevant shares included**: Avoid "generic" shares that correlate with many shocks
-  - Example: Don't use "industry structure" as shares if treatment is trade but outcome is health
-  - Risk: Shares also capture health/mortality exposure → Biased IV
-  
-- [ ] **First-stage strength**: F-statistic > 10 (minimum), F > 23 (better)
-  - Report: F-stat in first-stage results
-  - If weak: Consider alternative IV or direct estimation with robustness
-  
-- [ ] **Robustness checks**:
-  - Stability across control variable sets
-  - Stability across weighting schemes (population vs. unit-weight)
-  - Leave-one-out jackknife (does one shift drive all results?)
-  - Alternative shift definitions (robustness to measurement)
+- **Shares predetermined**: Baseline period chosen far enough before treatment/outcome
+ - Example: 1990 shares for 1990-2007 analysis (ADH) ✓
+ - Counter-example: 2000 shares for 1990-2000 analysis ✗
+
+- **Shifts exogenous to outcome**: Argument for why shifts (global trade, tech) are exogenous
+ - Check: Compare to falsification (prior shifts shouldn't affect post outcomes)
+ - ADH placebo: 1980-1990 shifts don't predict 1990-2000 outcomes ✓
+
+- **Only relevant shares included**: Avoid "generic" shares that correlate with many shocks
+ - Example: Don't use "industry structure" as shares if treatment is trade but outcome is health
+ - Risk: Shares also capture health/mortality exposure → Biased IV
+
+- **First-stage strength**: F-statistic > 10 (minimum), F > 23 (better)
+ - Report: F-stat in first-stage results
+ - If weak: Consider alternative IV or direct estimation with robustness
+
+- **Robustness checks**:
+ - Stability across control variable sets
+ - Stability across weighting schemes (population vs. unit-weight)
+ - Leave-one-out jackknife (does one shift drive all results?)
+ - Alternative shift definitions (robustness to measurement)
 
 ### 2. Practical Recommendations
 
 #### 2.1 Choosing the Shifts
 **Good practice**:
 - **Out-of-sample shifts**: Use shifts measured outside the analysis sample
-  - Example: Chinese export growth (measured at national/global level) for regional US labor market
-  - Avoids mechanical correlation (shares computed from same data as shifts)
-  
+ - Example: Chinese export growth (measured at national/global level) for regional US labor market
+ - Avoids mechanical correlation (shares computed from same data as shifts)
+
 - **Alternative**: In-sample Bartik style (like ADH)
-  - Shifts = National-level growth rates (excluding local unit)
-  - "Leave-out" version: $g_k = \bar{g}_k^{-i}$ (growth in sector k excluding unit i)
-  - More practical but more assumptions (must assume shifts are "as-if exogenous")
+ - Shifts = National-level growth rates (excluding local unit)
+ - "Leave-out" version: $g_k = \bar{g}_k^{-i}$ (growth in sector k excluding unit i)
+ - More practical but more assumptions (must assume shifts are "as-if exogenous")
 
 - **Measurement precision**: Use high-quality source
-  - Example: UN Comtrade (trade) is standard; mitigates measurement error
+ - Example: UN Comtrade (trade) is standard; mitigates measurement error
 
 #### 2.2 Interpretation of Coefficients
 **When reporting results**:
@@ -240,9 +240,9 @@ If **heterogeneous treatment effect** (differs by unit/sector):
 
 **C. Specification stability**:
 - Coefficient size/significance across:
-  - Different control variable sets
-  - With/without population weighting
-  - Different sample periods
+ - Different control variable sets
+ - With/without population weighting
+ - Different sample periods
 
 **D. Share composition**:
 - Which shares are driving results? (Share-specific F-stats)
@@ -251,29 +251,29 @@ If **heterogeneous treatment effect** (differs by unit/sector):
 ### 3. Common Pitfalls (What NOT to do)
 
 1. **Using shares that capture outcome heterogeneity**:
-   - Example: Initial health/mortality rates as shares for mortality outcome
-   - → Shares are correlated with outcome → Biased IV
-   - **Fix**: Use predetermined, policy-determined shares (industry structure, initial settlement patterns)
+ - Example: Initial health/mortality rates as shares for mortality outcome
+ - → Shares are correlated with outcome → Biased IV
+ - **Fix**: Use predetermined, policy-determined shares (industry structure, initial settlement patterns)
 
 2. **Forgetting that shares must be uncorrelated with future shocks**:
-   - Critical assumption often overlooked
-   - Example: If trade shock anticipated, firms move out → shares change → Endogenous
-   - **Fix**: Argument for "surprise" or historical determination
+ - Critical assumption often overlooked
+ - Example: If trade shock anticipated, firms move out → shares change → Endogenous
+ - **Fix**: Argument for "surprise" or historical determination
 
 3. **Multiple hypotheses without correction**:
-   - Report many outcomes, many outcomes without multiple-testing correction
-   - → Some "significant" results by chance
-   - **Fix**: Pre-specify main outcomes; use Romano-Wolf correction
+ - Report many outcomes, many outcomes without multiple-testing correction
+ - → Some "significant" results by chance
+ - **Fix**: Pre-specify main outcomes; use Romano-Wolf correction
 
 4. **Weak instruments + small sample**:
-   - F < 10 + N < 500 → Estimator unreliable
-   - Can't be fixed by adding more clusters alone
-   - **Fix**: Alternative identification or acknowledge limitation
+ - F < 10 + N < 500 → Estimator unreliable
+ - Can't be fixed by adding more clusters alone
+ - **Fix**: Alternative identification or acknowledge limitation
 
 5. **Generic shares for multiple mechanisms**:
-   - Example: Industry composition captures trade, tech adoption, financialization
-   - If outcome responds to multiple channels: Biased IV
-   - **Fix**: Control for competing mechanisms in robustness; interpret carefully
+ - Example: Industry composition captures trade, tech adoption, financialization
+ - If outcome responds to multiple channels: Biased IV
+ - **Fix**: Control for competing mechanisms in robustness; interpret carefully
 
 ## Heterogeneity & HTE
 
@@ -329,72 +329,72 @@ where:
 This guide (Borusyak 2025) is the **most recent best-practice guidance** for shift-share instruments. PAP v3.4 will necessarily follow this framework.
 
 - **Share design**: How to construct Korean trade exposure (시군구별 산업 구성)
-  - Should use 1990 or 2000 baseline (predetermined)
-  - Check: Available in Korean census? Ministry of statistics?
-  
+ - Should use 1990 or 2000 baseline (predetermined)
+ - Check: Available in Korean census? Ministry of statistics?
+
 - **Shift design**: What represents common shocks to Korea?
-  - Global demand shifts by sector (from UN Comtrade, global trade)
-  - Korean export growth rates (national-level, excluding regional unit?)
-  - Question: In-sample or out-of-sample? (Bartik vs. pure external IV)
+ - Global demand shifts by sector (from UN Comtrade, global trade)
+ - Korean export growth rates (national-level, excluding regional unit?)
+ - Question: In-sample or out-of-sample? (Bartik vs. pure external IV)
 
 **2. Validity Argument**:
 - **Exogenous shares**: Korean regional industry structure in 1990 determined by
-  - Historical geography (coal, ports, transportation)
-  - Government policy (Chaebol location, SEZ)
-  - Not anticipatory (1990 before major trade liberalization 2000s)
-  
+ - Historical geography (coal, ports, transportation)
+ - Government policy (Chaebol location, SEZ)
+ - Not anticipatory (1990 before major trade liberalization 2000s)
+
 - **Exogenous shifts**: Global trade dynamics
-  - China's rise (1995+ but accelerating 2001+)
-  - Vietnam trade (post-normalization 1995)
-  - Japan/Asia regional supply chains
-  
+ - China's rise (1995+ but accelerating 2001+)
+ - Vietnam trade (post-normalization 1995)
+ - Japan/Asia regional supply chains
+
 - **Threat to validity**: 
-  - Korea also grew rapidly in 1990s-2000s
-  - Could "generic" shares also capture development/tech exposure?
-  - **Fix**: Robustness control for non-trade shocks
+ - Korea also grew rapidly in 1990s-2000s
+ - Could "generic" shares also capture development/tech exposure?
+ - **Fix**: Robustness control for non-trade shocks
 
 **3. First-Stage Strategy**:
 - Estimate: How much did regional import competition grow?
-  - Outcome: Regional import penetration or employment decline
-  - Key: Report F-stat, discuss weak/strong instruments
-  - Expectation: If Korea industrial structure concentrated → Possibly weak IV
-  
+ - Outcome: Regional import penetration or employment decline
+ - Key: Report F-stat, discuss weak/strong instruments
+ - Expectation: If Korea industrial structure concentrated → Possibly weak IV
+
 - **Alternative**: Report reduced-form (direct outcome)
-  - Like Finkelstein (2026): Directly estimate mortality response to NAFTA exposure
-  - Avoids two-stage estimation; bypasses some weak-instrument issues
+ - Like Finkelstein (2026): Directly estimate mortality response to NAFTA exposure
+ - Avoids two-stage estimation; bypasses some weak-instrument issues
 
 **4. Heterogeneity Analysis** (HTE):
 Borusyak's framework implies PAP should report:
 
 - **Which sectors/shifts are driving results?**
-  - E.g., Chinese imports vs. Japanese vs. Vietnam
-  - Can show that Chinese shock dominates (transparency)
-  
+ - E.g., Chinese imports vs. Japanese vs. Vietnam
+ - Can show that Chinese shock dominates (transparency)
+
 - **Subgroup effects**:
-  - High-manufacturing regions (Gyeonggi, Busan) vs. low
-  - Seoul metro vs. rural
-  - Chaebol-heavy (Seoul, Daegu) vs. SME-heavy
-  
+ - High-manufacturing regions (Gyeonggi, Busan) vs. low
+ - Seoul metro vs. rural
+ - Chaebol-heavy (Seoul, Daegu) vs. SME-heavy
+
 - **Timing**: 
-  - Immediate vs. delayed effect (2-5 year lag for deaths?)
-  - Comparison to ADH/Finkelstein lag structure
+ - Immediate vs. delayed effect (2-5 year lag for deaths?)
+ - Comparison to ADH/Finkelstein lag structure
 
 **5. Robustness Checklist**:
 From Borusyak et al.'s guide, PAP should include:
 
-- [ ] Balance tests: Baseline characteristics vs. trade exposure (uncorrelated?)
-- [ ] Falsification: Pre-1990 shocks shouldn't predict post-2000 mortality
-- [ ] Specification stability: Results across control variable sets
-- [ ] Share composition: Which industries/regions drive results?
-- [ ] Alternative IV: China-shock vs. other sources (different effects?)
-- [ ] Weak-instrument robust CI (Anderson-Rubin) if F-stat low
+- Balance tests: Baseline characteristics vs. trade exposure (uncorrelated?)
+- Falsification: Pre-1990 shocks shouldn't predict post-2000 mortality
+- Specification stability: Results across control variable sets
+- Share composition: Which industries/regions drive results?
+- Alternative IV: China-shock vs. other sources (different effects?)
+- Weak-instrument robust CI (Anderson-Rubin) if F-stat low
 
 **6. Coefficient Interpretation**:
 Following Borusyak:
 - If homogeneous effect: "Trade shock → X% mortality increase" (straightforward)
 - If heterogeneous: "Trade shock weighted average effect, driven primarily by [sector/region]"
-  - More transparent; acknowledges underlying HTE
-  - Avoids false precision
+ - More transparent; acknowledges underlying HTE
+ - Avoids false precision
 
 **7. Practical Implementation Questions for PAP**:
 
@@ -402,8 +402,8 @@ Following Borusyak:
 |----------|-----------|------------------------|----------|
 | Share definition | 1990 industry composition (CZ) | Predetermined period ✓ | 1990 or 2000 industry composition (Si-Gun-Gu) |
 | Shift definition | Foreign import growth | Out-of-sample preferred | Global trade growth? Or Korea national growth? |
-| F-stat expected | ~23 | Depends on share variation | ? (Korean data TBD) |
-| In-sample or out-of-sample shifts? | Mostly out-of-sample (China trade) | Out-of-sample strongly preferred | ? (Design choice) |
+| F-stat expected | ~23 | Depends on share variation |? (Korean data TBD) |
+| In-sample or out-of-sample shifts? | Mostly out-of-sample (China trade) | Out-of-sample strongly preferred |? (Design choice) |
 | Weak-instrument robust? | Robustness, but not formal | If F < 10, essential | If needed, use Anderson-Rubin |
 | Report by subgroup? | Some (education level) | Encouraged (HTE transparency) | Should do (region, sector, macro period) |
 
@@ -423,19 +423,19 @@ Borusyak discuss: If K > 1 shifts (multiple sectors/sources)
 **Concern**: Korean regional data smaller (fewer CZs) than US (722)
 - US regions: 722 commuting zones
 - Korea regions: ~250 Si-Gun-Gu municipalities
-  - → Less variation, potentially weak IV
-  
+ - → Less variation, potentially weak IV
+
 - **Mitigation**:
-  - Use broader regional groupings (시도 = provinces, ~17)
-  - More aggregate → Stronger instrument, but less granular
-  - Or: Accept weak IV, use robust methods (Anderson-Rubin, Bonferroni)
+ - Use broader regional groupings (시도 = provinces, ~17)
+ - More aggregate → Stronger instrument, but less granular
+ - Or: Accept weak IV, use robust methods (Anderson-Rubin, Bonferroni)
 
 **10. Timeline & Lags**:
 Following Finkelstein (2026) + ADH:
 - Trade shock (measured 1990-2000, 2000-2010, 2010-2020)
 - Employment response (1-2 year lag for data reporting)
 - Health/mortality response (2-5 year lag for despair → death)
-  - → Event-study framework with appropriate leads/lags
+ - → Event-study framework with appropriate leads/lags
 
 ## Quality Assessment: 본 Researcher의 3가지 핵심 교훈
 
@@ -443,54 +443,54 @@ Following Finkelstein (2026) + ADH:
 **교훈**:
 - Borusyak et al. emphasize: **Shares must be uncorrelated with ALL future shocks**, not just the one being measured
 - 가장 흔한 위반: Generic shares capturing multiple exposure dimensions
-  - Example: Industry composition exposes to trade, tech adoption, financialization
-  - If outcome responds to multiple channels → Biased IV
+ - Example: Industry composition exposes to trade, tech adoption, financialization
+ - If outcome responds to multiple channels → Biased IV
 
 - **PAP 적용**:
-  - Korean "deaths of despair" 원인: 다중
-    - Economic desperation (trade shock pathway)
-    - Opioid epidemic (global health pathway, Korea 1990s-2000s약물 규제 변화)
-    - Aging population (demographic pathway)
-  - If shares (industry composition) correlate with all three → Confounded
-  - **Solution**: Explicitly control for competing mechanisms; show trade effect persists
+ - Korean "deaths of despair" 원인: 다중
+ - Economic desperation (trade shock pathway)
+ - Opioid epidemic (global health pathway, Korea 1990s-2000s약물 규제 변화)
+ - Aging population (demographic pathway)
+ - If shares (industry composition) correlate with all three → Confounded
+ - **Solution**: Explicitly control for competing mechanisms; show trade effect persists
 
 ### 2. Weak Instruments Are Common & Manageable, But Require Honesty
 **교훈**:
 - Borusyak: F-stat >> 10 preferred, but F ~ 10-23 acceptable if:
-  - Argument for exogeneity is strong
-  - Robustness checks supportive
-  - Weak-instrument robust CI reported
-  
+ - Argument for exogeneity is strong
+ - Robustness checks supportive
+ - Weak-instrument robust CI reported
+
 - ADH's F ~ 23 is actually *not weak* (Cragg-Donald threshold), but modest
 - **Point**: Authors should be transparent, not hide weak first-stage
 
 - **PAP실행**:
-  - Don't assume Korea data will be strong (smaller samples)
-  - Plan for potentially weak IV
-  - Report first-stage F proactively
-  - Have Anderson-Rubin CI ready as backup
+ - Don't assume Korea data will be strong (smaller samples)
+ - Plan for potentially weak IV
+ - Report first-stage F proactively
+ - Have Anderson-Rubin CI ready as backup
 
 ### 3. Heterogeneous Effects are the Norm, Not Exception
 **교훈**:
 - Borusyak's framing (HTE + weighted average) is more realistic than
  homogeneous effect assumption
 - Example: Different sectors hit differently by trade
-  - Textiles, apparel (highly exposed to China) → Large job loss
-  - Chemicals, machinery (less exposed) → Smaller effect
-  - Coefficient = weighted average (dominated by large shocks)
+ - Textiles, apparel (highly exposed to China) → Large job loss
+ - Chemicals, machinery (less exposed) → Smaller effect
+ - Coefficient = weighted average (dominated by large shocks)
 
 - **Practical implication**: 
-  - Always report subgroup analysis
-  - Show which groups drive the overall effect
-  - Increases credibility (less "black box")
-  
+ - Always report subgroup analysis
+ - Show which groups drive the overall effect
+ - Increases credibility (less "black box")
+
 - **PAP strategy**:
-  - Report overall trade effect (mortality %)
-  - Disaggregate by:
-    - Industry (manufacturing-heavy vs. services)
-    - Region (urban vs. rural)
-    - Macro period (1990s crisis vs. 2000s growth vs. 2010s slowdown)
-  - Pattern in heterogeneity can reveal mechanism (e.g., manufacturing-driven = job-loss-driven)
+ - Report overall trade effect (mortality %)
+ - Disaggregate by:
+ - Industry (manufacturing-heavy vs. services)
+ - Region (urban vs. rural)
+ - Macro period (1990s crisis vs. 2000s growth vs. 2010s slowdown)
+ - Pattern in heterogeneity can reveal mechanism (e.g., manufacturing-driven = job-loss-driven)
 
 ---
 

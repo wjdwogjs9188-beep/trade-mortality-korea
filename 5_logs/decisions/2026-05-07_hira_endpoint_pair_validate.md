@@ -41,7 +41,7 @@
 2. sigungu fixed effects panel 영역 위 sample restriction effect decomposition
 3. β_146 (이전 intersection) vs β_147 (새 intersection) 의 cumulative 정합 form (둘 다 substantive 정통적 영역의 cumulative confirm) ### 5.2 미추홀구 KOSIS pop join 영역의 sub-task 2.3 정정 KOSIS pop ETL 위 raw_code → h_code 매핑 추가 (sigungu_crosswalk 의 23030 → 23090 적용) 시:
 - 미추홀구 2010 영역 5 cells 회복 → sparse 30 → 25 (intersection 147 영역 위)
-- 단 ETL 의 KOSIS pop separate build 영역의 변경이 mortality panel 영역과의 cumulative 정합 verify 필요 ### 5.3 30 sparse cell 의 R&R cycle 위임 97.96% coverage (intersection 147 × 5 × 2 - 30 sparse = 1,440 / 1,470) 의 maximum form 도달. R&R reviewer 가 행정 변경 transition 의 raw_code 매핑 ETL 추가 요청 시 4 sigungu 회복 가능 (29010 + 31280 + 34080 + 미추홀구 2010 KOSIS pop). 현 시점 commit 의 substantive 비용/이익 비대칭으로 R&R 위임이 합리적 영역. ## 6. 후속 step ### 6.1 즉시 (다음 automated tooling 위임 prompt 의 대상) - Phase 2 sub-task 2.3 prompt 작성: M1 composite outcome variable 정의 (4 mental ATC4 weighted average + 1 liver therapy 의 2-stage composite, log + z-score normalization, sparse cell complete-case form)
+- 단 ETL 의 KOSIS pop separate build 영역의 변경이 mortality panel 영역과의 cumulative 정합 verify 필요 ### 5.3 30 sparse cell 의 R&R cycle 위임 97.96% coverage (intersection 147 × 5 × 2 - 30 sparse = 1,440 / 1,470) 의 maximum form 도달. R&R reviewer 가 행정 변경 transition 의 raw_code 매핑 ETL 추가 요청 시 4 sigungu 회복 가능 (29010 + 31280 + 34080 + 미추홀구 2010 KOSIS pop). 현 시점 commit 의 substantive 비용/이익 비대칭으로 R&R 위임이 합리적 영역. ## 6. 후속 step ### 6.1 즉시 (다음 위임 prompt 의 대상) - Phase 2 sub-task 2.3 prompt 작성: M1 composite outcome variable 정의 (4 mental ATC4 weighted average + 1 liver therapy 의 2-stage composite, log + z-score normalization, sparse cell complete-case form)
 - KOSIS pop ETL raw_code 매핑 추가 sub-task (선택 영역 — sub-task 2.3 prep 와 cumulative) ### 6.2 Mid-term (Phase 2 sub-task 2.4) - DGHP 2017 ivmediate framework R 또는 Stata implementation
 - ACME (average causal mediation effect) + ADE (average direct effect) + TE (total effect) 추정
 - 147 intersection sample 위 paper § 7.2 narrative draft ### 6.3 Long-term (Phase 3-7) - PAP v4.6 update with sub-task 2.2 corrections + sparse cell treatment commit
@@ -52,4 +52,4 @@
 - Aggregation cross-check 5 random cells rel err 0.0000% ✅
 - β_147 = -0.155, cluster t = -5.65, p = 0.0001 ✅
 - paper § 7.1.1 + § 7.1.2 + § 8.3.3.1 wording 정정 cumulative ✅ **Status**: COMMIT (사용자 confirm 위 (A) 즉시 정정 path 의 cumulative 진행 완료)
-**다음 turn**: Phase 2 sub-task 2.3 self-contained automated tooling 위임 prompt 작성
+**다음 turn**: Phase 2 sub-task 2.3 self-contained 위임 prompt 작성

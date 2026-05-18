@@ -1,5 +1,5 @@
 #' @param method Vector specifying which inference methods to use. The vector
-#'     elements have to be one or more of the following strings:
+#' elements have to be one or more of the following strings:
 #'
 #' \describe{
 #'
@@ -19,10 +19,10 @@
 #' \item{\code{"all"}}{All of the methods above}}
 #' @param beta0 null that is tested (only affects reported p-values)
 #' @param region_cvar A vector with length \code{N} of cluster variables, for
-#'     method \code{"cluster_region"}. If the vector \code{1:N} is used,
-#'     clustering is effectively equivalent to \code{ehw}
+#' method \code{"cluster_region"}. If the vector \code{1:N} is used,
+#' clustering is effectively equivalent to \code{ehw}
 #' @param sector_cvar A vector with length \code{S} of cluster variables, if
-#'     sectors are to be clustered, for methods \code{"akm"} and \code{"akm0"}.
-#'     If the vector \code{1:S} is used, this is equivalent to not clustering.
+#' sectors are to be clustered, for methods \code{"akm"} and \code{"akm0"}.
+#' If the vector \code{1:S} is used, this is equivalent to not clustering.
 #' @param alpha Determines confidence level of reported confidence intervals,
-#'     which will have coverage \code{1-alpha}.
+#' which will have coverage \code{1-alpha}.

@@ -20,11 +20,11 @@
 **Individual-level fixed effect spec** (region-level 이 아닌 worker-level):
 ```
 MD_it = β1·IS_ψ5(i,t-1),t + I_i,t-6·β2 + J_ψ(i,t-1),t-6·β3
-       + α_i + α_σ(i,t-1),t + α_ω(i,t-1),t + α_λ(i,t-1),t + α_m + α_h + ε
+ + α_i + α_σ(i,t-1),t + α_ω(i,t-1),t + α_λ(i,t-1),t + α_m + α_h + ε
 ```
 - IS = log change in real imports in worker's industry over 5 years
 - α_i: individual FE
-- α_σ,ω,λ: sector × year, occupation × year, LLM × year FE
+- α_σ,ω,λ: sector × year, occupation × year, × year FE
 - IV: Chinese imports to other OECD countries (ADH-style)
 
 **핵심**: individual FE 로 시간 불변 selection 통제. 같은 worker 가 시간에 따라 trade exposure 가 변할 때의 within-individual 변화 추정.
@@ -46,9 +46,9 @@ MD_it = β1·IS_ψ5(i,t-1),t + I_i,t-6·β2 + J_ψ(i,t-1),t-6·β3
 
 ## 본 paper 와의 차별화
 - **본 paper unique contribution**:
-  - Korea = export-driven (Colantone 의 import-Bartik 가정 violated)
-  - DFS-style net exposure framework (Colantone 못 한)
-  - Mortality 직접 (Colantone 은 GHQ proxy)
+ - Korea = export-driven (Colantone 의 import-Bartik 가정 violated)
+ - DFS-style net exposure framework (Colantone 못 한)
+ - Mortality 직접 (Colantone 은 GHQ proxy)
 
 ## 본 paper § 1 인용 안
 > "Recent evidence shows trade exposure increases mental distress (Colantone et al. 2019), 

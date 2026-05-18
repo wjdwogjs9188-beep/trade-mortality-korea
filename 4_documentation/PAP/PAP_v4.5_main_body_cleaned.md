@@ -8,7 +8,7 @@
 - WCB cluster-시도 (G=16, 1000 boot) p = 0.041
 - Cluster-시도 sandwich t = −2.12 3 SE layer (HC1, WCB cluster-시도, cluster-시도 sandwich) 산출 완료, 일관 negative. Pending:
 - Conley centroid SE (1km/5km/10km) — Stage A
-- AKM (BHJ industry-mode) 정식 implementation — Stage B automated tooling 위임 (현재 ssaggregate WLS 의 별도 estimand β=+0.890 산출, OLS β 와 다른 estimator) 미국 (Pierce-Schott 2020, ADH 2019, Charles-Hurst-Schwartz 2019, Finkelstein-Notowidigdo-Shi 2026) 의 *adverse* effect 와 정반대 부호. 독일 (DFS 2014) 의 export-driven *protective* effect (employment gain) 와 *consistent mechanism 가설* (employment ↑ → mortality ↓ — DFS 가 직접 mortality 측정은 안 했음). ### 1.2 Contribution (3가지) #### (1) Reverse asymmetry — 첫 sigungu-level evidence
+- AKM (BHJ industry-mode) 정식 implementation — Stage B 위임 (현재 ssaggregate WLS 의 별도 estimand β=+0.890 산출, OLS β 와 다른 estimator) 미국 (Pierce-Schott 2020, ADH 2019, Charles-Hurst-Schwartz 2019, Finkelstein-Notowidigdo-Shi 2026) 의 *adverse* effect 와 정반대 부호. 독일 (DFS 2014) 의 export-driven *protective* effect (employment gain) 와 *consistent mechanism 가설* (employment ↑ → mortality ↓ — DFS 가 직접 mortality 측정은 안 했음). ### 1.2 Contribution (3가지) #### (1) Reverse asymmetry — 첫 sigungu-level evidence
 ADH 2019, Pierce-Schott 2020, Finkelstein-Notowidigdo-Shi 2026 모두 미국 deaths of despair 의 무역 충격 *adverse* effect 를 직접 정량화. 본 paper 는 export-driven economy (한국) 의 inverse 효과를 sigungu-level 미시 자료로 처음 추정. DFS 2014 독일 employment gain 은 입증했지만 mortality 는 직접 측정 안 했음. #### (2) Methodological — weak-IV 처리 protocol
 LMP 2022 (AER 112(10)) tF inference + Pre-WTO placebo robustness check 를 본 paper setting 에 적용:
 - LMP cutoff: F=19.65 → c₀.₀₅(F) = 3.286 (interpolated)
@@ -46,7 +46,7 @@ deaths of despair 만 trade exposure 와 상관, cancer / cardiovascular / respi
 - θ_t: year FE
 - 5-layer SE: 3 layer 산출 + Conley planned + AKM 별도 estimand **Sample universe**: 251 sigungu (h_code 256 - drop 5) **Drop 5 시군구의 정확한 list + 이유**: § 12.5 P1 commit pending (paper draft 진입 전 검증 필수) **IV (robustness)**:
 ```
-Δ_5y log(mortality_h) = α + β·Δ_5y log(emp_h) + θ_t + ε_h , instrumented by z_x_h
+Δ_5y log(mortality_h) = α + β·Δ_5y log(emp_h) + θ_t + ε_h, instrumented by z_x_h
 ``` ### 3.2 Phase B-x test evidence chain | Test | 진단 대상 | 결과 |
 |---|---|---|
 | Test 1 (Romer-Romer macro orthogonality) | shock 외생성 | univariate Bonferroni + HAC, mostly p>0.10 |
@@ -66,7 +66,7 @@ deaths of despair 만 trade exposure 와 상관, cancer / cardiovascular / respi
 | AKM (BHJ industry-mode, simplified) | ssaggregate WLS regression (별도 estimand) | β=+0.890, t=+1.51 (n.s.) | 정식 implementation P2 pending | 3 SE layer 산출 완료 + 1 layer planned (Conley) + 1 layer 별도 estimand (AKM). ### 4.1.1 AKM (BHJ industry-mode) 정의 명확화 본 paper 의 "AKM (BHJ industry-mode)" 는:
 - ssaggregate transformation: Y_k (industry-aggregated outcome) = Σ_h s_{h,k} · y_h
 - industry-level WLS regression: Y_k = α + β · w_k + η_k, weights = Σ_h s_{h,k}
-- Result: β=+0.890, t=+1.51 이는 BHJ 2022 의 *equivalence theorem* 의 직접 implementation 이 아님. 정식 BHJ 2022 AKM 은 OLS β 그대로 + shock-only SE (HCK 또는 cluster-on-shock). 본 paper 의 "AKM (BHJ industry-mode)" 의 β=+0.890 은 ssaggregate WLS 의 별도 estimand 이며, OLS β=−0.069 와 동일 estimator 가 아님. 정식 implementation cross-check (P2, Stage B automated tooling 위임):
+- Result: β=+0.890, t=+1.51 이는 BHJ 2022 의 *equivalence theorem* 의 직접 implementation 이 아님. 정식 BHJ 2022 AKM 은 OLS β 그대로 + shock-only SE (HCK 또는 cluster-on-shock). 본 paper 의 "AKM (BHJ industry-mode)" 의 β=+0.890 은 ssaggregate WLS 의 별도 estimand 이며, OLS β=−0.069 와 동일 estimator 가 아님. 정식 implementation cross-check (P2, Stage B 위임):
 - R `ShiftShareSE` package 의 `reg_ss` 함수 적용
 - BHJ 2022 의 정식 shock-only SE (region-level OLS β=−0.069 그대로 + AKM 1·2 SE) ### 4.2 tF inference (Lee-McCrary-Moreira-Porter 2022, AER 112(10)) 본 paper 의 method anchor — 단일-IV 모형의 valid t-ratio inference. **LMP critical value table (5% level)**: | F | c₀.₀₅(F) | SE 보정 factor |
 |---|---|---|
@@ -178,7 +178,7 @@ z_ADH_h = Σ_k s_{h,k}^{1994} × ΔM_{8OECD-CN,k}^{2000-2010}
 - Mitigation: HIRA 약물 panel = 시군구 250개 단위 (main mediator), HIRA 정신질환 = 시도 sub mediator (cross-validation) ### 8.9 환자 거주지 vs 의료기관 소재지
 - HIRA 자료 = 의료기관 소재지 기준
 - 시군구 인접 진료 시 매칭 한계
-- Mitigation: 한국 시군구별 의료기관 분포 균등 가정, 추가 robustness (정신과 의원 수 control) ### 8.10 AKM (BHJ industry-mode, simplified) 의 별도 estimand 한계 본 paper 의 "AKM (BHJ industry-mode)" 결과 (β=+0.890, t=+1.51) 는 region-level OLS β=−0.069 와 다른 estimator (ssaggregate transformation 후 industry-level WLS regression) 의 별도 estimand. 정식 BHJ 2022 의 equivalence theorem 의 직접 implementation 이 아님. Mitigation (P2, Stage B automated tooling 위임):
+- Mitigation: 한국 시군구별 의료기관 분포 균등 가정, 추가 robustness (정신과 의원 수 control) ### 8.10 AKM (BHJ industry-mode, simplified) 의 별도 estimand 한계 본 paper 의 "AKM (BHJ industry-mode)" 결과 (β=+0.890, t=+1.51) 는 region-level OLS β=−0.069 와 다른 estimator (ssaggregate transformation 후 industry-level WLS regression) 의 별도 estimand. 정식 BHJ 2022 의 equivalence theorem 의 직접 implementation 이 아님. Mitigation (P2, Stage B 위임):
 - R `ShiftShareSE` package 의 `reg_ss` 함수 적용
 - 정식 BHJ 2022 shock-only SE 산출
 - 정식 결과 commit 후 § 4.1 표 정정 본 paper 의 5 SE layer 의 4 layer (HC1, WCB cluster-시도, cluster-시도 sandwich, Conley) 는 OLS β=−0.069 의 SE 만 다르게 추정 — 정합성 있음. ### 8.11 Pre-WTO placebo point estimate sign reversal weak evidence
@@ -235,7 +235,7 @@ y_h = α + β_direct · z_x_h + ζ · m_h + γ X_h + ν (direct + indirect via m
 - z_x_h = single Bartik IV (KR-CN bilateral)
 - β_total = β_direct + ζ · δ (decomposition) #### Identification 가정 (DGHP 2017)
 - (a) **Treatment exogeneity**: z_x_h ⊥ ε (Bartik IV 의 standard assumption)
-- (b) **Mediator unconfoundedness given treatment**: m_h | z_x_h ⊥ ν #### Implementation (P2 Stage B automated tooling 위임)
+- (b) **Mediator unconfoundedness given treatment**: m_h | z_x_h ⊥ ν #### Implementation (P2 Stage B 위임)
 - Stata `ivmediate` package (DFH 2020) 또는 Python `linearmodels` + bootstrap
 - 1000 cluster-시도 wild bootstrap
 - Sobel test 도 별도 보고 (parametric, restrictive 가정) #### 6 mediator 별 channel
@@ -276,20 +276,20 @@ E5. AKM 정식 BHJ 2022 implementation (P2) 의 OLS β 와 일관성 --- ## § 1
 ### 12.6 v4.5 (2026-05-05) — final clean version, audit-accepted 본 v4.5 = v4.0-v4.4 의 모든 정정 통합 + inline patch 표기 제거 + 깨끗한 narrative. ### 12.7 Pending list (paper draft Stage C 진입 전 commit 필수) | # | Pending | 처리 | Effort | Stage |
 |---|---|---|---|---|
 | P1 | n=222 vs n=251 정합성 + 5 시군구 drop list | derived panel build code 검증 | direct 1-2h | Stage A |
-| P2 | AKM (BHJ industry-mode) 정식 implementation | R `ShiftShareSE` `reg_ss` 적용 | automated tooling 위임 3-4h | Stage B |
-| P3 | AR-CI 산출 | linearmodels AR_test + ConfidenceSet | automated tooling 위임 2-3h | Stage B |
+| P2 | AKM (BHJ industry-mode) 정식 implementation | R `ShiftShareSE` `reg_ss` 적용 | 위임 3-4h | Stage B |
+| P3 | AR-CI 산출 | linearmodels AR_test + ConfidenceSet | 위임 2-3h | Stage B |
 | P4 | WCB cluster-시도 G=16 결과 재산출 (verify) | Phase 4 5-layer SE script 재실행 | direct 1h | Stage A |
 | P5 | DGHP 2017 + DFH 2020 분리 인용 file | 별도 markdown citation | direct 30분 | Stage A |
 | P6 | Conley centroid SE 산출 (1km/5km/10km) | spatial cluster SE script | direct 1h | Stage A |
 | P8 | Pre-WTO sub-period sensitivity (1992-1995, 1990-1994) | placebo regression script | direct 1h | Stage A |
 | P9 | KOSIS 사망원인 50항목 시군구별 statistics search (despair 4 component 외부 검증) | KOSIS DT search | 사용자 측 다운 1h | 사용자 |
 | ~~P10~~ | ~~Comtrade Switzerland fetch~~ — closed (build 코드 검증 결과 이미 포함) | — | 0 | closed | **Stage A 합계 (direct)**: P1 + P4 + P5 + P6 + P8 = 4-5h, 다음 turn 단일 가능
-**Stage B 합계 (automated tooling 위임)**: P2 + P3 = 5-6h, 차차 turn 단일 위임
+**Stage B 합계 (위임)**: P2 + P3 = 5-6h, 차차 turn 단일 위임
 **사용자 측 P9**: KOSIS search 1h Stage A·B + P9 모두 commit 후 v4.6 → paper draft Stage C (KER full paper format) 진입 ### 12.8 Track 3 — 1992 baseline build (사용자 audit B priority) PAP v4.5 의 § 5.3 의 5 baseline year sensitivity 의 첫 실행:
 - 1992 광업제조업조사 microdata → baseline shares 1992
 - z_x_h^{1992 baseline} 산출
 - 1992 vs 1994 sensitivity 회귀
-- 본 paper § 8.6 share-exogeneity violation 처리의 결과 의존성 해결 **Track 3 Status**: Stage A 와 병렬 가능 (direct 또는 automated tooling 위임). --- ## § 13. Outcome external validation ### 13.1 자료
+- 본 paper § 8.6 share-exogeneity violation 처리의 결과 의존성 해결 **Track 3 Status**: Stage A 와 병렬 가능 (direct 또는 위임). --- ## § 13. Outcome external validation ### 13.1 자료
 - KOSIS DT_1B34E13 (사망원인별/시군구별/성별 사망자수·조사망률·연령표준화사망률, 50,071 행)
 - 자살 (코드 102, X60-X84) 만 추출
 - 본 paper 의 despair_total 의 main 구성 요소 (4 component 중 1, 약 50% 비중) ### 13.2 cross-check spec
@@ -314,10 +314,10 @@ E5. AKM 정식 BHJ 2022 implementation (P2) 의 OLS β 와 일관성 --- ## § 1
 - P4: WCB cluster-시도 G=16 verify
 - P5: DGHP/DFH 분리 인용 file
 - P6: Conley centroid SE 산출
-- P8: Pre-WTO sub-period sensitivity ### Stage B (차차 turn, automated tooling 위임 5-6h)
+- P8: Pre-WTO sub-period sensitivity ### Stage B (차차 turn, 위임 5-6h)
 - P2: AKM 정식 BHJ 2022 implementation
 - P3: AR-CI 산출 ### Track 3 (병렬, 사용자 audit B priority)
-- 1992 광업제조업조사 baseline build (direct 또는 automated tooling 위임) ### 사용자 측 병렬
+- 1992 광업제조업조사 baseline build (direct 또는 위임) ### 사용자 측 병렬
 - P9: KOSIS 사망원인 50항목 시군구별 search (1h)
 - HIRA 약물 9 ATC × 250 시군구 fetch 진행 중 (6일 분산) ### v4.6 commit (Stage A·B + Track 3 + P9 모두 완료 후)
 - 8 pending 모두 closed
@@ -338,7 +338,7 @@ E5. AKM 정식 BHJ 2022 implementation (P2) 의 OLS β 와 일관성 --- ## § 1
 - Online appendix: full robustness tables + mechanism details + 4 baseline sensitivity ### Stage D — Bibliography + Cover letter + KER submission --- ## 결론 본 PAP v4.5 = audit-accepted final clean version. v4.0-v4.4 의 모든 정정 (9 inconsistency + 12 framing + Switzerland 정합 회복) 통합 + inline patch 표기 제거. **Target venue**: KER 1순위 + AEJ Applied 2순위. AER:I 는 advisor 합류 + IV strength F>30 + multi-paper track 후 long-term goal. **Pending list**: 8개 (P1·P2·P3·P4·P5·P6·P8·P9). P10 closed. **Timeline**:
 - v4.5 commit: 완료 (본 turn)
 - Stage A (direct): 다음 turn 4-5h
-- Stage B (automated tooling 위임): 차차 turn 5-6h
+- Stage B (위임): 차차 turn 5-6h
 - Track 3 (1992 baseline): Stage A·B 와 병렬
 - 사용자 측 P9: 1h (병렬)
 - v4.6 commit + paper draft Stage C 진입: 차차차 turn

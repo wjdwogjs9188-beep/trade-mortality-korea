@@ -19,25 +19,25 @@
 
 ## Data
 - **Source**:
-  - IMF, World Bank: 국가 수준 거시경제 데이터 (GDP, household debt, non-financial firm debt)
-  - Cross-country historical dataset: Pre-GFC 가계부채 붐 국가들 (US, UK, Spain, Denmark, Iceland 등)
-  - Mian et al. (2017) 원본 dataset
-  - Chinese/Korean national statistics agencies
+ - IMF, World Bank: 국가 수준 거시경제 데이터 (GDP, household debt, non-financial firm debt)
+ - Cross-country historical dataset: Pre-GFC 가계부채 붐 국가들 (US, UK, Spain, Denmark, Iceland 등)
+ - Mian et al. (2017) 원본 dataset
+ - Chinese/Korean national statistics agencies
 
 - **분석 기간**:
-  - Pre-boom period: t-7 to t-1 (7년)
-  - Post-boom period: t+1 to t+3 (3년)
-  - 예: China/Korea의 경우 2015-2021 (boost phase), 2023-2025 (forecast)
-  
+ - Pre-boom period: t-7 to t-1 (7년)
+ - Post-boom period: t+1 to t+3 (3년)
+ - 예: China/Korea의 경우 2015-2021 (boost phase), 2023-2025 (forecast)
+
 - **Sample scope**:
-  - 역사적 비교 대상: 약 20-30개 국가, 1950s-2010s 다중 credit boom episodes
-  - 중점: GFC 이전 주요 3 booms (US 2001-07, UK 2001-07, Spain 2001-07)
-  - China-Korea: 2015-2021 23 percentage point 증가 (세계 최대급)
+ - 역사적 비교 대상: 약 20-30개 국가, 1950s-2010s 다중 credit boom episodes
+ - 중점: GFC 이전 주요 3 booms (US 2001-07, UK 2001-07, Spain 2001-07)
+ - China-Korea: 2015-2021 23 percentage point 증가 (세계 최대급)
 
 - **주요 변수**:
-  - **Dependent**: ΔLog(GDP growth) post vs. pre boom
-  - **Treatment**: ΔHousehold debt-to-GDP, ΔNon-financial firm debt-to-GDP
-  - **Control**: Initial income level, trade openness, international position
+ - **Dependent**: ΔLog(GDP growth) post vs. pre boom
+ - **Treatment**: ΔHousehold debt-to-GDP, ΔNon-financial firm debt-to-GDP
+ - **Control**: Initial income level, trade openness, international position
 
 ## Identification Strategy
 
@@ -53,15 +53,15 @@ $$\Delta \text{GDP growth}_{i,post} - \Delta \text{GDP growth}_{i,pre} = \alpha 
 ### Identification 논리
 **내재적 가정**:
 1. **Timing**: Debt 증가(t-7 to t-1)는 미래 GDP 성장(t+1 to t+3)을 결정
-   - 역인과성 우려: 낮은 미래 성장 기대 → 현재 debt 증가 (less concern, 역사적 data는 ex-ante forecasts 아님)
-   
+ - 역인과성 우려: 낮은 미래 성장 기대 → 현재 debt 증가 (less concern, 역사적 data는 ex-ante forecasts 아님)
+
 2. **Cross-country variation**:
-   - 동일 시기(e.g., 2000s)에도 국가별 debt 증가량 다양
-   - Within-time period 비교가 confounders (global shocks) 통제
-   
+ - 동일 시기(e.g., 2000s)에도 국가별 debt 증가량 다양
+ - Within-time period 비교가 confounders (global shocks) 통제
+
 3. **Credit channel**:
-   - 가설: 높은 HH debt → 미래 deleveraging pressure → 수요 부족 → 성장 저하
-   - 외생성 문제: credit boom을 야기한 underlying factors (supply-side productivity gains, expected returns)가 output을 직접 결정?
+ - 가설: 높은 HH debt → 미래 deleveraging pressure → 수요 부족 → 성장 저하
+ - 외생성 문제: credit boom을 야기한 underlying factors (supply-side productivity gains, expected returns)가 output을 직접 결정?
 
 ### Causal Interpretation의 한계
 - **준-구조적** 관계: 인과관계 식별보다는 **predictive relationship**
@@ -94,14 +94,14 @@ $$\Delta \text{GDP growth}_{i, post-pre} = \alpha + \beta_{HH} \cdot \Delta (\te
 ### 통제 변수 및 specification
 - **Baseline**: HH debt + Firm debt (main specification)
 - **Robustness checks**:
-  - By sub-period (pre-war, post-war, recent)
-  - By initial development level (advanced vs. emerging)
-  - Lagged specifications (t-3, t-5, etc.)
-  
+ - By sub-period (pre-war, post-war, recent)
+ - By initial development level (advanced vs. emerging)
+ - Lagged specifications (t-3, t-5, etc.)
+
 - **No explicit panel structure**:
-  - Cross-sectional (not time-series or panel)
-  - Each country-boom episode = 1 observation
-  - SE: OLS robust, implicit country clustering in historical data
+ - Cross-sectional (not time-series or panel)
+ - Each country-boom episode = 1 observation
+ - SE: OLS robust, implicit country clustering in historical data
 
 ### Outcome Specifications
 - **Primary**: 3-year forward growth (t+1 to t+3)
@@ -127,8 +127,8 @@ $$\Delta \text{GDP growth}_{i, post-pre} = \alpha + \beta_{HH} \cdot \Delta (\te
 | US 2001-2007 | 6 years | ~40 pp | ~3-4 pp | Yes (GFC) |
 | UK 2001-2007 | 6 years | ~35 pp | ~2.5-3 pp | Yes (bank failures) |
 | Spain 2001-2007 | 6 years | ~45 pp | ~4-5 pp | Yes (17% unemployment) |
-| **China 2015-2021** | 6 years | **23 pp** | **-2.07 pp** (predicted) | ? (Low probability) |
-| **Korea 2015-2021** | 6 years | **23 pp** | **-2.07 pp** (predicted) | ? (Low probability) |
+| **China 2015-2021** | 6 years | **23 pp** | **-2.07 pp** (predicted) |? (Low probability) |
+| **Korea 2015-2021** | 6 years | **23 pp** | **-2.07 pp** (predicted) |? (Low probability) |
 
 **Magnitude**: China-Korea booms smaller than pre-GFC episodes
 - US/UK/Spain: 35-50pp → 3-4pp decline
@@ -193,7 +193,7 @@ $$\Delta \text{GDP growth}_{i, post-pre} = \alpha + \beta_{HH} \cdot \Delta (\te
 - 2015: Government stimulus (monetary easing, infrastructure)
 - 2019: Tech regulations begin (fintech, real estate)
 - 2020-2021: COVID recovery, property developer defaults (Evergrande)
-  - → Forecast may underestimate slowdown if structural policy shifts
+ - → Forecast may underestimate slowdown if structural policy shifts
 
 **Korea differences from China**:
 - More market-driven (vs. state-controlled Chinese banks)
@@ -214,32 +214,32 @@ $$\Delta \text{GDP growth}_{i, post-pre} = \alpha + \beta_{HH} \cdot \Delta (\te
 
 ### 1. Sectoral impacts
 - **Real estate**: Direct negative (construction, property services)
-  - China: 15-20% of GDP, 25% of employment (migrant workers)
-  - Korea: ~10% of GDP, concentrated in construction & finance
-  
+ - China: 15-20% of GDP, 25% of employment (migrant workers)
+ - Korea: ~10% of GDP, concentrated in construction & finance
+
 - **Finance**: Credit contraction → Higher lending rates, reduced credit access
-  - Korea: Small economies more vulnerable (credit market concentration)
-  - China: Government backstop likely (moral hazard)
+ - Korea: Small economies more vulnerable (credit market concentration)
+ - China: Government backstop likely (moral hazard)
 
 - **Tradables/exports**: Stimulus-dependent
-  - Korea: Tech (semiconductors, EV) as offset
-  - China: Manufacturing resilience if stimulus applied
+ - Korea: Tech (semiconductors, EV) as offset
+ - China: Manufacturing resilience if stimulus applied
 
 ### 2. Regional heterogeneity
 - **China**: Tier 1 cities (Beijing, Shanghai) vs. Tier 3+ (much higher real estate exposure)
-  - Property-dependent local governments: Revenue from land sales ~40% of local budget
-  - Geographical concentration of risk
-  
+ - Property-dependent local governments: Revenue from land sales ~40% of local budget
+ - Geographical concentration of risk
+
 - **Korea**: Seoul metropolitan area vs. regional cities
-  - Less extreme disparity than China
-  - But chaebol headquarters concentration in Seoul
+ - Less extreme disparity than China
+ - But chaebol headquarters concentration in Seoul
 
 ### 3. Time dynamics
 - **2015-2019**: Accumulation phase (demand strong, prices rising)
 - **2020-2021**: Post-COVID rebound (stimulus extended, inventory built)
 - **2023-2025**: Deleveraging phase (predicted decline)
-  - Year 1 (2023): Adjustment begins, GDP still above trend
-  - Year 2-3 (2024-2025): Maximum impact (HH balance sheet repair)
+ - Year 1 (2023): Adjustment begins, GDP still above trend
+ - Year 2-3 (2024-2025): Maximum impact (HH balance sheet repair)
 
 ## Mechanism: Credit-Driven Business Cycle Theory
 
@@ -254,24 +254,24 @@ $$\text{HH debt} \uparrow \text{ (t-7 to t-1)} \Rightarrow \text{Demand shift fo
 
 ### Specific to China:
 1. **Investment boom mechanism**:
-   - Real estate credit expansion → Property prices ↑ → HH balance sheets inflated (wealth effect)
-   - Once boom ends → Wealth effect reverses → Consumption demand collapses
-   - BUT: Government can offset via fiscal spending (infrastructure, transfers)
+ - Real estate credit expansion → Property prices ↑ → HH balance sheets inflated (wealth effect)
+ - Once boom ends → Wealth effect reverses → Consumption demand collapses
+ - BUT: Government can offset via fiscal spending (infrastructure, transfers)
 
 2. **Structural rebalancing**:
-   - Credit boom coincided with export growth slowdown (2015+)
-   - Government wanted rebalancing (consumption vs. investment)
-   - But HH debt instead of improved HH income = unsustainable
+ - Credit boom coincided with export growth slowdown (2015+)
+ - Government wanted rebalancing (consumption vs. investment)
+ - But HH debt instead of improved HH income = unsustainable
 
 ### Specific to Korea:
 1. **Chaebol financing**:
-   - Unlike pure HH debt story, Korean chaebol groups also expanded leverage
-   - Non-financial firm debt = major part of total credit
-   - Corporate vs. household effects may differ
+ - Unlike pure HH debt story, Korean chaebol groups also expanded leverage
+ - Non-financial firm debt = major part of total credit
+ - Corporate vs. household effects may differ
 
 2. **External stability**:
-   - Trade surplus = safety valve (rebalancing via external demand)
-   - Unlike US 2007 (must rebalance internally)
+ - Trade surplus = safety valve (rebalancing via external demand)
+ - Unlike US 2007 (must rebalance internally)
 
 ## 본 연구와의 Connection
 
@@ -281,46 +281,46 @@ $$\text{HH debt} \uparrow \text{ (t-7 to t-1)} \Rightarrow \text{Demand shift fo
 - **ADH / Autor-Dorn-Hanson**: Trade shock at regional level → labor market outcomes (unemployment, government transfers)
 - **Sufi BFI**: Economy-wide debt cycle → macro slowdown
 - **Korea PAP v3.4**: 결합 가능성 (Trade shock + macro vulnerability?)
-  - Assumption: Trade shock 발생 시, 동시에 debt cycle 이행 중이면 local labor market 충격 amplified
+ - Assumption: Trade shock 발생 시, 동시에 debt cycle 이행 중이면 local labor market 충격 amplified
 
 **2. Time period alignment**:
 - BFI forecast (2023-2025): Predicted 1-2pp GDP slowdown
 - Korea PAP sample period: 2000-2019 (historical), 2020+ (forecasting)
 - Overlap: 2015-2021 (debt boom) → 2020-2025 (predicted slowdown, overlaps with PAP's observed period)
-  - **Implication**: Korea의 1990s-2000s "Deaths of despair" spike가 macro debt cycle과 연관?
+ - **Implication**: Korea의 1990s-2000s "Deaths of despair" spike가 macro debt cycle과 연관?
 
 **3. Mechanism overlap**:
 - **ADH mechanism**: Trade displacement → unemployment → welfare → (eventually) despair
 - **Sufi mechanism**: Debt-driven growth → deleveraging → demand destruction → unemployment
-  - Korea에서: If 1990s-2000s period에 debt cycle 있었다면?
-  - Historical Korea household debt-to-GDP: 1990 ~30% → 2000 ~60% → 2010 ~75% (accelerating)
-  - **Match**: ADH가 측정한 1990s manufacturing shock period와 Korea household debt boom period 일치!
+ - Korea에서: If 1990s-2000s period에 debt cycle 있었다면?
+ - Historical Korea household debt-to-GDP: 1990 ~30% → 2000 ~60% → 2010 ~75% (accelerating)
+ - **Match**: ADH가 측정한 1990s manufacturing shock period와 Korea household debt boom period 일치!
 
 **4. Policy response difference**:
 - **ADH findings**: Government transfers (UI → DI) 증가가 주요 response
-  - But transfers는 reallocation 못함 → persistent unemployment
-  
+ - But transfers는 reallocation 못함 → persistent unemployment
+
 - **Sufi findings**: Macro growth slowdown 발생 → (implicit) fiscal stimulus 필요성
-  - Government fiscal capacity = key driver of soft landing probability
-  - Korea (2023): 높은 government debt (40-50% of GDP) → Limited fiscal space → Adjustment harder
+ - Government fiscal capacity = key driver of soft landing probability
+ - Korea (2023): 높은 government debt (40-50% of GDP) → Limited fiscal space → Adjustment harder
 
 **5. Methodological contrast**:
 - **ADH**: Causal (IV-based), local labor market level, long-term effects
 - **Sufi**: Associational, national level, medium-term forecast
 - **Synthesis for PAP**: 
-  - Bartik-style shock (trade) + macro debt context
-  - Regional labor market damage (ADH-style) + national growth headwind (Sufi-style) = compounded
+ - Bartik-style shock (trade) + macro debt context
+ - Regional labor market damage (ADH-style) + national growth headwind (Sufi-style) = compounded
 
 **6. Specific quote mapping**:
 - Sufi: "credit-driven household demand channel operative in China and Korea?"
-  - ADH response (implicit): Yes, but primarily through job destruction, not wage adjustment
-  - Korea PAP: Trade shock + credit cycle doubly hits vulnerable regions
+ - ADH response (implicit): Yes, but primarily through job destruction, not wage adjustment
+ - Korea PAP: Trade shock + credit cycle doubly hits vulnerable regions
 
 **7. Robustness/heterogeneity application**:
 - **Regional variation in PAP**:
-  - High initial-debt regions → Larger trade shock impact (Sufi's regional mechanism + ADH's local labor market)
-  - Low initial-debt regions → Smaller effect (more macro-buffered)
-  - Test: Interaction of trade shock × initial debt-to-GDP by region
+ - High initial-debt regions → Larger trade shock impact (Sufi's regional mechanism + ADH's local labor market)
+ - Low initial-debt regions → Smaller effect (more macro-buffered)
+ - Test: Interaction of trade shock × initial debt-to-GDP by region
 
 **8. Timeline for Korea empirics**:
 | Period | Macro context | Labor market | Deaths of despair |
@@ -329,7 +329,7 @@ $$\text{HH debt} \uparrow \text{ (t-7 to t-1)} \Rightarrow \text{Demand shift fo
 | 2000-2008 | HH debt 60% → 75% | Services growth | Stable/slight decline |
 | 2008-2015 | HH debt 75% → 85% (slower) | Post-crisis adjustment | Increasing (elderly) |
 | 2015-2021 | HH debt 85% → 100% (23pp) | Tech boom (partial offset) | Still increasing |
-| 2023-2025 | Forecast: -2pp GDP | Unemployment ↑ (Sufi predicts) | ? (PAP should test) |
+| 2023-2025 | Forecast: -2pp GDP | Unemployment ↑ (Sufi predicts) |? (PAP should test) |
 
 ## Quality Assessment: 본 Researcher의 3가지 핵심 교훈
 
@@ -339,30 +339,30 @@ $$\text{HH debt} \uparrow \text{ (t-7 to t-1)} \Rightarrow \text{Demand shift fo
 - Pattern: 역사적 23개 credit boom → 평균 -0.09 elasticity
 - 하지만 causal mechanism은 명확하지 않음 (reverse causality? omitted variables?)
 - **실행**: Korea PAP에서도 "이 계수가 인과적인가?" 질문 필요
-  - Trade shock의 인과성은 강함 (ADH-style IV)
-  - 하지만 deaths of despair 까지의 pathway는? (confounding 가능성)
+ - Trade shock의 인과성은 강함 (ADH-style IV)
+ - 하지만 deaths of despair 까지의 pathway는? (confounding 가능성)
 
 ### 2. Structural Differences의 경제적 중요성
 **교훈**:
 - Pre-GFC vs. 현 China/Korea의 "비슷한 수치 다른 결과" 예시
 - Coefficient가 같아도 (β = -0.09), 국가별 external position/government capacity 다르면
-  - US 2007: 3-4pp 감소 + 금융위기
-  - Korea 2025 (Sufi예측): 1-2pp 감소 + soft landing
+ - US 2007: 3-4pp 감소 + 금융위기
+ - Korea 2025 (Sufi예측): 1-2pp 감소 + soft landing
 - **실행**: Korea PAP에서 "region × 구조적 buffer" 상호작용 검토
-  - Trade shock 큰 지역 + 낮은 정부지원 지역 = worst case
-  - Trade shock 큰 지역 + 정부 대응 있음 = moderate
+ - Trade shock 큰 지역 + 낮은 정부지원 지역 = worst case
+ - Trade shock 큰 지역 + 정부 대응 있음 = moderate
 
 ### 3. Medium-term vs. Long-term 호라이즌
 **교훈**:
 - Sufi: 3-5년 forward looking (debt cycle phase)
 - ADH: 10-20년 (structural unemployment, irreversible damage)
 - **대조**: 같은 trade shock도 horizon에 따라 다름
-  - 3년: Macro stimulus로 offset 가능
-  - 10년: Individual-level scarring (skills lost, networks broken)
+ - 3년: Macro stimulus로 offset 가능
+ - 10년: Individual-level scarring (skills lost, networks broken)
 - **실행**: Korea PAP에서 period 정의 신중하게
-  - 1990-2010: ADH-long term scarring
-  - vs. 2000-2007: Pre-GFC cycle (Sufi-relevant)
-  - 두 mechanism 동시 작동 가능? (long-term skill loss + medium-term debt cycle)
+ - 1990-2010: ADH-long term scarring
+ - vs. 2000-2007: Pre-GFC cycle (Sufi-relevant)
+ - 두 mechanism 동시 작동 가능? (long-term skill loss + medium-term debt cycle)
 
 ---
 

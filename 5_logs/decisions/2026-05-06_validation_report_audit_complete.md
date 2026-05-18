@@ -21,7 +21,7 @@
 - § 5.2: "c_{0.05}(F) ≈ 3.84 for F = 19.65 in the implementation table used here"
 - Tension: 3.286 (LMP table 2022) vs 3.84 (χ²(1) = 1.96², conservative bound)
 - Implementation script `30_phase4_main_spec_5layer.py` uses 3.84 (CSV column `tF_cutoff = 3.84`) which is the asymptotic χ²(1) limit, not the LMP table value.
-- Impact: Under LMP 3.286 cutoff, |t| = 3.65 (AKM) and |t| = 3.11 (cluster) PASS the LMP threshold; under 3.84 cutoff, they FAIL. Material difference in IV inference framing.
+- Impact: Under LMP 3.286 cutoff, |t| = 3.65 (AKM) and |t| = 3.11 (cluster) PASS the LMP threshold; under 3.84 cutoff, they FL. Material difference in IV inference framing.
 - Action: Reconcile — either update implementation to use LMP 3.286 (preferred per PAP § 4.5) or update narrative to consistently cite 3.84 (current CSV) and explain it as a more conservative bound. recommends the former (LMP 3.286 per Lee et al. 2022). ### P3 — Low severity (nice-to-have) **P3.1: Mortality WA panel NaN=3588** - File: `3_derived/mortality/sigungu_mortality_panel_v02_wa.parquet` has 3,588 / 31,494 NaN cells (11.4%)
 - Likely source: small-cell mortality (deaths/pop pairs missing for some outcome groups in some years)
 - Impact: Sub-period split drops these — already handled in `n=218`/`n=206` reduced samples

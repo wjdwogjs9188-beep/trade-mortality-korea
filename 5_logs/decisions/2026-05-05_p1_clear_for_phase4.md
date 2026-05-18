@@ -18,7 +18,7 @@
 | respiratory | −0.012 | −0.20 | 0.845 | n.s. |
 | external_other | +0.014 | +0.18 | 0.858 | n.s. | **Final framing** (Phase 4 후 최종 update):
 - 현재: "preliminary protective effect, awaiting Phase 4 5-layer SE resolution"
-- Phase 4 통과 시: "first paper-grade evidence of trade-induced mortality decrease in export-driven economy" ## Phase 4 진입 prompt (Reviewer 의 NEXT_STEP_PROMPT 채택) 다음 turn 또는 automated tooling 위임. 7 step:
+- Phase 4 통과 시: "first paper-grade evidence of trade-induced mortality decrease in export-driven economy" ## Phase 4 진입 prompt (Reviewer 의 NEXT_STEP_PROMPT 채택) 다음 turn 또는 위임. 7 step:
 1. Working-age panel verify (✅ 본 turn 완료)
 2. 5-layer SE 동시 출력 (HC1 + WCB-sigungu + cluster-sido + AKM + Conley)
 3. tF inference 적용 (cutoff F-dependent)

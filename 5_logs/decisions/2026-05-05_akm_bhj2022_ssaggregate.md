@@ -31,12 +31,12 @@ _2026-05-05_
 
 ## Top 5 industries (Rotemberg weight)
 ```
-ksic9_2digit  rotemberg_weight
-         C26          0.806811
-         C24          0.111552
-         C20          0.020084
-         C28          0.014498
-         C30          0.014053
+ksic9_2digit rotemberg_weight
+ C26 0.806811
+ C24 0.111552
+ C20 0.020084
+ C28 0.014498
+ C30 0.014053
 ```
 
 ## SE 비교 (final)

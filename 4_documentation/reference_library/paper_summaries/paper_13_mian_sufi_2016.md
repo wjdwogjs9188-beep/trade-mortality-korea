@@ -24,8 +24,8 @@ Is there a systematic empirical relation between household debt and business cyc
 **Credit Data**:
 - Source: Bank for International Settlements (BIS) "Long series on total credit to the non-financial sectors"
 - Definitions:
-  - **Household debt to GDP** ($d^{HH}_{it} = \frac{D^{HH}_{it}}{Y_{it}}$): Outstanding residential mortgages + consumer credit
-  - **Non-financial firm debt to GDP** ($d^F_{it} = \frac{D^F_{it}}{Y_{it}}$): Outstanding credit to non-financial corporations
+ - **Household debt to GDP** ($d^{HH}_{it} = \frac{D^{HH}_{it}}{Y_{it}}$): Outstanding residential mortgages + consumer credit
+ - **Non-financial firm debt to GDP** ($d^F_{it} = \frac{D^F_{it}}{Y_{it}}$): Outstanding credit to non-financial corporations
 - Concept: Total credit (loans + bonds) from domestic + foreign banks + non-bank institutions
 - Coverage: Broader than bank lending only; includes securitized lending
 - Time series: Average 30 years per country (23 years after differencing to 3-year changes)
@@ -57,7 +57,7 @@ $$\mathbf{A}\mathbf{Y}_{it} = \mathbf{a}_i + \sum^p_{j=1} \boldsymbol{\alpha}_j 
 where:
 - $\mathbf{Y}_{it} = (y_{it}, d^F_{it}, d^{HH}_{it})$ — log real GDP, firm debt/GDP, household debt/GDP
 - $\mathbf{a}_i$ — country fixed effects
-- $p=5$ lags (AIC criterion)
+- $p=5$ lags (C criterion)
 - Debt normalized by **one-year lagged GDP** to avoid capturing GDP innovations in debt equations
 - Reduced form: $\mathbf{Y}_{it} = \mathbf{c}_i + \sum^p_{j=1} \boldsymbol{\delta}_j \mathbf{Y}_{it-j} + \mathbf{u}_{it}$
 
@@ -101,21 +101,21 @@ $$\beta^{HH} = \text{Effect on 3-year GDP growth of 1-unit increase in household
 
 **Impulse Response Analysis** (Figure 1):
 1. **Household debt shock response to itself** (left panel): 
-   - Initial shock → 3-4 year boom in household debt → peak at year 3
-   - Subsequent reversion to initial level by year 5-7
-   - Dynamics: Household credit cycle lasts ~7 years peak-to-trough
+ - Initial shock → 3-4 year boom in household debt → peak at year 3
+ - Subsequent reversion to initial level by year 5-7
+ - Dynamics: Household credit cycle lasts ~7 years peak-to-trough
 
 2. **GDP response to household debt shock** (middle panel):
-   - **Years 0-3**: GDP boost (positive elasticity) → temporary expansion during boom
-   - **Years 3-6**: GDP contraction (negative effect, labeled "Effect A" in figure)
-   - **Years 6-10**: Further GDP decline (labeled "Effect B") → long-run lower level
-   - **Focal window**: Year 3-6 (medium-run) = -0.42 log point response
-   - Interpretation: Credit-driven consumption boom temporarily raises output; subsequent bust depresses growth
+ - **Years 0-3**: GDP boost (positive elasticity) → temporary expansion during boom
+ - **Years 3-6**: GDP contraction (negative effect, labeled "Effect A" in figure)
+ - **Years 6-10**: Further GDP decline (labeled "Effect B") → long-run lower level
+ - **Focal window**: Year 3-6 (medium-run) = -0.42 log point response
+ - Interpretation: Credit-driven consumption boom temporarily raises output; subsequent bust depresses growth
 
 3. **Firm debt shock response** (right panel):
-   - **Contrast**: Immediate negative GDP response (no consumption boom phase)
-   - Firm debt effect more immediate, smaller, reverts by year 5
-   - **Test for distinctness**: Wald test rejects $\beta^{HH} = \beta^F$ (p<0.01)
+ - **Contrast**: Immediate negative GDP response (no consumption boom phase)
+ - Firm debt effect more immediate, smaller, reverts by year 5
+ - **Test for distinctness**: Wald test rejects $\beta^{HH} = \beta^F$ (p<0.01)
 
 **Robustness (Jordá Local Projections, Figure 2)**:
 - Baseline: Baseline impulse response (top-left) confirms VAR findings
@@ -357,7 +357,7 @@ where $\bar{d}^{HH}_{t} = \sum_i \Delta^3 d^{HH}_{it}$ = global household debt c
 ## 추가 기술 노트
 
 ### VAR Lag Selection
-- Akaike Information Criterion (AIC) selects p=5
+- Akaike Information Criterion (C) selects p=5
 - Bias correction for dynamic panel (Nickell) via iterative bootstrap
 - Minimum expected bias (T≈25 years >> 5 lags)
 

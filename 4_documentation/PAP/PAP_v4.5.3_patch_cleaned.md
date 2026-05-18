@@ -24,7 +24,7 @@
 - Assumption A-2 의 강한 가정 — direct effect = 0 = 본 paper 의 각 mediator 가 trade exposure 의 mortality 영향의 유일 channel 이라는 가설
 - 한계: A-2 위반 시 (즉 trade exposure 가 mediator 외 channel 로 mortality 에 영향) bounds 보고로 robustness check **6 channel decomposition**:
 - Channel 1 (HIRA SSRI 처방률, 시군구), Channel 2-4 (KOSIS 이혼·출생·혼인), Channel 5 (z_m_marital), Channel 6 (z_m_education)
-- 각 channel k: indirect = ζ_k · β_k, direct = β_direct, total = β_direct + ζ_k · β_k **P2 Stage B automated tooling 위임 시**: DGHP 정식 implementation = Stata `ivmediate` (DFH 2020) 또는 R 직접 구현.
+- 각 channel k: indirect = ζ_k · β_k, direct = β_direct, total = β_direct + ζ_k · β_k **P2 Stage B 위임 시**: DGHP 정식 implementation = Stata `ivmediate` (DFH 2020) 또는 R 직접 구현.
 ``` ## 2. § 1.3 — Finkelstein 2026 deaths of despair sub-category 본문 직접 verify (BFI WP 2026-33, Figure 5): > "Figure 5 shows the impacts on deaths classified as 'deaths of despair', as well as for the three sub-categories: drug-related deaths, suicides, and alcohol-related deaths."
 > > "For the full sample, there is a statistically significant increase in deaths of despair, with increases in all three sub-categories, and statistically significant increases in drug-related deaths and in suicides."
 > > "For men who were 25-44 in 1994, there is a statistically significant increase in alcohol-related mortality, and large but imprecise increases in drug-related mortality." ### v4.5.3 정정 — § 1.3 anchor 비교 표 Finkelstein 행 | 이전 (v4.5.2) | 정정 (v4.5.3) |
@@ -62,9 +62,9 @@ cd C:\Users\82103\Documents\\Projects\논문을쓰자
 | § 9.5 DGHP A-2 정확 spec + Lemma L-2 | commit |
 | § 9.5 의 6 channel decomposition explicit | commit |
 | Track 2 코드 작성 (사용자 실행 대기) | 완료 |
-| Track 3 코드 작성 (사용자 실행 대기) | 완료 | v4.5.3 = paper draft Stage C 진입 prerequisite 의 9/9 commit (P1·P4·P5·P6·P8 direct + P2·P3 Stage B + Track 2·3 코드 작성 + DGHP/Finkelstein verify). --- ## 5. 사용자 측 다음 작업 (1 일) 1. **PowerShell 실행** (15-40분): ```powershell cd C:\Users\82103\Documents\\Projects\논문을쓰자 .\run_track2_track3.ps1 ``` 2. **결과 에 보고**: - `5_logs/integrity_checks/<date>_z_m_education_sensitivity.md` 의 4 baseline correlation - `5_logs/integrity_checks/<date>_baseline_shares_1992.md` 의 시군구 매칭률 + 종사자 합 3. **HIRA 약물 fetch** (계속): ```powershell .\run_hira_drug_extended.ps1 ``` --- ## 6. 다음 turn 작업 (Track 2·3 결과 받은 후) 1. § 9.4 + § 5.3 v4.5.4 patch (Track 2·3 결과 반영)
+| Track 3 코드 작성 (사용자 실행 대기) | 완료 | v4.5.3 = paper draft Stage C 진입 prerequisite 의 9/9 commit (P1·P4·P5·P6·P8 direct + P2·P3 Stage B + Track 2·3 코드 작성 + DGHP/Finkelstein verify). --- ## 5. 사용자 측 다음 작업 (1 일) 1. **PowerShell 실행** (15-40분): ```powershell cd C:\Users\82103\Documents\\Projects\논문을쓰자.\run_track2_track3.ps1 ``` 2. **결과 에 보고**: - `5_logs/integrity_checks/<date>_z_m_education_sensitivity.md` 의 4 baseline correlation - `5_logs/integrity_checks/<date>_baseline_shares_1992.md` 의 시군구 매칭률 + 종사자 합 3. **HIRA 약물 fetch** (계속): ```powershell.\run_hira_drug_extended.ps1 ``` --- ## 6. 다음 turn 작업 (Track 2·3 결과 받은 후) 1. § 9.4 + § 5.3 v4.5.4 patch (Track 2·3 결과 반영)
 2. z_x_h^{1992} 산출 + 1992 vs 1994 sensitivity 회귀 script (코드 + 사용자 실행)
-3. Stage B automated tooling 위임 prompt (P2 AKM + P3 AR-CI)
+3. Stage B 위임 prompt (P2 AKM + P3 AR-CI)
 4. Paper draft § 1 + § 2 (Stage C 시작) --- ## 결론 (PAP v4.5.3 patch commit) 본 v4.5.3 = direct deep inspect (DGHP A-2 + Finkelstein deaths of despair) + Track 2·3 코드 commit. paper draft Stage C 진입 prerequisite 9/9. **Author**: 정재헌 (가천대학교 경제학)
 **Date**: 2026-05-05
 **Verified by**: direct PDF inspect + Track 2·3 코드 작성

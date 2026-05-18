@@ -6,14 +6,14 @@ _2026-05-12_
 - shape: (2927330, 29) (rows × cols)
 - encoding: utf-8-sig, header=None, 29 columns
 - column convention: col 0=시도, col 1=시군구, col 3=KSIC letter,
-  col 4=KSIC 2-digit (15-37 for D), col 28=종사자 합계 annual (M+F)
+ col 4=KSIC 2-digit (15-37 for D), col 28=종사자 합계 annual (M+F)
 
 ## Manufacturing filter
 - D-filter rows: 297,416 / 2,927,330 (10.2%)
 - distinct sgg5 (D only): 246
 - distinct KSIC 2-digit (D only): 23
 - 종사자수 national sum (col 28, D only): **2,459,919**
-  - 통계청 1999 광업제조업 annual employment anchor ≈ 2.4-2.7M → ✅ 정합
+ - 통계청 1999 광업제조업 annual employment anchor ≈ 2.4-2.7M → ✅ 정합
 
 ## Sigungu crosswalk (year=1999, raw → h_code)
 - row-level match: 297,416/297,416 (100.0%)
@@ -22,7 +22,7 @@ _2026-05-12_
 ## KSIC 7→9 crosswalk (manufacturing 2-digit)
 - file: `1_codebooks/ksic6_to_ksic9_2digit.csv` (label legacy; D-prefix = KSIC 7th)
 - D-prefix mapping rows: 23
-- D15→C10 food, D17→C13 textiles, ..., D37→C33 (1-to-1 dominant target)
+- D15→C10 food, D17→C13 textiles,..., D37→C33 (1-to-1 dominant target)
 
 ## 1999 baseline shares (KSIC9 2-digit)
 - agg rows: 4,361
@@ -48,7 +48,7 @@ _2026-05-12_
 ## Native long-difference panel (despair_total, 1999 baseline)
 - n = 235 sigungu, G (sido) = 17
 - z_x_per_worker SD (σ_z, 1999): 3796256.8533
-  (compare: 1994 baseline σ_z = reference value from main spec)
+ (compare: 1994 baseline σ_z = reference value from main spec)
 
 ### 5-layer SE for β_1999 (despair_total)
 - β = -0.0872, n = 235

@@ -1,5 +1,5 @@
 ================================================================================
-                    HIRA DRUG PANEL ANALYSIS — FINAL REPORT
+ HIRA DRUG PANEL ANALYSIS — FINAL REPORT
 ================================================================================
 
 PROJECT: Trade Shock and Deaths of Despair in Korea
@@ -24,27 +24,27 @@ KEY METRICS:
 • Quality: Zero missing values, zero duplicates, all codes valid
 
 RECOMMENDATION: Use for post-2010 robustness checks and sensitivity analysis
-                in § 5.2. Document temporal limitation in appendix.
+ in § 5.2. Document temporal limitation in appendix.
 
 ================================================================================
 SKILLS COMPLETED
 ================================================================================
 
 ✅ SKILL A: DATA EXPLORATION
-   Profiled dataset structure, distributions, and dimensions
-   Finding: 5 ATC4 drugs available (mental health + liver), no opioids
+ Profiled dataset structure, distributions, and dimensions
+ Finding: 5 ATC4 drugs available (mental health + liver), no opioids
 
 ✅ SKILL B: DATA VALIDATION
-   Checked duplicates, negatives, code validity, temporal gaps
-   Finding: A+ quality (zero duplicates, zero nulls, valid codes)
+ Checked duplicates, negatives, code validity, temporal gaps
+ Finding: A+ quality (zero duplicates, zero nulls, valid codes)
 
 ✅ SKILL C: RELEVANCE ANALYSIS
-   Mapped HIRA drugs to your 4 deaths of despair + paper periods
-   Finding: T3-T4 full/partial coverage; T0-T1 completely missing
+ Mapped HIRA drugs to your 4 deaths of despair + paper periods
+ Finding: T3-T4 full/partial coverage; T0-T1 completely missing
 
 ✅ SKILL D: QUERY TEMPLATES
-   Provided 4 production-ready queries (Pandas + SQL)
-   Finding: Ready to aggregate, rate, correlate, decompose
+ Provided 4 production-ready queries (Pandas + SQL)
+ Finding: Ready to aggregate, rate, correlate, decompose
 
 ================================================================================
 CRITICAL FINDINGS
@@ -64,30 +64,30 @@ FINDING #2: Liver Drug Available (1/1)
 FINDING #3: Opioids NOT Available (0/1)
 ────────────────────────────────────────
 ❌ Opioids (N02A): Not in dataset (0 rows)
-   → Expected for Korea 2010-2019 (minimal Rx vs US)
-   → Supports your § 7 narrative on US dominance
+ → Expected for Korea 2010-2019 (minimal Rx vs US)
+ → Supports your § 7 narrative on US dominance
 
 FINDING #4: Time Period Mismatch
 ─────────────────────────────────
-Your paper periods:          HIRA coverage:
-T0 (1997-2001) ........... ❌ Not available
-T1 (2002-2006) ........... ❌ Not available
-T2 (2007-2011) ........... ⚠️  Partial (2010-2011 only)
-T3 (2012-2016) ........... ✅ Full coverage
-T4 (2017-2021) ........... ⚠️  Partial (2017-2019 only)
+Your paper periods: HIRA coverage:
+T0 (1997-2001)........... ❌ Not available
+T1 (2002-2006)........... ❌ Not available
+T2 (2007-2011)........... ⚠️ Partial (2010-2011 only)
+T3 (2012-2016)........... ✅ Full coverage
+T4 (2017-2021)........... ⚠️ Partial (2017-2019 only)
 
 CRITICAL: HIRA starts 2010, missing entire pre-shock baseline (1997-2009).
-          Cannot serve as PRIMARY mediator for full design.
+ Cannot serve as PRIMARY mediator for full design.
 
 FINDING #5: Growth Over Time
 ──────────────────────────────
 Mental health Rx (2010→2019):
-  - Amount: +59% (₩174B → ₩277B)
-  - Quantity: +39% (851M → 1,181M units)
+ - Amount: +59% (₩174B → ₩277B)
+ - Quantity: +39% (851M → 1,181M units)
 
 Liver Rx (2010→2019):
-  - Amount: +72% (₩54B → ₩93B)
-  - Quantity: +49% (192M → 286M units)
+ - Amount: +72% (₩54B → ₩93B)
+ - Quantity: +49% (192M → 286M units)
 
 Interpretation: Growing treatment uptake or disease burden over period.
 
@@ -147,41 +147,41 @@ DELIVERABLES
 
 REPORT FILE:
 📁 /sessions/tender-quirky-cannon/mnt/outputs/
-   hira_drug_panel_exploration_v01.md (204 lines)
+ hira_drug_panel_exploration_v01.md (204 lines)
 
-   Sections:
-   • Executive summary
-   • A. Data profiling (shape, dtypes, distributions)
-   • B. Validation results (duplicates, codes, temporal)
-   • C. Relevance analysis (paper mapping, periods)
-   • D. Suitability assessment
-   • E. Data quality scorecard
-   • F. Next steps checklist
+ Sections:
+ • Executive summary
+ • A. Data profiling (shape, dtypes, distributions)
+ • B. Validation results (duplicates, codes, temporal)
+ • C. Relevance analysis (paper mapping, periods)
+ • D. Suitability assessment
+ • E. Data quality scorecard
+ • F. Next steps checklist
 
 QUERY TEMPLATES (in report):
-   • Query A: Aggregate to sigungu × year × ATC4 (Pandas + SQL)
-   • Query B: Mental health Rx rate per 100K (Pandas)
-   • Query C: Correlation with suicide (Pandas + scipy)
-   • Query D: Drug composition by type (Pandas)
+ • Query A: Aggregate to sigungu × year × ATC4 (Pandas + SQL)
+ • Query B: Mental health Rx rate per 100K (Pandas)
+ • Query C: Correlation with suicide (Pandas + scipy)
+ • Query D: Drug composition by type (Pandas)
 
 ================================================================================
 FINAL VERDICT
 ================================================================================
 
-Data Quality:              ★★★★★ (A+) Excellent
-Completeness:              ★★★★★ (100%, zero missing)
-Validity:                  ★★★★☆ (A, code format non-standard)
-Temporal Suitability:      ★★★☆☆ (B, 2010-2019 only)
-Geographic Coverage:       ★★★☆☆ (B-, 67% of units)
-Paper § 5.2 Suitability:   ★★★☆☆ (B+, supplementary only)
+Data Quality: ★★★★★ (A+) Excellent
+Completeness: ★★★★★ (100%, zero missing)
+Validity: ★★★★☆ (A, code format non-standard)
+Temporal Suitability: ★★★☆☆ (B, 2010-2019 only)
+Geographic Coverage: ★★★☆☆ (B-, 67% of units)
+Paper § 5.2 Suitability: ★★★☆☆ (B+, supplementary only)
 
 OVERALL: Use as SUPPLEMENTARY EVIDENCE for § 5.2 robustness.
-         Do NOT use as PRIMARY MEDIATOR for 1997-2021 design.
+ Do NOT use as PRIMARY MEDIATOR for 1997-2021 design.
 
 RECOMMENDATION: Integrate into § 5.2 appendix with time period caveat.
-                Keep main text reliant on 1997-baseline sources.
-                HIRA provides modern-era Rx patterns (T3-T4) to test
-                "medication access" mechanism for post-shock period.
+ Keep main text reliant on 1997-baseline sources.
+ HIRA provides modern-era Rx patterns (T3-T4) to test
+ "medication access" mechanism for post-shock period.
 
 ================================================================================
 END OF REPORT

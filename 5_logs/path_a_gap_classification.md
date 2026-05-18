@@ -10,7 +10,7 @@
 - **Current text**: "The OLS point estimate β = -0.0685 is invariant across the standard error layers by construction (SE layers affect inference but not the OLS coefficient)"
 - **Issue**: § 5.1 context shows this is ARCHIVE build discussion (Table 1 rows below claim main β=-0.127). Transition text incorrectly generalizes archive coefficient as "the" OLS point estimate
 - **Fix**: Replace "-0.0685" with "-0.127" OR clarify this is sub-section on archive-build robustness layer
-- **Recommendation**: REPLACE with "-0.127"; this section should document MAIN inference layer table ### Priority 2 (Explicit main specification claim) **2. § 5, line 56** — "This paper proceeds with the reduced-form coefficient β_main = -0.0685 as the preferred specification"
+- **Recommendation**: REPLACE with "-0.127"; this section should document MN inference layer table ### Priority 2 (Explicit main specification claim) **2. § 5, line 56** — "This paper proceeds with the reduced-form coefficient β_main = -0.0685 as the preferred specification"
 - **File**: `paper_draft_v01_section_5.md`, line 56
 - **Current text**: "This paper proceeds with the reduced-form coefficient β_main = -0.0685 as the preferred specification, following the convention..."
 - **Issue**: DIRECT contradiction of Path A. Section 5.1 (line 19) clearly states β_main = -0.127. This line appears to be legacy Path B wording
@@ -24,7 +24,7 @@
 - **File**: `paper_draft_v01_section_6.md`, line 13
 - **Current text**: "This section reports six classes of robustness checks for the main reduced-form estimate β = -0.0685 (HC1 t = -2.12, p = 0.034)"
 - **Issue**: § 6 is explicitly ROBUSTNESS section. Intro conflates "robustness checks FOR the main estimate" with "checks ON archive build". The HC1 t=-2.12 and p=0.034 correspond to archive build, not main. Path A main would yield HC1 t > -4.0 (much larger)
-- **Fix**: Clarify that § 6 reports robustness to the MAIN β=-0.127, with HC1 t and p-values updated accordingly
+- **Fix**: Clarify that § 6 reports robustness to the MN β=-0.127, with HC1 t and p-values updated accordingly
 - **Recommendation**: REWRITE section intro to reference main estimate correctly and update inference layer p-values ### Priority 5 (Main specification period) **5. § 1_2, line 36** — "From 2000 to 2010—the long-difference period of this paper"
 - **File**: `paper_draft_v01_section_1_2.md`, line 36
 - **Current text**: "From 2000 to 2010—the long-difference period of this paper—Korean imports from China grew from approximately USD 12.8 billion..."
@@ -37,7 +37,7 @@
 - **Fix**: Recalculate HC1 standard error and t-statistic for β=-0.127; update Table 1 HC1 row
 - **Recommendation**: REPLACE with correct HC1 values OR clarify this row is archive-only robustness table --- ## B. LEGITIMATE_ROBUSTNESS List (11 items — DO NOT TOUCH) These references properly cite the archive build as a sensitivity layer, robustness check, or comparative context. No cleanup needed: 1. **§ 1_2, line 56** — "1994-baseline Bartik exposure measure" — baseline construction explanatory text
 2. **§ 1_2, line 44** — "I use the 1994 KOSTAT industrial census" — methodological choice explanation
-3. **§ 5, line 19** — "β_main = -0.127 (cluster-province t = -4.02)" — MAIN estimate correctly cited
+3. **§ 5, line 19** — "β_main = -0.127 (cluster-province t = -4.02)" — MN estimate correctly cited
 4. **§ 5, line 25** — "Replacing the 2000-2010 China bilateral exposure with 1995-2001 pre-WTO bilateral exposure" — pre-WTO placebo specification (legitimate falsification test)
 5. **§ 5, line 25** — "β_placebo = +0.0238" — archive build placebo result (correctly flagged as sensitivity)
 6. **§ 6, line 31** — "β_dropC26 = -0.0756 (HC1 SE = 0.0335, t = -2.26)" — robustness result on archive specification (correct context)
@@ -45,7 +45,7 @@
 8. **§ 6, line 47** — "β_1992 = -0.0158 (HC1 SE = 0.0246)" — baseline sensitivity result (properly contextualized attenuation)
 9. **§ 8_9, line 15** — "The Korean estimate of -6.85 percent reduction" — percentage form interpretation of main effect
 10. **§ 8_9, line 35** — "The 1992-baseline alternative specification yields β = -0.016" — limitations section (archive weakness properly disclosed)
-11. **§ 8_9, line 51** — "β = -0.127 in log-rate units" — conclusion statement (MAIN estimate correctly cited) --- ## C. AMBIGUOUS List (1 item — context judgment needed) **1. § 6, line 88** — "0.0897 vs 0.0685 in absolute terms"
+11. **§ 8_9, line 51** — "β = -0.127 in log-rate units" — conclusion statement (MN estimate correctly cited) --- ## C. AMBIGUOUS List (1 item — context judgment needed) **1. § 6, line 88** — "0.0897 vs 0.0685 in absolute terms"
 - **Text**: "...with the same protective sign as the main estimate and a magnitude approximately 31 percent larger (0.0897 vs 0.0685 in absolute terms)."
 - **Context**: Section 5.4 reports post-2008 sub-period: β_post-2008 = -0.0897. The line compares this to 0.0685. This could mean: - **(Interpretation A)**: Compares post-2008 native (-0.0897) to archive build period estimate (-0.0685) — legitimate robustness - **(Interpretation B)**: Treats -0.0685 as the full-period main and reports post-2008 as 31% larger — TRUE GAP
 - **Judgment**: LIKELY LEGITIMATE. Read full § 5.4 context: line 86 establishes β_post-2008 = -0.0897 as the sub-period result. The comparison to -0.0685 appears to be against the *archive build's full-period estimate* (not the main -0.127), used to show the sub-period strengthens the effect. Recommend reading full § 5.4 to confirm this is intended as sub-period robustness (LEGITIMATE) vs archive comparison (TRUE_GAP). --- ## Revised Unification Status ### Before Re-Classification (49% gaps reported)

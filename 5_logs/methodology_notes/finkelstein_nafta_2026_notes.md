@@ -62,10 +62,10 @@ $$y_{ct} = \beta_t [V_c \times \mathbb{1}(\text{Year}_t)] + \alpha_c + \tau_t + 
 
 ```
 NAFTA top vs bottom quartile vulnerability:
-  → +1.9% age-adjusted mortality (SE = 0.54)
+ → +1.9% age-adjusted mortality (SE = 0.54)
 
 Average CZ vulnerability = 0.35:
-  → NAFTA increased mortality by 0.68% on average over 15년
+ → NAFTA increased mortality by 0.68% on average over 15년
 ```
 
 **NAFTA welfare gain (Caliendo-Parro 2015) 보다 큰 사망 비용** = welfare-erasing effect.
@@ -80,11 +80,11 @@ Average CZ vulnerability = 0.35:
 
 ```
 Specification:
-  log(mortality) = β_m × ΔEPOP_M + β_n × ΔEPOP_N + α_c + τ_t
+ log(mortality) = β_m × ΔEPOP_M + β_n × ΔEPOP_N + α_c + τ_t
 
 Results:
-  β_m ≈ -1.5%  (1pp manufacturing 감소 → +1.5% mortality)
-  β_n ≈ +0.5%  (1pp non-manufacturing 감소 → -0.5% mortality)
+ β_m ≈ -1.5% (1pp manufacturing 감소 → +1.5% mortality)
+ β_n ≈ +0.5% (1pp non-manufacturing 감소 → -0.5% mortality)
 
 → 부호 반대! 통계적으로 다름
 → 같은 magnitude EPOP 감소도 어디서 오느냐에 따라 mortality 영향 정반대
@@ -214,7 +214,7 @@ IV: KR-CN bilateral IV split by KSIC C (manufacturing) vs others
 
 ## 6. 핵심 인용구
 
-> "We estimate that a 1 percentage point trade-induced decline in area EPOP from either NAFTA or exposure to trade from China increases age-adjusted mortality by the same magnitude (about 1.5 percent); ... but are of opposite sign and statistically distinguishable from our estimates that a 1 percentage point recession-induced area EPOP decline *reduces* mortality by about 0.5 percent." (Abstract)
+> "We estimate that a 1 percentage point trade-induced decline in area EPOP from either NAFTA or exposure to trade from China increases age-adjusted mortality by the same magnitude (about 1.5 percent);... but are of opposite sign and statistically distinguishable from our estimates that a 1 percentage point recession-induced area EPOP decline *reduces* mortality by about 0.5 percent." (Abstract)
 
 > "Local area declines in manufacturing employment increase mortality, while local area declines in non-manufacturing employment *decrease* mortality." (Introduction)
 

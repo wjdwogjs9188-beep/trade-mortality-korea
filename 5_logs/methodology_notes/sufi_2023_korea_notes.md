@@ -70,8 +70,8 @@
 **Specification 추가:**
 ```
 ln(MortRate)_{ct} = β_1 × Bartik_c + β_2 × HHDebt_{ct} 
-                  + β_3 × (Bartik_c × HHDebt_{ct})
-                  + α_c + τ_t + X_{ct}φ + ε
+ + β_3 × (Bartik_c × HHDebt_{ct})
+ + α_c + τ_t + X_{ct}φ + ε
 ```
 
 → β_3 가 유의 → "Sufi channel" 확인

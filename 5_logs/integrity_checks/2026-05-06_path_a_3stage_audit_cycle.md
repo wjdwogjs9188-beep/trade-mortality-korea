@@ -13,7 +13,7 @@
 - Section breakdown: - § 1_2: ~60% complete (window_archive 3 hits 잔존) - § 5: ~50% complete (β_std 4 hits + window_archive 1 hit) - § 6: ~40% complete (β_std 7 hits dominant + window_archive 4 hits) - § 8_9: ~55% complete (window_archive 6 hits 잔존) ### Caveat
 Stage 1 의 49% gap 추정은 모든 archive build reference (β_std, n=222, window_archive) 를 cleanup gap 으로 treat 한 결과. 다만 Path A 가 archive build 를 robustness footnote 로 preserve 하는 spec 임을 감안하면 false positive 가능. --- ## Stage 2 — /data:analyze (3-category gap re-classification) ### Method
 Stage 1 의 49% gap 을 3 category 로 re-classify:
-- **Category A (TRUE_GAP)**: archive build reference 가 MAIN 으로 cited — mechanical cleanup 필요
+- **Category A (TRUE_GAP)**: archive build reference 가 MN 으로 cited — mechanical cleanup 필요
 - **Category B (LEGITIMATE_ROBUSTNESS)**: archive build reference 가 robustness footnote 또는 sensitivity 로 cited — preserve
 - **Category C (AMBIGUOUS)**: context 불분명, 추가 verify 필요 각 reference 의 line + 3 lines before + 3 lines after read 후 category assign. ### Output
 - `outputs/path_a_gap_classification.csv`

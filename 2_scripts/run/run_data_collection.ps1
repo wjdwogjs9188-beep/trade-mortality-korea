@@ -1,5 +1,5 @@
 # 데이터 수집 자동 실행 스크립트
-# 사용법: PowerShell 에서 .\run_data_collection.ps1
+# 사용법: PowerShell 에서.\run_data_collection.ps1
 
 $ErrorActionPreference = "Stop"
 

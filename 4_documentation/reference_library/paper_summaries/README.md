@@ -100,4 +100,4 @@ Finkelstein 2026 (벤치마크 effect size) → BHJ 2025 (IV 방법) → AKM 201
 2. `paper_02_pierce_schott_2020_aeri.md` (1시간) **다음 주**:
 3. Finkelstein 2026 요약 (본 paper 벤치마크 확인)
 4. BHJ 2025 + AKM 2019 (IV 방법론 깊게 이해) **이후**:
-5. 필요한 추가 논문들 JIT (just-in-time) 읽기 --- **생성**: automated tooling Agent **최종 업데이트**: 2026-05-04 **버전**: v1.0 (Pierce-Schott 완료, Finkelstein 등 예정) 
+5. 필요한 추가 논문들 JIT (just-in-time) 읽기 --- **생성**: Agent **최종 업데이트**: 2026-05-04 **버전**: v1.0 (Pierce-Schott 완료, Finkelstein 등 예정) 

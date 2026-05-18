@@ -110,23 +110,23 @@ $$\text{DeathRate}_{ct} = \sum_t \theta_t \mathbb{1}\{year=t\} \times \text{NTRG
 ### B. 본 연구가 Pierce-Schott 와 다른 이유
 
 1. **한국은 export-driven** (vs 미국 import-shock)
-   → Korea-China bilateral net exposure 가 더 적합
-   → 효과 방향 (단순 음 vs 양) 가설 다를 수 있음
+ → Korea-China bilateral net exposure 가 더 적합
+ → 효과 방향 (단순 음 vs 양) 가설 다를 수 있음
 
 2. **한국의 자영업 buffer**
-   → 미국 manufacturing 일자리 잃으면 disability 로 갔지만,
-   → 한국은 자영업 (편의점·음식점) 으로 흡수 → 사망 효과 약화 가능성
+ → 미국 manufacturing 일자리 잃으면 disability 로 갔지만,
+ → 한국은 자영업 (편의점·음식점) 으로 흡수 → 사망 효과 약화 가능성
 
 3. **Drug overdose vs Suicide**
-   → 미국: opioid epidemic (Oxycontin 1996+)
-   → 한국: opioid 처방 매우 제한적, 자살이 dominant deaths of despair
-   → **본 연구 main outcome 은 자살 (102)**, drug 보다.
+ → 미국: opioid epidemic (Oxycontin 1996+)
+ → 한국: opioid 처방 매우 제한적, 자살이 dominant deaths of despair
+ → **본 연구 main outcome 은 자살 (102)**, drug 보다.
 
 4. **Pierce-Schott "기타 심장질환" placebo**
-   → 본 연구 v3.x 에서 "기타 심장질환 (069 = I26-I51) -3.8% 보호효과"
-   → Pierce-Schott 는 internal causes 0 효과 (placebo 통과)
-   → 본 연구 발견은 **PSc 와 다른 conclusion** = 한국 export 충격의 cardiovascular 보호 효과 가능성
-   → **paper main contribution** 으로 강조
+ → 본 연구 v3.x 에서 "기타 심장질환 (069 = I26-I51) -3.8% 보호효과"
+ → Pierce-Schott 는 internal causes 0 효과 (placebo 통과)
+ → 본 연구 발견은 **PSc 와 다른 conclusion** = 한국 export 충격의 cardiovascular 보호 효과 가능성
+ → **paper main contribution** 으로 강조
 
 ### C. 본 연구의 specification 설계 (PSc 차용)
 

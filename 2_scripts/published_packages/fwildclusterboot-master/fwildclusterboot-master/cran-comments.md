@@ -7,10 +7,9 @@ I have tested the package on:
 
 and received the following notes: 
 
-* checking for detritus in the temp directory ... NOTE
+* checking for detritus in the temp directory... NOTE
 Found the following files/directories:
-  'lastMiKTeXException'
-
+ 'lastMiKTeXException'
 
 ## Resubmission of 0.12.1 
 
@@ -23,7 +22,6 @@ I have added additional information on how to download WildBootTests.jl to the d
 I have also corrected the link to the JuliaConnectoR package, which now points to CRAN instead of the github repo.
 
 Tests via rhub and github actions pass without notes. 
-
 
 ## Resubmission of 0.12.1
 
@@ -39,12 +37,12 @@ I have checked the package on rhub and github actions, without any additional no
 
 ## fwildclusterboot 0.12.1
 
-This is a hot-fix release which turns of some tests that fail on  ATLAS MKL OpenBLAS . 
+This is a hot-fix release which turns of some tests that fail on ATLAS MKL OpenBLAS. 
 
 No tests fail on github actions, rhub and win-devel.
 
 Only one note found: 
 
-"❯ checking for detritus in the temp directory ... NOTE
-  Found the following files/directories:
-    'lastMiKTeXException'".
+"❯ checking for detritus in the temp directory... NOTE
+ Found the following files/directories:
+ 'lastMiKTeXException'".

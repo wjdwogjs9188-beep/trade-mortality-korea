@@ -101,4 +101,4 @@ Layer 5: Romano-Wolf FWER correction (주요 한계)
 - ADH Harvard Dataverse: China Syndrome data ### 국내 맥락
 - KOSIS 사망 microdata: 보건복지부
 - 광업제조업통계: 통계청
-- 무역통계: 관세청 --- **작성자**: automated tooling Agent **최종 업데이트**: 2026-05-04 **상태**: Reference complete (Tier 1-4 메타데이터), Tier 5-6 pending 
+- 무역통계: 관세청 --- **작성자**: Agent **최종 업데이트**: 2026-05-04 **상태**: Reference complete (Tier 1-4 메타데이터), Tier 5-6 pending 

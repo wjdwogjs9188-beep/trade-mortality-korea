@@ -34,10 +34,10 @@
 - 폴더: 2_scripts/sigungu_crosswalk
 - 폴더: 3_derived
 - 폴더: 5_logs/decisions
-- 폴더: .git
+- 폴더:.git
 - 파일: CLAUDE.md
-- 파일: .env
-- 파일: .gitignore
+- 파일:.env
+- 파일:.gitignore
 - 파일: requirements.txt
 - 파일: 1_codebooks/sigungu_crosswalk.csv
 - 파일: 1_codebooks/sigungu_changes_history.md
@@ -62,6 +62,6 @@
 - CLAUDE.md ECOS 16개 일관: ECOS16: True, ECOS13(stale): False
 - CLAUDE.md 사망 27년 일관: 27년: True, 28년(stale): False
 - Phase 1 헤더: 1-A/C/D/E 완료 표시
-- .env gitignored: .env 라인 존재
+-.env gitignored:.env 라인 존재
 - git history API 키 노출: 0개 노출
 - git commit 수: 1개

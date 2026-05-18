@@ -11,11 +11,11 @@ Successfully completed comprehensive deep-read analysis of all 4 required papers
 **File**: `paper_01_dauth_findeisen_suedekum.md`
 - **Status**: ✅ COMPLETE (Deep read, 1,752 words)
 - **Content coverage**:
-  - Shift-share IV identification strategy (detailed equations)
-  - 442,000 net jobs retained from East rise (1988-2008)
-  - Import coefficient: -0.23, Export coefficient: +0.40
-  - Heterogeneous effects: China vs Eastern Europe comparison
-  - 5 robustness checks including leave-one-out IV
+ - Shift-share IV identification strategy (detailed equations)
+ - 442,000 net jobs retained from East rise (1988-2008)
+ - Import coefficient: -0.23, Export coefficient: +0.40
+ - Heterogeneous effects: China vs Eastern Europe comparison
+ - 5 robustness checks including leave-one-out IV
 - **Key to dissertation**: Foundational shift-share IV methodology for Layer 1
 - **Read calls**: 4 separate grep/search operations extracting abstract, methods, results, robustness sections
 
@@ -23,11 +23,11 @@ Successfully completed comprehensive deep-read analysis of all 4 required papers
 **File**: `paper_02_imf_1806_shift_share.md`
 - **Status**: ✅ COMPLETE (Deep read, 1,718 words)
 - **Content coverage**:
-  - Overrejection problem in shift-share (SE underestimation)
-  - 4 inference correction methods (adjustment factor, bootstrap, HR-SE, leave-one-out)
-  - AER survey: 60% report F-stat, <20% use robust inference
-  - Heteroskedastic-robust adjustments
-  - Overidentification test theory
+ - Overrejection problem in shift-share (SE underestimation)
+ - 4 inference correction methods (adjustment factor, bootstrap, HR-SE, leave-one-out)
+ - AER survey: 60% report F-stat, <20% use robust inference
+ - Heteroskedastic-robust adjustments
+ - Overidentification test theory
 - **Key to dissertation**: Critical for Layer 3-4 (robust inference)
 - **Read calls**: 5+ grep operations on methodology, results, figures
 
@@ -35,12 +35,12 @@ Successfully completed comprehensive deep-read analysis of all 4 required papers
 **File**: `paper_03_fed_2016094_trade_suicide.md`
 - **Status**: ✅ COMPLETE (Deep read, 1,995 words)
 - **Content coverage**:
-  - PNTR shock (2000) to US-China trade
-  - IQR shift in NTR gap → 4.0-4.8% suicide increase
-  - White males: 4.8% suicide, 59% ARLD, 14% poisoning
-  - Heterogeneity by gender/race
-  - Placebo tests confirm causal effect
-  - Mechanisms: employment, drug markets, psychosocial stress
+ - PNTR shock (2000) to US-China trade
+ - IQR shift in NTR gap → 4.0-4.8% suicide increase
+ - White males: 4.8% suicide, 59% ARLD, 14% poisoning
+ - Heterogeneity by gender/race
+ - Placebo tests confirm causal effect
+ - Mechanisms: employment, drug markets, psychosocial stress
 - **Key to dissertation**: ONLY existing trade-mortality paper; foundational evidence
 - **Read calls**: 7+ searches extracting abstract, results tables, heterogeneity, mechanisms
 
@@ -48,12 +48,12 @@ Successfully completed comprehensive deep-read analysis of all 4 required papers
 **File**: `paper_04_annurev_weak_instruments.md`
 - **Status**: ✅ COMPLETE (Deep read, 2,062 words)
 - **Content coverage**:
-  - F-statistic threshold rules (F>13.91 for 5% bias, F>9.08 for 10%)
-  - Anderson-Rubin test (robust to weak IV)
-  - Heteroskedasticity-robust SE procedures (HC3, HC4)
-  - Cluster-robust variance estimation
-  - AER survey: 20% of papers have F<5, 30% have F<10
-  - Delta method failure under weak instruments
+ - F-statistic threshold rules (F>13.91 for 5% bias, F>9.08 for 10%)
+ - Anderson-Rubin test (robust to weak IV)
+ - Heteroskedasticity-robust SE procedures (HC3, HC4)
+ - Cluster-robust variance estimation
+ - AER survey: 20% of papers have F<5, 30% have F<10
+ - Delta method failure under weak instruments
 - **Key to dissertation**: Layer 4 diagnostics & robust testing framework
 - **Read calls**: 8+ searches extracting theory, thresholds, diagnostics, empirical survey
 
@@ -214,17 +214,17 @@ Successfully completed comprehensive deep-read analysis of all 4 required papers
 
 Based on 4-paper synthesis:
 
-- [ ] Construct shift-share IV following DFS exactly (Section 3.2)
-- [ ] Calculate first-stage F; if F<10, apply ASS robust SE (Section 3.3)
-- [ ] DiD specification: trade shock × post-shock (pierce-schott template)
-- [ ] Main equation: Δ Mortality_ct = β₀ + β₁·NTR_c·Post_t + controls + ε_ct
-- [ ] Report coefficient magnitude + standard error + [AR CI if F<10]
-- [ ] Placebo test: regress on unrelated cause of death (P-S robustness)
-- [ ] Heterogeneous effects: White? Male? Manufacturing industry? (P-S heterogeneity)
-- [ ] Mediation: decompose into employment pathway + residual (DGHP layer 2)
-- [ ] Multiple testing: apply Romano-Wolf to 3-5 mortality outcomes (IMF layer 3)
-- [ ] IV validity: AR test or KP test if overidentified (ASS layer 4)
-- [ ] Robustness: leave-one-out IV by industry (DFS blueprint)
+- Construct shift-share IV following DFS exactly (Section 3.2)
+- Calculate first-stage F; if F<10, apply ASS robust SE (Section 3.3)
+- DiD specification: trade shock × post-shock (pierce-schott template)
+- Main equation: Δ Mortality_ct = β₀ + β₁·NTR_c·Post_t + controls + ε_ct
+- Report coefficient magnitude + standard error + [AR CI if F<10]
+- Placebo test: regress on unrelated cause of death (P-S robustness)
+- Heterogeneous effects: White? Male? Manufacturing industry? (P-S heterogeneity)
+- Mediation: decompose into employment pathway + residual (DGHP layer 2)
+- Multiple testing: apply Romano-Wolf to 3-5 mortality outcomes (IMF layer 3)
+- IV validity: AR test or KP test if overidentified (ASS layer 4)
+- Robustness: leave-one-out IV by industry (DFS blueprint)
 
 ---
 
@@ -233,20 +233,20 @@ Based on 4-paper synthesis:
 **Summary files location**:
 ```
 C:\Users\82103\Desktop\뉴 논문\paper_summaries\
-  ├── paper_01_dauth_findeisen_suedekum.md (1,752 words)
-  ├── paper_02_imf_1806_shift_share.md (1,718 words)
-  ├── paper_03_fed_2016094_trade_suicide.md (1,995 words)
-  ├── paper_04_annurev_weak_instruments.md (2,062 words)
-  └── _READING_COMPLETION_REPORT.md (this file)
+ ├── paper_01_dauth_findeisen_suedekum.md (1,752 words)
+ ├── paper_02_imf_1806_shift_share.md (1,718 words)
+ ├── paper_03_fed_2016094_trade_suicide.md (1,995 words)
+ ├── paper_04_annurev_weak_instruments.md (2,062 words)
+ └── _READING_COMPLETION_REPORT.md (this file)
 ```
 
 **Original papers location**:
 ```
 C:\Users\82103\Desktop\연구 자료\참고논문\md\
-  ├── 127_Dauth_Findeisen_Suedekum.md (5,755 lines, 2014 paper)
-  ├── 1806.md (16,274 lines, IMF WP 2018-06)
-  ├── 2016094pap.md (713 lines, Fed WP 2016-094)
-  └── annurev-economics-080218-025643.md (1,441 lines, AER 2019)
+ ├── 127_Dauth_Findeisen_Suedekum.md (5,755 lines, 2014 paper)
+ ├── 1806.md (16,274 lines, IMF WP 2018-06)
+ ├── 2016094pap.md (713 lines, Fed WP 2016-094)
+ └── annurev-economics-080218-025643.md (1,441 lines, AER 2019)
 ```
 
 ---

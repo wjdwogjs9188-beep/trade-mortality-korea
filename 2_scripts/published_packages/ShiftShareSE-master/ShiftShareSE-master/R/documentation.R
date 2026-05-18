@@ -3,9 +3,9 @@
 #' Subset of data from Autor, Dorn and Hanson (2013, ADH) that is used to
 #' illustrate the confidence intervals implemented in this package.
 #' @format A list, consisting of a data frame, a vector, and a matrix. The first
-#'     data frame, \code{ADH$reg}, has 1,444 rows and 16 variables. The rows
-#'     correspond to 722 commuting zones (CZ) over 2 time periods (1990-1999 and
-#'     2000-2007), and the variables are as follows:
+#' data frame, \code{ADH$reg}, has 1,444 rows and 16 variables. The rows
+#' correspond to 722 commuting zones (CZ) over 2 time periods (1990-1999 and
+#' 2000-2007), and the variables are as follows:
 #'
 #' \describe{
 #' \item{d_sh_empl}{Change in the share of working-age population}
@@ -14,7 +14,7 @@
 #' in manufacturing.}
 #'
 #' \item{d_sh_empl_nmfg}{Change in the share of working-age population employed
-#'   in non-manufacturing.}
+#' in non-manufacturing.}
 #'
 #' \item{shock}{Change in sectoral U.S. imports from China normalized by U.S.
 #' total employment in the corresponding sector, aggregated to regional level.
@@ -46,8 +46,8 @@
 #' sectors.
 #'
 #' @source We thank David Dorn for helping us with the construction of the share
-#'     matrix. The remaining data was obtained from David Dorn's website,
-#'     \url{http://ddorn.net/data.htm}.
+#' matrix. The remaining data was obtained from David Dorn's website,
+#' \url{http://ddorn.net/data.htm}.
 
 #' @references{
 #'

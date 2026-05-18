@@ -10,7 +10,6 @@ _timestamp: 2026-05-04T13:10:55.852065_
 ## DT_1B8000F
 - ❌ error 응답: `20`
 
-
 ## ⚠️ 모든 후보 실패
 
 - KOSIS 표 검색 페이지 직접 조회: https://kosis.kr/statisticsList/statisticsListIndex.do
