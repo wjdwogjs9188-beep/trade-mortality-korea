@@ -124,12 +124,11 @@ desktop.ini
 7_paper/paper_draft_v01_*.md
 7_paper/compute_*.py
 7_paper/compute_*.R
-_scrub_*.py
-_final_cleanup.ps1
-_cleanup_for_git.ps1
-_push_to_github.ps1
-_remove_*.ps1
-_remove_*.py
+# Top-level utility scripts (any "_*.py" / "_*.ps1" / "_*.sh" at repo root)
+/_*.py
+/_*.ps1
+/_*.sh
+/_*.txt
 
 # ============================================================
 # Additional AI-created / external files (untracked)
