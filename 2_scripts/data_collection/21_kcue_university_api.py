@@ -1,5 +1,5 @@
 """
-Phase B-m P1.4 — KCUE 한국대학교육협의회 OpenAPI getSchoolInfo.
+KCUE 한국대학교육협의회 OpenAPI getSchoolInfo.
 
 핵심: 응답에 schlEstbDt (설립일자) 보유 → 1990 이전 설립 필터 가능.
  → § 3.2 z_m_education baseline (외생성 보존) 정확 구축.
