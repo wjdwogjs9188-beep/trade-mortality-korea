@@ -1,86 +1,58 @@
-# Makefile — 전체 파이프라인 한 번에 재현
-# 사용: make all, make clean, make panel, etc.
+# Makefile — sequential pipeline reference for the panel build
+# ============================================================
+# For Windows users the canonical orchestrators are PowerShell scripts in
+# 2_scripts/run/ (run_data_collection.ps1, run_phase_data_collection_v02.ps1,
+# run_comtrade_pre_wto.ps1, run_crawl_hs_ksic_v01.ps1, run_kcue.ps1).
+# This Makefile mirrors the build order for *nix / WSL environments.
 
-PYTHON := python3
-SCRIPTS := 2_scripts
-DERIVED := 3_derived
-RESULTS := 4_results
-LOGS := 5_logs
+PYTHON   := python
+SCRIPTS  := 2_scripts
+DERIVED  := 3_derived
+RESULTS  := 4_results
 
-.PHONY: all clean panel iv regress robust paper help
+.PHONY: all inventory sigungu panels bartik regress clean help
 
-all: paper
+all: regress
 
-# Phase 0: raw extract + inventory
-$(DERIVED)/raw_inventory.csv: 0_raw/
-	$(PYTHON) $(SCRIPTS)/00_extract_zips.py
+# Phase 0 — raw inventory
+inventory:
 	$(PYTHON) $(SCRIPTS)/00_build_inventory.py
 
-# Phase 2: panels
-$(DERIVED)/mortality_panel.parquet: 0_raw/지역별\ 자살\ 데이터/ 1_codebooks/icd10_to_cause.yaml
-	$(PYTHON) $(SCRIPTS)/01_build_mortality_panel.py
+# Phase 1 — sigungu h_code crosswalk
+sigungu:
+	$(PYTHON) $(SCRIPTS)/sigungu_crosswalk/step3_build_h_code.py
+	$(PYTHON) $(SCRIPTS)/sigungu_crosswalk/step4_validate.py
+	$(PYTHON) $(SCRIPTS)/sigungu_crosswalk/step5_finalize.py
 
-$(DERIVED)/population_panel.parquet: 0_raw/연구\ 자료/
-	$(PYTHON) $(SCRIPTS)/02_build_population_panel.py
+# Phase 2 — mortality / population / mediator panels
+panels:
+	$(PYTHON) $(SCRIPTS)/build_panel/2A_mortality_panel.py
+	$(PYTHON) $(SCRIPTS)/build_panel/3A_population_panel.py
+	$(PYTHON) $(SCRIPTS)/build_panel/3B_panel_v02.py
+	$(PYTHON) $(SCRIPTS)/build_panel/3B_rate_v02_1.py
+	$(PYTHON) $(SCRIPTS)/build_panel/3C_mediator_panel.py
 
-$(DERIVED)/asmr_panel.parquet: $(DERIVED)/mortality_panel.parquet $(DERIVED)/population_panel.parquet
-	$(PYTHON) $(SCRIPTS)/03_compute_asmr.py
+# Phase 3 — Bartik IV (baseline 1994 shares, KIET60 mapping, Comtrade)
+bartik:
+	$(PYTHON) $(SCRIPTS)/bartik/02_build_baseline_shares_1994.py
+	$(PYTHON) $(SCRIPTS)/bartik/03b_kiet60_mapping_v2_robust.py
+	$(PYTHON) $(SCRIPTS)/bartik/04_bartik_iv_build.py
 
-$(DERIVED)/industry_panel.parquet: 0_raw/산업\ 비중\ 데이터/
-	$(PYTHON) $(SCRIPTS)/04_build_industry_panel.py
+# Phase 4 — reduced-form regressions + Phase B-x diagnostics
+# (see 2_scripts/identification/ for full diagnostic suite)
+regress:
+	$(PYTHON) $(SCRIPTS)/identification/reduced_form_5layer.py
 
-$(DERIVED)/trade_panel.parquet: 0_raw/연구\ 자료/
-	$(PYTHON) $(SCRIPTS)/05_build_trade_data.py
-
-panel: $(DERIVED)/asmr_panel.parquet $(DERIVED)/industry_panel.parquet $(DERIVED)/trade_panel.parquet
-
-# Phase 3: Bartik IV
-$(DERIVED)/bartik_iv.parquet: $(DERIVED)/industry_panel.parquet $(DERIVED)/trade_panel.parquet
-	$(PYTHON) $(SCRIPTS)/06_build_bartik_iv.py
-
-iv: $(DERIVED)/bartik_iv.parquet
-
-# Phase 4: 회귀
-$(DERIVED)/analysis_panel.parquet: $(DERIVED)/asmr_panel.parquet $(DERIVED)/bartik_iv.parquet
-	$(PYTHON) $(SCRIPTS)/07_build_controls.py
-
-$(RESULTS)/regression_log.csv: $(DERIVED)/analysis_panel.parquet
-	$(PYTHON) $(SCRIPTS)/08_run_regressions.py
-
-regress: $(RESULTS)/regression_log.csv
-
-# Phase 6: Robustness
-$(RESULTS)/robustness_log.csv: $(DERIVED)/analysis_panel.parquet
-	$(PYTHON) $(SCRIPTS)/09_robustness.py
-
-robust: $(RESULTS)/robustness_log.csv
-
-# Phase 7: 표/그림
-$(RESULTS)/tables/main.tex: $(RESULTS)/regression_log.csv
-	$(PYTHON) $(SCRIPTS)/10_make_tables.py
-
-$(RESULTS)/figures/fig1.pdf: $(RESULTS)/regression_log.csv
-	$(PYTHON) $(SCRIPTS)/11_make_figures.py
-
-paper: $(RESULTS)/tables/main.tex $(RESULTS)/figures/fig1.pdf
-
-# 정리
 clean:
-	rm -rf $(DERIVED)/*.parquet
-	rm -rf $(RESULTS)/tables/*.tex $(RESULTS)/figures/*.pdf
-	@echo "Cleaned derived data and results. Raw and logs preserved."
-
-clean-all: clean
-	rm -rf $(LOGS)/pipeline_runs/*
-	@echo "Also cleaned logs."
+	rm -rf $(DERIVED)/*.parquet $(RESULTS)/regression/*.csv
+	@echo "Cleaned derived parquet and regression CSV."
 
 help:
 	@echo "Targets:"
-	@echo "  make all       — 전체 파이프라인"
-	@echo "  make panel     — panel 데이터까지"
-	@echo "  make iv        — Bartik IV 까지"
-	@echo "  make regress   — 회귀 까지"
-	@echo "  make robust    — robustness 까지"
-	@echo "  make paper     — 표/그림"
-	@echo "  make clean     — derived/results 삭제"
-	@echo "  make clean-all — 위 + logs 삭제"
+	@echo "  make inventory  — Phase 0 raw inventory"
+	@echo "  make sigungu    — Phase 1 sigungu h_code crosswalk"
+	@echo "  make panels     — Phase 2 mortality / population / mediator"
+	@echo "  make bartik     — Phase 3 Bartik IV build"
+	@echo "  make regress    — Phase 4 reduced-form regressions"
+	@echo "  make all        — full pipeline (inventory → regress)"
+	@echo "  make clean      — remove derived parquet + regression csv"
