@@ -73,3 +73,29 @@
 - 초기 시군구 panel 구축
 - ADH 8-country IV → weak 발견
 - Korea-China bilateral 도입
+
+## 2026-05-04 (v4.1) — 데이터 보강 + 폴더 정리
+
+### 데이터 추가
+- BACI HS92 1995-2011 (17 csv, 3.9 GB) → `4_trade/raw/baci/`
+- WITS HS6→ISIC Rev3 4-digit + Rev2 (5,703 codes) → `0_raw/hs_isic4_concordance/WITS_*.csv`
+- KIET 60-industry HS-KSIC (P1.6 우회 후보, granularity 부족 — robustness 만)
+- **researchall HS6↔KSIC10 매핑 (6,351 rows, 415 manuf KSIC) — P1.6 SOLVED ⭐** → `0_raw/hs_ksic_concordance/researchall_HS6_to_KSIC_link.csv`
+- KSIC chain (8→9→10→11) 통합 lookup (1,361 rows) → `3_derived/sigungu/ksic_chain_lookup.csv`
+- IMF WEO Historical (1990-2022 vintage) → `0_raw/imf_weo_korea_vintage/WEOhistorical.xlsx`
+- 시군구 centroid (KOSTAT 2018, 251 rows) → `0_raw/sigungu_centroid/`
+- ECOS 200Y110 (분기 GDP 실질, 2,100 rows) + 402Y014 (수출물가 총지수) + 401Y015 (수입물가 총지수) — Test 1 macro variable
+- KOSIS 보건의료 4 시리즈 (보건기관 이용률 + 인플루엔자 접종률 + 일반건강검진 정상B/질환의심) → `0_raw/kosis_medical_infra/`
+- **MDIS 인구주택총조사 1975/1980/1985/1990/1995 (5 census, 220 MB, 3.8M rows) — z_m_marital instrument 핵심 데이터** ⭐⭐ → `0_raw/mdis_population_census/2pct_1975_1995/`
+
+### Protocol commit
+- **PAP v4.0 unified identification protocol** (z_x + z_m + Sequential Ignorability + Joint decision tree) ⭐
+- v3.5 (z_x only) + v3.6 z_m draft → archive
+
+### 폴더 정리 (root → sub-folder)
+- REVIEWER 5 문서 → `4_documentation/reviewer/`
+- RESEARCH_PROGRESS 2 + next_prompt → `4_documentation/status_reports/`
+- 실행 스크립트 6 (.bat, .ps1) → `2_scripts/run/`
+- PAP 7 archive 버전 → `4_documentation/PAP/archive/`
+- inventory csv → `4_documentation/pipeline_docs/`
+- root: 9 파일만 유지 (메타 entry)

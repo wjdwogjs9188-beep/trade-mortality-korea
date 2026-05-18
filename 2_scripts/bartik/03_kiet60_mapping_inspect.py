@@ -1,0 +1,181 @@
+"""
+Phase 2-B Step 5a — KIET60 매핑 inspect + baseline aggregate to KIET60
+=========================================================================
+
+목표:
+1) KIET60 ↔ KSIC9 매핑 파일 schema 확인 (`0_raw/research_supp/KIET60_to_KSIC_v2.xlsx`)
+2) HS6 ↔ KIET60 매핑 파일 schema 확인 (`0_raw/research_supp/KIET60_to_HS6.xlsx`)
+3) baseline_shares_1994_manufacturing.parquet 의 KSIC4 → KIET60 변환률 확인
+4) baseline_shares_1994_kiet60.parquet 산출
+
+KSIC 차수 issue:
+- 1994 광업제조업조사 = KSIC **6차** (1991-1997 사용)
+- KIET60 mapping = KSIC **9차/10차**
+- 6차 → 9차 crosswalk 필요할 수 있음
+
+이번 step 에서 6→9차 mismatch 가 심각하면 별도 turn (KSIC 차수 crosswalk build) 필요.
+경증 mismatch 는 KIET60 leveling 이 흡수 가능 (60개로 묶는 과정에서 4-digit 차이 사라짐).
+
+산출:
+- `5_logs/integrity_checks/<date>_kiet60_mapping_inspect.md`
+- `3_derived/bartik/baseline_shares_1994_kiet60.parquet` (성공 시)
+
+Author: R-A
+Date  : 2026-05-04
+"""
+from __future__ import annotations
+
+import sys
+from datetime import date
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+CONC = PROJ / "0_raw" / "hs_ksic_concordance"
+BARTIK = PROJ / "3_derived" / "bartik"
+LOGS = PROJ / "5_logs" / "integrity_checks"
+BARTIK.mkdir(parents=True, exist_ok=True)
+LOGS.mkdir(parents=True, exist_ok=True)
+TODAY = date.today().isoformat()
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+# Mapping file candidates (correct path: hs_ksic_concordance/)
+KIET_KSIC_CANDIDATES = list(CONC.glob("KIET*KSIC*.xlsx")) + list(CONC.glob("KIET*KSIC*.csv"))
+KIET_HS_CANDIDATES = list(CONC.glob("KIET*HS*.xlsx")) + list(CONC.glob("KIET*HS*.csv"))
+RESEARCHALL_CSV = list(CONC.glob("researchall*.csv"))
+
+
+def inspect_xlsx(path: Path, log: list, label: str) -> pd.DataFrame | None:
+    log.append(f"\n## {label}: `{path.relative_to(PROJ)}`")
+    log.append(f"- size: {path.stat().st_size/1024:.1f} KB")
+    try:
+        if path.suffix == ".xlsx":
+            xl = pd.ExcelFile(path)
+            log.append(f"- sheets: {xl.sheet_names}")
+            df = xl.parse(xl.sheet_names[0])
+        else:
+            df = pd.read_csv(path, encoding="utf-8-sig")
+        log.append(f"- shape: {df.shape}")
+        log.append(f"- columns: {list(df.columns)}")
+        log.append("- 첫 10 rows:")
+        log.append("```")
+        log.append(df.head(10).to_string(index=False))
+        log.append("```")
+        return df
+    except Exception as e:
+        log.append(f"- [FAIL] read error: {e}")
+        return None
+
+
+def main() -> None:
+    log = [f"# Phase 2-B Step 5a — KIET60 매핑 inspect\n_{TODAY}_\n"]
+
+    # 1) KIET60 ↔ KSIC mapping
+    if KIET_KSIC_CANDIDATES:
+        kiet_ksic = inspect_xlsx(KIET_KSIC_CANDIDATES[0], log, "KIET60 ↔ KSIC mapping")
+    else:
+        log.append("\n## KIET60 ↔ KSIC: ❌ file not found")
+        log.append(f"- searched in: `{RES.relative_to(PROJ)}`")
+        kiet_ksic = None
+
+    # 2) KIET60 ↔ HS mapping
+    if KIET_HS_CANDIDATES:
+        kiet_hs = inspect_xlsx(KIET_HS_CANDIDATES[0], log, "KIET60 ↔ HS6 mapping")
+    else:
+        log.append("\n## KIET60 ↔ HS6: ❌ file not found")
+        kiet_hs = None
+
+    # 3) baseline shares load + KSIC4 unique
+    log.append("\n## baseline_shares_1994_manufacturing 의 KSIC4 분포")
+    bs_path = BARTIK / "baseline_shares_1994_manufacturing.parquet"
+    if not bs_path.exists():
+        log.append(f"❌ {bs_path.name} not found — Step 2-B.4 먼저 실행")
+        out = LOGS / f"{TODAY}_kiet60_mapping_inspect.md"
+        out.write_text("\n".join(log), encoding="utf-8")
+        return
+    bs = pd.read_parquet(bs_path)
+    log.append(f"- baseline shares rows: {len(bs):,}")
+    log.append(f"- distinct KSIC4: {bs['ksic4'].nunique()}")
+    log.append(f"- KSIC4 sample (top 20 by employment): {bs.groupby('ksic4')['employment'].sum().sort_values(ascending=False).head(20).to_dict()}")
+
+    # 4) Try to map KSIC4 → KIET60
+    if kiet_ksic is not None:
+        log.append("\n## KSIC4 → KIET60 매핑 시도")
+        # find KSIC col + KIET col in mapping df
+        cols = [str(c).lower() for c in kiet_ksic.columns]
+        ksic_col = next((kiet_ksic.columns[i] for i, c in enumerate(cols) if "ksic" in c), None)
+        kiet_col = next((kiet_ksic.columns[i] for i, c in enumerate(cols) if "kiet" in c), None)
+        log.append(f"- detected KSIC col: `{ksic_col}`")
+        log.append(f"- detected KIET col: `{kiet_col}`")
+
+        if ksic_col and kiet_col:
+            # standardize KSIC code format
+            kiet_ksic[ksic_col] = kiet_ksic[ksic_col].astype(str).str.strip()
+            log.append(f"- KSIC mapping rows: {len(kiet_ksic):,}, distinct KSIC: {kiet_ksic[ksic_col].nunique()}")
+            log.append(f"- KSIC mapping length distribution: {kiet_ksic[ksic_col].str.len().value_counts().to_dict()}")
+
+            # KSIC4 (D181 형식, 4 chars) match
+            bs["ksic4_str"] = bs["ksic4"].astype(str).str.strip()
+            map_subset = kiet_ksic[[ksic_col, kiet_col]].dropna().drop_duplicates(subset=[ksic_col])
+            map_subset.columns = ["ksic_key", "kiet60"]
+            merged = bs.merge(map_subset, left_on="ksic4_str", right_on="ksic_key", how="left")
+            n_match = merged["kiet60"].notna().sum()
+            log.append(f"- baseline_shares.ksic4 → KIET60 매칭: **{n_match:,}/{len(merged):,}** ({n_match/len(merged):.1%})")
+            unmatched = merged.loc[merged["kiet60"].isna(), "ksic4_str"].value_counts().head(10).to_dict()
+            log.append(f"- 미매칭 KSIC4 top 10: {unmatched}")
+
+            if n_match / len(merged) > 0.5:
+                # aggregate to KIET60
+                kiet_agg = (
+                    merged.dropna(subset=["kiet60"])
+                    .groupby(["h_code", "kiet60"])["employment"]
+                    .sum()
+                    .reset_index()
+                )
+                # within-h share
+                h_total = kiet_agg.groupby("h_code")["employment"].sum().rename("h_total")
+                kiet_agg = kiet_agg.merge(h_total, on="h_code")
+                kiet_agg["share"] = kiet_agg["employment"] / kiet_agg["h_total"].replace(0, np.nan)
+                out_path = BARTIK / "baseline_shares_1994_kiet60.parquet"
+                kiet_agg.to_parquet(out_path, index=False)
+                log.append(f"- ✅ saved: `{out_path.relative_to(PROJ)}` ({len(kiet_agg):,} rows)")
+                log.append(f"- distinct h_code: {kiet_agg['h_code'].nunique()}, distinct KIET60: {kiet_agg['kiet60'].nunique()}")
+                log.append(f"- top KIET60 by employment:")
+                log.append("```")
+                log.append(kiet_agg.groupby("kiet60")["employment"].sum().sort_values(ascending=False).head(15).to_string())
+                log.append("```")
+            else:
+                log.append("- ⚠️ 매칭률 50% 미만 → KSIC 6차 vs 9차 차수 crosswalk 필요. 별도 turn.")
+        else:
+            log.append("- ⚠️ KSIC 또는 KIET 컬럼 자동 인식 실패. 수동 컬럼 매핑 필요.")
+
+    # 5) HS6 ↔ KIET60 inspect (Comtrade 매핑 준비)
+    if kiet_hs is not None:
+        log.append("\n## HS6 → KIET60 매핑 sample (Comtrade input 준비용)")
+        cols = [str(c).lower() for c in kiet_hs.columns]
+        hs_col = next((kiet_hs.columns[i] for i, c in enumerate(cols) if "hs" in c), None)
+        kiet_col = next((kiet_hs.columns[i] for i, c in enumerate(cols) if "kiet" in c), None)
+        log.append(f"- HS col: `{hs_col}`, KIET col: `{kiet_col}`")
+        if hs_col and kiet_col:
+            log.append(f"- mapping rows: {len(kiet_hs):,}")
+            log.append(f"- distinct HS: {kiet_hs[hs_col].nunique()}, distinct KIET60: {kiet_hs[kiet_col].nunique()}")
+            log.append(f"- HS code length distribution: {kiet_hs[hs_col].astype(str).str.len().value_counts().to_dict()}")
+
+    # 6) decision
+    log.append("\n## 결정 사항\n")
+    log.append("- [ ] KSIC4 → KIET60 매핑률 ≥ 90% 인지 확인")
+    log.append("- [ ] HS code length (HS2/4/6/10) 확인 → Comtrade 와 정합성")
+    log.append("- [ ] KSIC 6차 vs 9차 mismatch 심각 시 별도 차수 crosswalk turn")
+    log.append("- [ ] OK 시 Step 2-B.5b (Comtrade ΔM 2000-2010 → KIET60 → Bartik IV)")
+
+    out = LOGS / f"{TODAY}_kiet60_mapping_inspect.md"
+    out.write_text("\n".join(log), encoding="utf-8")
+    print(f"[OK] {out}")
+
+
+if __name__ == "__main__":
+    main()

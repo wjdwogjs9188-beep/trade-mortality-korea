@@ -1,15 +1,62 @@
-# Derived data — 재생성 가능, git에 넣지 않음
+# =============================================================
+# Data folders — 매우 큼, 별도 zip / 별도 archive 로 보관
+# =============================================================
+0_raw/
+4_trade/
+6_references/
+
+# Derived data — 재생성 가능
 3_derived/*.parquet
 3_derived/*.csv
 3_derived/cache/
+3_derived/**/*.parquet
+3_derived/**/*.csv
 
-# Logs — 큰 파이프라인 로그는 제외 (decisions/ 는 commit)
+# Results — large parquet outputs
+4_results/*.parquet
+4_results/**/*.parquet
+
+# =============================================================
+# Logs (decisions/ 는 commit, 나머지 무시)
+# =============================================================
 5_logs/pipeline_runs/*.log
+5_logs/data_collection/*.log
+5_logs/integrity_checks/*.log
 
-# Raw data — 매우 큼, 별도 zip 로 보관 (git에 넣지 않음)
-0_raw/
+# =============================================================
+# Backup / temp / generated files
+# =============================================================
+# Edit backup files (Pass 31-36 patterns)
+*.bak
+*.bak-*
+*.bak-section-*
+*.bak-escape-*
+*.bak-escape2-*
+*.bak-section8-*
+*.bak-thinspace-*
+*.bak-underscore-*
 
+# Temp files
+*.tmp
+~$*
+.~lock.*#
+*.swp
+*.swo
+
+# ZIP folder duplicates (re-zip on demand)
+1_codebooks/*.zip
+2_scripts.zip
+2_scripts/published_packages/*.zip
+8_submission/*.zip
+trade_mortality_korea.zip
+
+# Submission backup folders
+7_paper/submission_*_backup/
+7_paper/**/*.bak-*
+
+# =============================================================
 # Python
+# =============================================================
 __pycache__/
 *.pyc
 *.pyo
@@ -23,18 +70,24 @@ __pycache__/
 venv/
 env/
 
+# =============================================================
 # OS
+# =============================================================
 .DS_Store
 Thumbs.db
+desktop.ini
 
+# =============================================================
 # IDE
+# =============================================================
 .vscode/
 .idea/
-*.swp
+*.code-workspace
 
-# Latex
+# =============================================================
+# LaTeX / pandoc artifacts
+# =============================================================
 *.aux
-*.log
 *.out
 *.toc
 *.bbl
@@ -42,13 +95,19 @@ Thumbs.db
 *.fdb_latexmk
 *.fls
 *.synctex.gz
+*.log
 
-# Temp
-*.tmp
-*.bak
-
+# =============================================================
+# Sensitive / personal
+# =============================================================
 # API keys (절대 commit X)
 .env
+.env.*
+!.env.example
 
 # Claude Code local settings (per-machine)
 .claude/settings.local.json
+.claude/
+
+# Local cache / personal scripts
+*.local.*

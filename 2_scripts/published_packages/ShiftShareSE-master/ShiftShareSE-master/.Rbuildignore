@@ -1,0 +1,13 @@
+^doc$
+^codecov\.yml$
+^\.travis\.yml$
+^Meta$
+^man-roxygen/*$
+.gitignore
+^data-raw/*$
+readme.md
+.lintr
+^cran-comments\.md$
+^CRAN-RELEASE$
+^\.github$
+^CRAN-SUBMISSION$

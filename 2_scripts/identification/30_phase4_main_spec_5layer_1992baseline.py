@@ -1,0 +1,413 @@
+"""
+Phase 4 — 5-layer SE main spec runner + tF inference + Romano-Wolf step-down
+==============================================================================
+
+Spec: Δ_long log_asr+1 (rate_h, 2000 → 2010) ~ z_x_h^{KR-CN, std}
+  - 5 outcome groups
+  - 5 SE layers per outcome
+  - tF inference (LMP 2022)
+  - Romano-Wolf step-down (1000 boot)
+  - 2008 ICD-10 sub-period split
+
+5 SE layers:
+  1) HC1 (statsmodels sandwich)
+  2) cluster-sigungu via wildboottest (WCB) — fallback to cluster-sigungu CGM
+  3) cluster-sido (statsmodels)
+  4) AKM (BHJ 2022 simplified — cluster on baseline industry mode)
+  5) Conley spatial HAC (1km, 5km, 10km cutoffs, centroid-based)
+
+Outputs:
+  - 4_results/regression/main_spec_5layer_se_1992baseline.csv
+  - 4_results/regression/romano_wolf_pvalues_1992baseline.csv
+  - 4_results/regression/sub_period_split_2008_1992baseline.csv
+  - 5_logs/decisions/<date>_phase4_1992baseline_sensitivity.md
+
+Author: R-A
+Date  : 2026-05-05
+"""
+from __future__ import annotations
+
+import sys
+from datetime import date
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+MORT = PROJ / "3_derived" / "mortality" / "sigungu_mortality_panel_v02_wa.parquet"
+IV = PROJ / "3_derived" / "bartik" / "iv_z_x_bilateral_1992baseline.parquet"
+SHARES = PROJ / "3_derived" / "bartik" / "baseline_shares_1992_ksic9_2digit_v2_renamed.parquet"
+CENTROID = PROJ / "0_raw" / "sigungu_centroid" / "sigungu_centroid_table.csv"
+CW = PROJ / "1_codebooks" / "sigungu_crosswalk.csv"
+OUT_REG = PROJ / "4_results" / "regression"
+OUT_REG.mkdir(parents=True, exist_ok=True)
+OUT_LOG = PROJ / "5_logs" / "decisions"
+OUT_LOG.mkdir(parents=True, exist_ok=True)
+TODAY = date.today().isoformat()
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+T0, T1 = 2000, 2010
+OUTCOMES = ["despair_total", "cancer", "cardiovascular", "respiratory", "external_other"]
+
+# tF cutoffs (LMP 2022 Table 3, F-dependent)
+def tF_cutoff(F: float) -> float:
+    """Lee-Moreira-McCrary-Porter 2022 conservative cutoff."""
+    if F >= 23.1:
+        return 1.96
+    elif F >= 20:
+        return 3.43
+    elif F >= 15:
+        return 3.84
+    elif F >= 10:
+        return 4.99
+    else:
+        return float("inf")  # weak IV, no inference
+
+
+def haversine_km(lat1, lng1, lat2, lng2):
+    """Great-circle distance in km."""
+    R = 6371.0
+    lat1, lat2 = np.radians(lat1), np.radians(lat2)
+    dlat = lat2 - lat1
+    dlng = np.radians(lng2 - lng1)
+    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlng/2)**2
+    return 2 * R * np.arcsin(np.sqrt(a))
+
+
+def conley_se(X, y, residuals, coords, cutoff_km=5.0):
+    """
+    Conley (1999) spatial HAC SE — uniform kernel within cutoff.
+    coords: (N, 2) array of (lat, lng)
+    Returns SE for each coefficient (including const).
+    """
+    n, k = X.shape
+    bread = np.linalg.inv(X.T @ X)
+
+    # weight matrix (1 if within cutoff, 0 else)
+    lat = coords[:, 0]
+    lng = coords[:, 1]
+    W = np.zeros((n, n))
+    for i in range(n):
+        d = haversine_km(lat[i], lng[i], lat, lng)
+        W[i, :] = (d <= cutoff_km).astype(float)
+
+    # Σ_W = Σ_i Σ_j W_ij × x_i × x_j × ε_i × ε_j
+    eps = residuals.reshape(-1, 1)
+    Z = X * eps  # n × k
+    meat = Z.T @ W @ Z
+
+    cov = bread @ meat @ bread
+    se = np.sqrt(np.diag(cov))
+    return se
+
+
+def romano_wolf_stepdown(t_stats, X_dict, y_dict, n_boot=1000, seed=42):
+    """
+    Romano-Wolf (2005) step-down adjusted p-values.
+    Per-outcome X and y (different sample sizes allowed).
+    """
+    rng = np.random.default_rng(seed)
+    outcomes = list(t_stats.keys())
+    abs_t = {o: abs(t_stats[o]) for o in outcomes}
+
+    boot_max_t = np.zeros(n_boot)
+    for b in range(n_boot):
+        boot_t_max = -np.inf
+        for o in outcomes:
+            n_o = len(y_dict[o])
+            u = rng.choice([-1, 1], size=n_o)
+            y_b = y_dict[o] * u
+            try:
+                m_b = sm.OLS(y_b, X_dict[o]).fit(cov_type="HC1")
+                t_b = abs(m_b.params[-1] / m_b.bse[-1])
+                if t_b > boot_t_max:
+                    boot_t_max = t_b
+            except Exception:
+                continue
+        boot_max_t[b] = boot_t_max
+
+    # adj p for each outcome (step-down ordered)
+    sorted_outcomes = sorted(outcomes, key=lambda o: abs_t[o], reverse=True)
+    adj_p = {}
+    for i, o in enumerate(sorted_outcomes):
+        # tilde = max(|t_i|, |t_(i+1)|, ..., |t_K|)
+        rest = sorted_outcomes[i:]
+        rest_t = max(abs_t[r] for r in rest)
+        # boot proportion ≥ rest_t
+        p_raw = (boot_max_t >= rest_t).mean()
+        # monotonicity enforcement
+        if i > 0:
+            prev_p = adj_p[sorted_outcomes[i-1]]
+            p_raw = max(p_raw, prev_p)
+        adj_p[o] = p_raw
+    return adj_p
+
+
+def main() -> None:
+    log = [f"# Phase 4 — 5-layer SE main spec final\n_{TODAY}_\n"]
+    log.append(f"- spec: Δ log_asr+1 (rate_h, {T0}→{T1}) ~ z_x_h^{{KR-CN, std}}")
+    log.append(f"- 5 outcomes × 5 SE layers + tF inference + Romano-Wolf 1000 boot\n")
+
+    # ----------------------------------------------------------------------
+    # 1. Load inputs
+    # ----------------------------------------------------------------------
+    mort = pd.read_parquet(MORT)
+    iv = pd.read_parquet(IV)
+    centroid = pd.read_csv(CENTROID, dtype={"h_code": str})
+    cw = pd.read_csv(CW, dtype=str)
+    shares = pd.read_parquet(SHARES)
+    log.append(f"- mortality: {mort.shape}, IV: {iv.shape}, centroid: {len(centroid)}")
+
+    # baseline industry mode (largest industry per h_code) — for AKM
+    industry_mode = (
+        shares.loc[shares.groupby("h_code")["share"].idxmax()]
+        [["h_code", "ksic9_2digit"]]
+        .rename(columns={"ksic9_2digit": "baseline_ind_mode"})
+    )
+    log.append(f"- baseline industry mode: {len(industry_mode)} h_codes, "
+               f"{industry_mode['baseline_ind_mode'].nunique()} distinct industries")
+
+    h_to_sido = cw.drop_duplicates("h_code")[["h_code", "sido_code"]]
+
+    # ----------------------------------------------------------------------
+    # 2. Per-outcome regression (5-layer SE)
+    # ----------------------------------------------------------------------
+    main_results = []
+    y_resid_dict = {}  # for Romano-Wolf
+    X_dict = {}  # per-outcome X
+
+    for outcome in OUTCOMES:
+        sub = mort[mort["outcome_group"] == outcome].copy()
+        sub = sub[sub["year"].isin([T0, T1])].copy()
+        pv = (
+            sub.pivot_table(index="h_code", columns="year", values="log_asr_p1", aggfunc="mean")
+            .reset_index()
+        )
+        if T0 not in pv.columns or T1 not in pv.columns:
+            log.append(f"\n## {outcome}: missing {T0} or {T1}, skip")
+            continue
+        pv["d_log"] = pv[T1] - pv[T0]
+        df = (
+            pv.merge(iv[["h_code", "z_x_per_worker"]], on="h_code", how="inner")
+            .merge(h_to_sido, on="h_code", how="left")
+            .merge(industry_mode, on="h_code", how="left")
+            .merge(centroid[["h_code", "lat", "lng"]], on="h_code", how="left")
+            .dropna(subset=["d_log", "z_x_per_worker"])
+        )
+        if len(df) < 50:
+            log.append(f"\n## {outcome}: n<50, skip")
+            continue
+
+        df["z_x_std"] = (df["z_x_per_worker"] - df["z_x_per_worker"].mean()) / df["z_x_per_worker"].std()
+        X = sm.add_constant(df[["z_x_std"]])
+        y = df["d_log"].values
+
+        # store for Romano-Wolf (per-outcome)
+        y_resid_dict[outcome] = y - y.mean()
+        X_dict[outcome] = X.values
+
+        # --- HC1 ---
+        m_hc1 = sm.OLS(y, X).fit(cov_type="HC1")
+        beta = m_hc1.params["z_x_std"]
+        se_hc1 = m_hc1.bse["z_x_std"]
+        # first-stage F: 본 reduced form 의 IV 자체 strength = approximate via R²
+        F_hc1 = m_hc1.fvalue if hasattr(m_hc1, "fvalue") else (beta / se_hc1) ** 2
+
+        # --- cluster-sido ---
+        m_sido = sm.OLS(y, X).fit(cov_type="cluster", cov_kwds={"groups": df["sido_code"]})
+        se_sido = m_sido.bse["z_x_std"]
+        F_sido = (beta / se_sido) ** 2
+
+        # --- cluster-sigungu (CGM) ---
+        # h_code 자체 cluster (단, sigungu 단위가 unit of obs라 1:1 → 사실상 HC0)
+        # 더 의미있는 해석: 인근 시군구 cluster (sido 가 그 역할). skip 또는 same as HC1.
+        # 본 spec 에서는 sigungu = unit, no within-cluster correlation → CGM trivial. 대신 sido 사용.
+        # Wild Cluster Bootstrap (WCB) — sido 단위에서 (15-17 cluster, 작은 수)
+        # WCB simplified — wildboottest 패키지 의존, 없으면 fallback
+        wcb_p = None
+        try:
+            from wildboottest.wildboottest import wildboottest
+            res = wildboottest(model=sm.OLS(y, X), cluster=df["sido_code"].values, B=999, param="z_x_std")
+            wcb_p = float(res["pvalue"].iloc[0]) if isinstance(res, pd.DataFrame) else None
+        except ImportError:
+            log.append(f"  - wildboottest 미설치, WCB skip")
+        except Exception as e:
+            log.append(f"  - WCB error: {e}")
+
+        # --- AKM (BHJ 2022 simplified) ---
+        # cluster on baseline industry mode (proxy for industry-level shock cluster)
+        m_akm = sm.OLS(y, X).fit(
+            cov_type="cluster",
+            cov_kwds={"groups": df["baseline_ind_mode"].astype(str).values}
+        )
+        se_akm = m_akm.bse["z_x_std"]
+        F_akm = (beta / se_akm) ** 2
+
+        # --- Conley spatial HAC ---
+        coords = df[["lat", "lng"]].values
+        df_clean = df.dropna(subset=["lat", "lng"])
+        if len(df_clean) >= 50:
+            X_c = sm.add_constant(df_clean[["z_x_std"]]).values
+            y_c = df_clean["d_log"].values
+            res_c = y_c - X_c @ np.linalg.lstsq(X_c, y_c, rcond=None)[0]
+            try:
+                se_conley_5 = conley_se(X_c, y_c, res_c, df_clean[["lat", "lng"]].values, cutoff_km=5.0)[1]
+                se_conley_10 = conley_se(X_c, y_c, res_c, df_clean[["lat", "lng"]].values, cutoff_km=10.0)[1]
+            except Exception as e:
+                se_conley_5 = se_conley_10 = np.nan
+                log.append(f"  - Conley error ({outcome}): {e}")
+        else:
+            se_conley_5 = se_conley_10 = np.nan
+
+        # tF inference
+        # cluster-sido F = 19.65 (Phase B-x), so per-outcome F unreliable. Use Phase B-x global F.
+        F_global = 19.65  # cluster-sido bilateral first-stage F
+        tF_crit = tF_cutoff(F_global)
+
+        row = {
+            "outcome": outcome,
+            "n": len(df),
+            "beta_std": beta,
+            "se_HC1": se_hc1,
+            "t_HC1": beta / se_hc1,
+            "p_HC1": m_hc1.pvalues["z_x_std"],
+            "se_cluster_sido": se_sido,
+            "t_cluster_sido": beta / se_sido,
+            "p_cluster_sido": m_sido.pvalues["z_x_std"],
+            "se_AKM": se_akm,
+            "t_AKM": beta / se_akm,
+            "se_Conley_5km": se_conley_5,
+            "t_Conley_5km": beta / se_conley_5 if not np.isnan(se_conley_5) else np.nan,
+            "se_Conley_10km": se_conley_10,
+            "t_Conley_10km": beta / se_conley_10 if not np.isnan(se_conley_10) else np.nan,
+            "WCB_sido_p": wcb_p,
+            "tF_cutoff": tF_crit,
+            "tF_pass_HC1": abs(beta / se_hc1) > tF_crit,
+            "tF_pass_cluster": abs(beta / se_sido) > tF_crit,
+            "tF_pass_AKM": abs(beta / se_akm) > tF_crit,
+            "tF_pass_Conley5": abs(beta / se_conley_5) > tF_crit if not np.isnan(se_conley_5) else False,
+            "r2": m_hc1.rsquared,
+        }
+        main_results.append(row)
+
+        log.append(f"\n## {outcome} (n={len(df)})")
+        log.append(f"- β (std) = {beta:+.4f}, R² = {m_hc1.rsquared:.3f}")
+        log.append(f"- HC1: SE={se_hc1:.4f}, t={beta/se_hc1:+.2f}, p={m_hc1.pvalues['z_x_std']:.4f}")
+        log.append(f"- cluster-sido: SE={se_sido:.4f}, t={beta/se_sido:+.2f}, p={m_sido.pvalues['z_x_std']:.4f}")
+        log.append(f"- AKM (industry-mode cluster): SE={se_akm:.4f}, t={beta/se_akm:+.2f}")
+        if not np.isnan(se_conley_5):
+            log.append(f"- Conley 5km: SE={se_conley_5:.4f}, t={beta/se_conley_5:+.2f}")
+            log.append(f"- Conley 10km: SE={se_conley_10:.4f}, t={beta/se_conley_10:+.2f}")
+        if wcb_p is not None:
+            log.append(f"- WCB-sido p: {wcb_p:.4f}")
+        log.append(f"- tF cutoff (F={F_global}): |t| > {tF_crit:.2f}")
+        passes = sum([row["tF_pass_HC1"], row["tF_pass_cluster"], row["tF_pass_AKM"], row["tF_pass_Conley5"]])
+        log.append(f"- tF pass count: {passes}/4 SE layers")
+
+    # ----------------------------------------------------------------------
+    # 3. Save 5-layer table
+    # ----------------------------------------------------------------------
+    main_df = pd.DataFrame(main_results)
+    main_df.to_csv(OUT_REG / "main_spec_5layer_se_1992baseline.csv", index=False, encoding="utf-8-sig")
+    log.append(f"\n- saved: `4_results/regression/main_spec_5layer_se_1992baseline.csv`")
+
+    # ----------------------------------------------------------------------
+    # 4. Romano-Wolf step-down
+    # ----------------------------------------------------------------------
+    log.append(f"\n## Romano-Wolf step-down (1000 boot, family of 5 outcomes)")
+    t_stats_dict = {r["outcome"]: r["t_HC1"] for r in main_results}
+    rw_p = romano_wolf_stepdown(t_stats_dict, X_dict, y_resid_dict, n_boot=1000)
+    rw_df = pd.DataFrame([
+        {"outcome": o, "t_HC1": t_stats_dict[o], "p_raw": next((r["p_HC1"] for r in main_results if r["outcome"] == o), None),
+         "p_RW_adj": rw_p[o], "RW_sig": rw_p[o] < 0.05}
+        for o in OUTCOMES if o in rw_p
+    ])
+    rw_df.to_csv(OUT_REG / "romano_wolf_pvalues_1992baseline.csv", index=False, encoding="utf-8-sig")
+    log.append("```")
+    log.append(rw_df.to_string(index=False))
+    log.append("```")
+    log.append(f"- saved: `4_results/regression/romano_wolf_pvalues_1992baseline.csv`")
+
+    # ----------------------------------------------------------------------
+    # 5. 2008 ICD-10 sub-period split (despair_total only)
+    # ----------------------------------------------------------------------
+    log.append(f"\n## 2008 ICD-10 sub-period split (despair_total)")
+    sub_results = []
+    for label, year_filter in [("pre_2008", lambda y: y <= 2007),
+                                ("post_2008", lambda y: y >= 2008)]:
+        d = mort[(mort["outcome_group"] == "despair_total") & mort["year"].apply(year_filter)].copy()
+        if len(d) == 0:
+            continue
+        # use first and last year of sub-period
+        years_avail = sorted(d["year"].unique())
+        if len(years_avail) < 2:
+            continue
+        y0, y1 = years_avail[0], years_avail[-1]
+        pv_s = d[d["year"].isin([y0, y1])].pivot_table(index="h_code", columns="year", values="log_asr_p1", aggfunc="mean").reset_index()
+        if y0 not in pv_s.columns or y1 not in pv_s.columns:
+            continue
+        pv_s["d_log_sub"] = pv_s[y1] - pv_s[y0]
+        d_s = pv_s.merge(iv[["h_code", "z_x_per_worker"]], on="h_code", how="inner").merge(h_to_sido, on="h_code", how="left").dropna(subset=["d_log_sub", "z_x_per_worker"])
+        if len(d_s) < 50:
+            continue
+        d_s["z_x_std"] = (d_s["z_x_per_worker"] - d_s["z_x_per_worker"].mean()) / d_s["z_x_per_worker"].std()
+        X_s = sm.add_constant(d_s[["z_x_std"]])
+        m_s = sm.OLS(d_s["d_log_sub"], X_s).fit(cov_type="cluster", cov_kwds={"groups": d_s["sido_code"]})
+        sub_results.append({
+            "period": label,
+            "year_range": f"{y0}-{y1}",
+            "n": len(d_s),
+            "beta": m_s.params["z_x_std"],
+            "se": m_s.bse["z_x_std"],
+            "t": m_s.params["z_x_std"] / m_s.bse["z_x_std"],
+            "p": m_s.pvalues["z_x_std"],
+        })
+        log.append(f"- {label} ({y0}-{y1}): N={len(d_s)}, β={m_s.params['z_x_std']:+.4f}, t={m_s.params['z_x_std']/m_s.bse['z_x_std']:+.2f}, p={m_s.pvalues['z_x_std']:.4f}")
+
+    sub_df = pd.DataFrame(sub_results)
+    sub_df.to_csv(OUT_REG / "sub_period_split_2008_1992baseline.csv", index=False, encoding="utf-8-sig")
+    log.append(f"- saved: `4_results/regression/sub_period_split_2008_1992baseline.csv`")
+    if len(sub_results) == 2:
+        s1, s2 = sub_results[0]["beta"], sub_results[1]["beta"]
+        if s1 * s2 > 0:
+            log.append(f"- ✅ pre/post 2008 sign 일치 ({s1:+.3f}, {s2:+.3f}) → ICD artifact 아님")
+        else:
+            log.append(f"- ⚠️ pre/post 2008 sign 불일치 ({s1:+.3f}, {s2:+.3f}) → ICD artifact 가능성")
+
+    # ----------------------------------------------------------------------
+    # 6. Final inference decision (despair_total)
+    # ----------------------------------------------------------------------
+    log.append(f"\n## Final inference (despair_total)")
+    despair_row = next((r for r in main_results if r["outcome"] == "despair_total"), None)
+    despair_rw = rw_p.get("despair_total", None)
+
+    if despair_row is None:
+        log.append("- ❌ despair_total 결과 없음")
+    else:
+        sig_layers = []
+        if despair_row["tF_pass_HC1"]: sig_layers.append("HC1")
+        if despair_row["tF_pass_cluster"]: sig_layers.append("cluster-sido")
+        if despair_row["tF_pass_AKM"]: sig_layers.append("AKM")
+        if despair_row["tF_pass_Conley5"]: sig_layers.append("Conley-5km")
+        log.append(f"- tF cutoff = {despair_row['tF_cutoff']:.2f} (Phase B-x F=19.65)")
+        log.append(f"- SE layers passing tF: **{len(sig_layers)}/4** ({', '.join(sig_layers) if sig_layers else 'none'})")
+        log.append(f"- Romano-Wolf adj p (despair) = {despair_rw:.4f}" if despair_rw else "")
+
+        if len(sig_layers) >= 2 and despair_rw and despair_rw < 0.05:
+            log.append(f"- ✅ **PUBLISHABLE SIGNIFICANT** — paper § 7 main spec confirm")
+        elif len(sig_layers) >= 1:
+            log.append(f"- ⚠️ borderline — at least 1 SE layer passes, RW adj p = {despair_rw:.4f}")
+        else:
+            log.append(f"- ❌ no SE layer passes tF cutoff → preliminary only, paper § 8 caveat 강화")
+
+    out_path = OUT_LOG / f"{TODAY}_phase4_1992baseline_sensitivity.md"
+    out_path.write_text("\n".join(log), encoding="utf-8")
+    print(f"[OK] {out_path}")
+
+
+if __name__ == "__main__":
+    main()

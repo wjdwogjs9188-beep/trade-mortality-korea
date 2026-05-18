@@ -1,0 +1,4 @@
+﻿spec,sido_FE,urbanization_ctrl,n,beta,se_HC1,t_HC1,p_HC1,se_clusterSido,t_clusterSido,p_clusterSido,wald_ci_lo,wald_ci_hi,AR_stat_at_0,AR_p_at_0,AR_ci_lo,AR_ci_hi,LMP_c0.05_F,LMP_t_stat,LMP_valid,r2,beta_attenuation_pct_of_spec0
+Spec 0 — z_x_std only (replicate β_main),False,False,213,-0.129706,0.026336,-4.924971,0.000001,0.032694,-3.967235,0.000073,-0.181325,-0.078087,24.370292,0.000001,-0.207706,-0.089706,inf,-4.924971,False,0.154056,100.000000
+Spec 1 — + sido FE (β_sidoFE),True,False,213,-0.063500,0.019795,-3.207915,0.001337,0.018863,-3.366391,0.000762,-0.102298,-0.024702,11.018346,0.000902,-0.117500,-0.031500,inf,-3.207915,False,0.429896,48.956866
+Spec 2 — + sido FE + Δ_urbanization (β_full),True,True,213,-0.070574,0.020398,-3.459900,0.000540,0.017913,-3.939914,0.000082,-0.110554,-0.030595,12.882397,0.000332,-0.126574,-0.038574,inf,-3.459900,False,0.456561,54.410930

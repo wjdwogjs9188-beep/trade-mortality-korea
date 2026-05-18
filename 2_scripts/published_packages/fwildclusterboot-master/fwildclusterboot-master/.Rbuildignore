@@ -1,0 +1,16 @@
+^fwildclusterboot\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^cran-comments\.md$
+^\.github$
+^codecov\.yml$
+^doc$
+^Meta$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^CRAN-RELEASE$
+^vignettes/articles$
+^CRAN-SUBMISSION$
+^CODE_OF_CONDUCT\.md$

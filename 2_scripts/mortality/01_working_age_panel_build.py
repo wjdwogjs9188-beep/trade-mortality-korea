@@ -1,0 +1,240 @@
+"""
+Phase 2-A — Mortality panel v02 working-age build (v3 — positional)
+=====================================================================
+
+KOSTAT 사망 microdata 18-col schema (1997-2024 동일):
+  col 0  연도
+  col 1  사망연도 (중복, 사용 X)
+  col 2  사망월
+  col 3  사망일
+  col 4  사망자주민등록행정구역시도코드        ← sido_resid
+  col 5  사망자주민등록행정구역시군구코드      ← sgg_resid
+  col 6  사망연월일
+  col 7  사망시
+  col 8  사망장소코드
+  col 9  사망자직업분류코드
+  col 10 사망자혼인상태코드
+  col 11 교육정도코드
+  col 12 성별코드
+  col 13 사망자연령5세단위코드               ← age_5y (1=0-4, ..., 13=60-64, 14=65-69, ..., 18=85+)
+  col 14 사망자국적구분코드                  ← nationality (Korean="1")
+  col 15 사망자이주국적코드
+  col 16 사망원인_104항목분류코드            ← cause_104
+  col 17 사망원인_57항목분류코드
+
+Cp949 mojibake 회피: header=0 으로 첫 row skip + names= 로 ASCII 컬럼명 부여.
+
+Working-age 25-64 = age_5y ∈ {6, 7, 8, 9, 10, 11, 12, 13}
+Korean filter: nationality == "1" (또는 NaN, 1997-2010 일부 missing)
+
+Author: R-A
+Date  : 2026-05-05 (v3 — positional)
+"""
+from __future__ import annotations
+
+import sys
+from datetime import date
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+RAW_MORT = PROJ / "0_raw" / "mortality_kostat" / "사망사료 정리"
+RAW_POP = PROJ / "0_raw" / "kosis_population" / "population_combined.csv"
+CW = PROJ / "1_codebooks" / "sigungu_crosswalk.csv"
+OUT = PROJ / "3_derived" / "mortality"
+LOGS = PROJ / "5_logs" / "integrity_checks"
+OUT.mkdir(parents=True, exist_ok=True)
+LOGS.mkdir(parents=True, exist_ok=True)
+TODAY = date.today().isoformat()
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+WA_AGE_CODES = {6, 7, 8, 9, 10, 11, 12, 13}  # 25-29 ~ 60-64
+
+OUTCOME_GROUPS = {
+    "despair_total": ["102", "101", "057", "081"],
+    "cancer": [f"{i:03d}" for i in range(27, 49)],
+    "cardiovascular": [f"{i:03d}" for i in range(67, 71)],
+    "respiratory": [f"{i:03d}" for i in range(73, 79)],
+    "external_other": [f"{i:03d}" for i in range(97, 105) if i != 102],
+}
+
+# 18 columns by position (ASCII name)
+COL_NAMES = [
+    "year", "death_year", "death_month", "death_day",
+    "sido_resid", "sgg_resid",
+    "death_date", "death_hour",
+    "death_loc", "occupation",
+    "marital", "education", "sex",
+    "age_5y", "nationality", "nationality_resident",
+    "cause_104", "cause_57",
+]
+
+
+def load_one_csv(f: Path, log: list) -> pd.DataFrame | None:
+    try:
+        df = pd.read_csv(
+            f,
+            encoding="cp949",
+            dtype=str,
+            header=0,
+            names=COL_NAMES,
+            low_memory=False,
+        )
+    except Exception as e:
+        log.append(f"- ❌ {f.name}: {e}")
+        return None
+    return df[["year", "sido_resid", "sgg_resid", "age_5y", "nationality", "cause_104"]]
+
+
+def main() -> None:
+    log = [f"# Phase 2-A — mortality panel v02 working-age build (v3 positional)\n_{TODAY}_\n"]
+    log.append(f"- working-age age_5y codes: {sorted(WA_AGE_CODES)} (25-29 ~ 60-64)")
+
+    files = sorted(RAW_MORT.glob("*.csv"))
+    log.append(f"\n## Mortality microdata\n- files: {len(files)}")
+
+    dfs = []
+    for f in files:
+        d = load_one_csv(f, log)
+        if d is not None:
+            dfs.append(d)
+    if not dfs:
+        log.append("\n[FAIL] no data")
+        (LOGS / f"{TODAY}_mortality_panel_v02_wa_validation_v3.md").write_text("\n".join(log), encoding="utf-8")
+        return
+
+    big = pd.concat(dfs, ignore_index=True)
+    log.append(f"- combined rows: **{len(big):,}**")
+
+    # type 변환
+    big["year"] = pd.to_numeric(big["year"].astype(str).str[:4], errors="coerce").astype("Int64")
+    big["age_5y"] = pd.to_numeric(big["age_5y"], errors="coerce").astype("Int64")
+    big["sido_resid"] = big["sido_resid"].astype(str).str.zfill(2)
+    big["sgg_resid"] = big["sgg_resid"].astype(str).str.zfill(3)
+    big["raw_code"] = big["sido_resid"] + big["sgg_resid"]
+    big["cause_104"] = big["cause_104"].astype(str).str.zfill(3)
+
+    # diagnostics
+    log.append(f"\n## Pre-filter 진단")
+    log.append(f"- year range: {big['year'].min()}-{big['year'].max()}")
+    log.append(f"- sido_resid distinct: {big['sido_resid'].nunique()}")
+    log.append(f"- sgg_resid distinct: {big['sgg_resid'].nunique()}")
+    log.append(f"- raw_code (시도+시군구) distinct: {big['raw_code'].nunique()}")
+    age_dist = big["age_5y"].value_counts().sort_index().to_dict()
+    log.append(f"- age_5y distribution: {age_dist}")
+    nat_dist = big["nationality"].fillna("(NaN)").value_counts().head(5).to_dict()
+    log.append(f"- nationality top 5: {nat_dist}")
+    cause_n = big["cause_104"].nunique()
+    log.append(f"- cause_104 distinct: {cause_n}")
+
+    # Korean filter (nationality "1" or NaN)
+    n_total = len(big)
+    kor_mask = big["nationality"].isna() | (big["nationality"].astype(str) == "1")
+    n_kor = kor_mask.sum()
+    log.append(f"\n## Korean filter\n- nationality '1' or NaN: {n_kor:,}/{n_total:,} ({n_kor/n_total:.2%})")
+    big = big[kor_mask].copy()
+
+    # working-age filter
+    n_pre = len(big)
+    big_wa = big[big["age_5y"].isin(WA_AGE_CODES)].copy()
+    log.append(f"\n## Working-age filter\n- age_5y ∈ {sorted(WA_AGE_CODES)}: {len(big_wa):,}/{n_pre:,} ({len(big_wa)/n_pre:.1%})")
+
+    # outcome group expand
+    expanded = []
+    for grp, codes in OUTCOME_GROUPS.items():
+        sub = big_wa[big_wa["cause_104"].isin(codes)].copy()
+        sub["outcome_group"] = grp
+        expanded.append(sub)
+    df_o = pd.concat(expanded, ignore_index=True)
+    log.append(f"\n## Outcome group expand\n- rows: {len(df_o):,}")
+    grp_counts = df_o["outcome_group"].value_counts().to_dict()
+    log.append(f"- by group: {grp_counts}")
+
+    # crosswalk match
+    cw = pd.read_csv(CW, dtype=str)
+    cw["year"] = pd.to_numeric(cw["year"], errors="coerce").astype("Int64")
+    df_o["year"] = df_o["year"].astype("Int64")
+    df_m = df_o.merge(cw[["year", "raw_code", "h_code"]], on=["year", "raw_code"], how="left")
+    n_match = df_m["h_code"].notna().sum()
+    log.append(f"\n## Crosswalk match\n- match rate: {n_match:,}/{len(df_m):,} ({n_match/len(df_m):.1%})")
+    unmatch = df_m.loc[df_m["h_code"].isna(), "raw_code"].value_counts().head(10).to_dict()
+    log.append(f"- unmatched raw_code top 10: {unmatch}")
+    df_m = df_m.dropna(subset=["h_code"])
+
+    # aggregate panel
+    panel = df_m.groupby(["h_code", "year", "outcome_group"]).size().reset_index(name="deaths")
+    log.append(f"\n## Panel aggregate\n- rows: {len(panel):,}")
+    log.append(f"- distinct h_code: {panel['h_code'].nunique()}")
+    log.append(f"- year range: {panel['year'].min()}-{panel['year'].max()}")
+
+    # population join
+    pop = pd.read_csv(RAW_POP, dtype=str)
+    pop.columns = [c.strip() for c in pop.columns]
+    log.append(f"\n## Population panel\n- cols: {list(pop.columns)[:10]}")
+    pop_col = next((c for c in pop.columns if "pop" in c.lower() or "총인구" in c or "인구수" in c), None)
+    age_col = next((c for c in pop.columns if "age" in c.lower() or "연령" in c), None)
+    h_col = "h_code" if "h_code" in pop.columns else None
+    year_col = "year" if "year" in pop.columns else None
+
+    if pop_col and age_col and h_col and year_col:
+        pop["__pop"] = pd.to_numeric(pop[pop_col], errors="coerce")
+        wa_bands = [f"{a}-{a+4}" for a in range(25, 65, 5)]
+        pop["__age"] = pop[age_col].astype(str).str.strip()
+        pop_wa = pop[pop["__age"].isin(wa_bands)].copy()
+        if len(pop_wa) == 0:
+            # alternative bands
+            log.append(f"- ⚠️ pop age bands '25-29' format 미매칭. age_col 샘플: {pop[age_col].dropna().unique()[:10]}")
+            # try numeric range
+            pop["__age_num"] = pd.to_numeric(pop[age_col], errors="coerce")
+            pop_wa = pop[pop["__age_num"].between(25, 64)].copy()
+            log.append(f"- pop age 25-64 numeric: {len(pop_wa):,}")
+        pop_wa[year_col] = pd.to_numeric(pop_wa[year_col], errors="coerce").astype("Int64")
+        pop_h = pop_wa.groupby([h_col, year_col])["__pop"].sum().reset_index()
+        pop_h.columns = ["h_code", "year", "pop_wa"]
+        log.append(f"- pop_wa aggregated: {len(pop_h):,} rows")
+
+        merged = panel.merge(pop_h, on=["h_code", "year"], how="left")
+        merged["mortality_rate"] = merged["deaths"] / merged["pop_wa"].replace(0, np.nan) * 100_000
+        merged["log_asr_p1"] = np.log(merged["mortality_rate"] + 1)
+        merged["period_pre2008"] = (merged["year"] <= 2007).astype(int)
+    else:
+        log.append(f"- ⚠️ pop column 미식별 (pop={pop_col}, age={age_col}, h={h_col}, year={year_col})")
+        merged = panel
+        merged["mortality_rate"] = np.nan
+        merged["log_asr_p1"] = np.nan
+
+    out_path = OUT / "sigungu_mortality_panel_v02_wa.parquet"
+    merged.to_parquet(out_path, index=False)
+    log.append(f"\n- saved: `{out_path.relative_to(PROJ)}`")
+    log.append(f"- final shape: {merged.shape}")
+    if "mortality_rate" in merged.columns and merged["mortality_rate"].notna().sum() > 0:
+        log.append(f"- mortality_rate: mean={merged['mortality_rate'].mean():.1f}, "
+                   f"median={merged['mortality_rate'].median():.1f}, "
+                   f"non-null={merged['mortality_rate'].notna().sum()}")
+
+    # external validation
+    log.append("\n## External validation")
+    despair = merged[merged["outcome_group"] == "despair_total"]
+    if len(despair) > 0 and "pop_wa" in despair.columns:
+        nat = despair.groupby("year").agg(deaths=("deaths", "sum"), pop=("pop_wa", "sum")).reset_index()
+        nat["rate_per_100k"] = nat["deaths"] / nat["pop"] * 100_000
+        log.append("- 전국 despair_total WA rate by year (last 10):")
+        log.append("```")
+        log.append(nat.tail(10).to_string(index=False))
+        log.append("```")
+        log.append("- KOSIS suicide WA 2010 ≈ 32-35/100k 와 비교 (despair = suicide+drug+psych+liver)")
+
+    log.append("\n## 다음 step\n- script 24 (Test 3 Pierce-Schott) 재실행")
+    log.append("- 첫 reduced form: Δlog despair ~ z_x_h^{KR-CN} + year FE")
+
+    out_log = LOGS / f"{TODAY}_mortality_panel_v02_wa_validation_v3.md"
+    out_log.write_text("\n".join(log), encoding="utf-8")
+    print(f"[OK] {out_log}")
+
+
+if __name__ == "__main__":
+    main()

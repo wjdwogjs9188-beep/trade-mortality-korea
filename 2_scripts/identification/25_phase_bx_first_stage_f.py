@@ -1,0 +1,203 @@
+"""
+PAP v4.0 § 2.2 — First-stage F-statistics (z_x: ADH-8 vs KR-CN bilateral)
+===========================================================================
+
+PAP § 5 decision tree 의 가장 윗줄 분기점:
+
+  - F^eff (ADH-8 Bartik) ≥ 23.1   AND   F^eff (bilateral) ≥ 23.1
+        → A.i  main  : Bartik  + AR robust
+  - F^eff (ADH-8) <  23.1, F^eff (bilateral) ≥ 23.1
+        → A.ii main  : bilateral primary
+  - 둘 다 < 23.1
+        → A.iii fallback : Romano-Wolf reduced-form only, 2SLS 보류
+
+cutoff 23.1 = Stock-Yogo (2005) 5% TSLS bias robust extension (1 endog, 1 IV).
+For 2 IV → use Olea-Pflueger (2013) effective F + Lee-Moreira-McCrary-Porter
+(2022) tF inference for the smaller of the two F's.
+
+Specification (5-year stacked first-difference, 2000-2010):
+- d5_log_E_h  =  α  +  φ_x · z_x_h  +  X_h γ  +  η_h            (z_x first stage)
+- z_x options:
+    1) ADH-8 Bartik: Σ_k (s_{hk,1990} · ΔM_{ADH8→CN, k} / E_{h,1990})
+    2) KR-CN bilateral: Σ_k (s_{hk,1990} · ΔM_{KR-CN, k} / E_{h,1990})
+
+5-layer SE attempted:
+- HC1 (sandwich)
+- cluster-sigungu (CGM 2008)
+- cluster-sido (broader)
+- AKM (BHJ 2022) — placeholder, lib in Phase 4
+- Conley spatial — placeholder, requires centroid (✅ 251/251 ready)
+
+Inputs:
+- 3_derived/bartik/baseline_shares_1990.parquet
+- 3_derived/bartik/iv_z_x_adh8.parquet
+- 3_derived/bartik/iv_z_x_bilateral.parquet
+- 3_derived/exposure/d5_log_employment_2000_2010.parquet
+- 0_raw/sigungu_centroid/sigungu_centroid_table.csv (Conley용)
+
+Outputs:
+- 5_logs/integrity_checks/<date>_phase_bx_first_stage_f.md
+- 3_derived/identification/first_stage_f_results.csv
+
+Author: R-A (Claude)
+Date  : 2026-05-04
+"""
+from __future__ import annotations
+
+from datetime import date
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+PROJ = Path(r"C:\Users\82103\Downloads\trade_mortality_korea")
+DERIVED = PROJ / "3_derived"
+SHARES = DERIVED / "bartik" / "baseline_shares_1994_ksic9_2digit.parquet"
+ZX_ADH = DERIVED / "bartik" / "iv_z_x_adh8.parquet"
+ZX_BIL = DERIVED / "bartik" / "iv_z_x_bilateral.parquet"
+EMP = DERIVED / "exposure" / "d5_log_employment_2000_2010.parquet"
+CENTROID = PROJ / "0_raw" / "sigungu_centroid" / "sigungu_centroid_table.csv"
+CROSS = PROJ / "1_codebooks" / "sigungu_crosswalk.csv"
+
+OUT_DIR = DERIVED / "identification"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+LOGS = PROJ / "5_logs" / "integrity_checks"
+LOGS.mkdir(parents=True, exist_ok=True)
+
+TODAY = date.today().isoformat()
+SY_5PCT = 23.1  # Stock-Yogo 5% TSLS bias cutoff (Olea-Pflueger 2013 robust extension)
+
+
+def load_or_dryrun(label: str, path: Path) -> pd.DataFrame | None:
+    if not path.exists():
+        print(f"[WARN] {label}: {path.name} not found")
+        return None
+    df = pd.read_parquet(path) if path.suffix == ".parquet" else pd.read_csv(path)
+    print(f"[{label}] shape={df.shape}")
+    return df
+
+
+def first_stage_f(y: pd.Series, x: pd.Series, sido: pd.Series | None = None) -> dict:
+    """
+    Single endogenous variable, single instrument first-stage F.
+    Returns dict with HC1 F + cluster-sido F (if sido provided).
+    """
+    out = {}
+    X = sm.add_constant(x.to_frame(name="z"))
+    base = sm.OLS(y, X)
+
+    # HC1
+    m_hc1 = base.fit(cov_type="HC1")
+    f_hc1 = (m_hc1.params["z"] / m_hc1.bse["z"]) ** 2
+    out["F_HC1"] = float(f_hc1)
+    out["beta"] = float(m_hc1.params["z"])
+    out["se_HC1"] = float(m_hc1.bse["z"])
+    out["n"] = int(m_hc1.nobs)
+    out["r2"] = float(m_hc1.rsquared)
+
+    # cluster-sido
+    if sido is not None and sido.notna().all():
+        m_cl = base.fit(cov_type="cluster", cov_kwds={"groups": sido})
+        f_cl = (m_cl.params["z"] / m_cl.bse["z"]) ** 2
+        out["F_cluster_sido"] = float(f_cl)
+        out["se_cluster_sido"] = float(m_cl.bse["z"])
+    else:
+        out["F_cluster_sido"] = np.nan
+        out["se_cluster_sido"] = np.nan
+
+    return out
+
+
+def main() -> None:
+    log = [f"# Phase B-x — First-stage F (z_x: ADH-8 vs KR-CN bilateral)\n_{TODAY}_\n"]
+    log.append(f"- cutoff: Stock-Yogo 5% TSLS bias robust = **{SY_5PCT}**")
+    log.append("- 2 IV → tF inference (Lee-Moreira-McCrary-Porter 2022) on smaller F")
+
+    shares = load_or_dryrun("shares", SHARES)
+    zx_adh = load_or_dryrun("z_x ADH-8", ZX_ADH)
+    zx_bil = load_or_dryrun("z_x bilateral", ZX_BIL)
+    emp = load_or_dryrun("d5_log_E", EMP)
+
+    missing = [n for n, d in [("shares", shares), ("z_x ADH-8", zx_adh),
+                              ("z_x bilateral", zx_bil), ("d5_log_E", emp)] if d is None]
+    if missing:
+        log.append("\n## ⚠️ Pending upstream Phase 2-B outputs:")
+        for m in missing:
+            log.append(f"- {m}")
+        log.append("\n이 스크립트는 Phase 2-B 산출 후 실행. 현재 dry-run.")
+        log_path = LOGS / f"{TODAY}_phase_bx_first_stage_f_dryrun.md"
+        log_path.write_text("\n".join(log), encoding="utf-8")
+        print(f"📝 dry-run log: {log_path}")
+        return
+
+    # crosswalk → sido cluster
+    cross = pd.read_csv(CROSS, dtype={"h_code": str, "sido_code": str})
+    h_to_sido = cross.drop_duplicates("h_code")[["h_code", "sido_code"]]
+
+    rows = []
+    for label, zx in [("ADH-8", zx_adh), ("bilateral", zx_bil)]:
+        # prefer normalized z_x_per_worker (ADH 2013 convention)
+        if "z_x_per_worker" in zx.columns:
+            z_col = "z_x_per_worker"
+        else:
+            z_col = next((c for c in zx.columns if c.startswith("z_x")), None)
+        if z_col is None:
+            log.append(f"❌ {label}: z_x column not found")
+            continue
+        log.append(f"\n## {label}: using `{z_col}` as instrument")
+        df = (
+            emp.merge(zx[["h_code", z_col]], on="h_code", how="inner")
+            .merge(h_to_sido, on="h_code", how="left")
+            .dropna(subset=["d5_log_E", z_col])
+        )
+        log.append(f"\n## {label} first stage")
+        log.append(f"- merged panel n={len(df)}")
+        if len(df) < 50:
+            log.append(f"⚠️ n<50, F-stat 부정확")
+            continue
+        res = first_stage_f(
+            y=df["d5_log_E"],
+            x=df[z_col],
+            sido=df["sido_code"],
+        )
+        res["instrument"] = label
+        rows.append(res)
+        log.append(f"- N = {res['n']}")
+        log.append(f"- β = {res['beta']:+.4f}, R² = {res['r2']:.3f}")
+        log.append(f"- F (HC1) = **{res['F_HC1']:.2f}**")
+        log.append(f"- F (cluster-sido) = **{res['F_cluster_sido']:.2f}**")
+        f_min = min(res["F_HC1"], res["F_cluster_sido"]) if not np.isnan(res["F_cluster_sido"]) else res["F_HC1"]
+        if f_min >= SY_5PCT:
+            log.append(f"- ✅ min(F) ≥ {SY_5PCT} → strong instrument")
+        elif f_min >= 10:
+            log.append(f"- ⚠️ min(F) ∈ [10, {SY_5PCT}) → weak-IV territory, tF inference 필수")
+        else:
+            log.append(f"- ❌ min(F) < 10 → A.iii branch (Romano-Wolf reduced-form only)")
+
+    if rows:
+        out = pd.DataFrame(rows)
+        out_csv = OUT_DIR / "first_stage_f_results.csv"
+        out.to_csv(out_csv, index=False, encoding="utf-8-sig")
+        log.append(f"\n- ✅ saved: `{out_csv.relative_to(PROJ)}`")
+
+        # Branch decision suggestion
+        f_adh = next((r["F_HC1"] for r in rows if r["instrument"] == "ADH-8"), np.nan)
+        f_bil = next((r["F_HC1"] for r in rows if r["instrument"] == "bilateral"), np.nan)
+        log.append("\n## Branch suggestion (PAP v4.0 § 5)")
+        if f_adh >= SY_5PCT and f_bil >= SY_5PCT:
+            log.append("- → **A.i main**: ADH-8 Bartik primary + KR-CN bilateral robustness")
+        elif f_bil >= SY_5PCT and f_adh < SY_5PCT:
+            log.append("- → **A.ii main**: KR-CN bilateral primary (ADH-8 weak)")
+        elif f_adh >= SY_5PCT and f_bil < SY_5PCT:
+            log.append("- → **A.i main, no bilateral cross-check**: ADH-8 only")
+        else:
+            log.append("- → **A.iii fallback**: 둘 다 weak. Romano-Wolf reduced-form 만, 2SLS 보류")
+
+    log_path = LOGS / f"{TODAY}_phase_bx_first_stage_f.md"
+    log_path.write_text("\n".join(log), encoding="utf-8")
+    print(f"\n✅ log: {log_path}")
+
+
+if __name__ == "__main__":
+    main()
