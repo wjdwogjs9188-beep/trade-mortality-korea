@@ -26,7 +26,7 @@
 # =============================================================
 # Backup / temp / generated files
 # =============================================================
-# Edit backup files (edit backup patterns)
+# Edit backup file patterns
 *.bak
 *.bak-*
 *.bak-section-*
