@@ -9,7 +9,7 @@
 # ⚠️ 사용자 메모리 정정:
 # - 029 ≠ 약물남용. ACTUALLY = 식도의 악성신생물 (oesophagus C15)
 # - 069 ≠ 알코올성간질환. ACTUALLY = 기타 심장 질환 (Other heart diseases I26-I51)
-# v3.x 논문에서 "기타 심장질환 보호효과 -3.8%" 발견은 ICD 매핑 자체는
+# earlier version 논문에서 "기타 심장질환 보호효과 -3.8%" 발견은 ICD 매핑 자체는
 # 맞았지만 라벨이 "alcohol"로 잘못 표기되어 있었음.
 #
 # Deaths of despair 후보 코드 (Case-Deaton 2015 정의):
@@ -19,7 +19,7 @@
 #
 # Pierce-Schott 2020 비교 outcome:
 # - AMI/허혈성 심장: 068 (Ischaemic heart I20-I25)
-# - Other heart: 069 (Other heart diseases I26-I51) ← v3.x 보호효과 발견
+# - Other heart: 069 (Other heart diseases I26-I51) ← earlier version 보호효과 발견
 # - Cerebrovascular: 070 (I60-I69)
 # - Lung cancer: 035 (C33-C34)
 # - Liver cancer: 032 (C22)
@@ -82,7 +82,7 @@ research_outcomes:
  code: '069'
  icd10: 'I26-I51'
  label: 기타 심장 질환
- note: "v3.x 발견 -3.8% 보호효과 (라벨 정정)"
+ note: "earlier version 발견 -3.8% 보호효과 (라벨 정정)"
 
  cerebrovascular:
  code: '070'

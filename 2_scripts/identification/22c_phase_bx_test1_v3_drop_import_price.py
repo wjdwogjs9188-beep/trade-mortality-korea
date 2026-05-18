@@ -1,5 +1,5 @@
 """
-PAP v4.0 § 2.2 Test 1 v3 — Drop 수입가 (VIF=27.9) sensitivity
+§ 2.2 Test 1 v3 — Drop 수입가 (VIF=27.9) sensitivity
 ============================================================== v2 의 2/6 Bonferroni-significant macro 중 수입가 (β=+0.76, p=0.0049, **VIF=27.9**)
 의 유의성은 multicollinearity 인공물 가능성. 수출가·CPI·환율과 거의 linear
 combination. drop 후 GDP 1개만 단독 유의로 남는지 확인. H0: GDP 만 유의 (1/5 Bonferroni after drop) → A.i main + year FE 필수 결정 robust.

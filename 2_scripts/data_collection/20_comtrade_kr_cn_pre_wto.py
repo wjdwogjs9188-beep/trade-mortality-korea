@@ -1,5 +1,5 @@
 """
-Phase B-x Test 2 (pre-WTO lead orthogonality) — KR-CN bilateral 1995-1999.
+identification diagnostic Test 2 (pre-WTO lead orthogonality) — KR-CN bilateral 1995-1999.
 
 기존: comtrade_korea_china/ 에 2000-2024 (50 files = 25년 × 2 direction) 보유.
 신규: 1995-1999 (10 files = 5년 × 2 direction) 추가 호출.

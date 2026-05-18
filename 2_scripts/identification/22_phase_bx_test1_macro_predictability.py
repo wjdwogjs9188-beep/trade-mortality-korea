@@ -1,7 +1,7 @@
 """
-Phase B-x Test 1 — Romer-Romer style macro predictability.
+identification diagnostic Test 1 — Romer-Romer style macro predictability.
 
-PAP v4.0 § 2.2 spec:
+§ 2.2 spec:
  ΔM_t^{KR←CN} = α + Σ_j β_j · KR_macro_realized_{t-j} + γ·X + ε_t
 
 H0: β_j = 0 ∀ j (모든 macro 변수)
@@ -102,7 +102,7 @@ def aggregate_bilateral_yearly -> pd.DataFrame:
 def main:
  OUT_DIR.mkdir(parents=True, exist_ok=True)
  LOG.parent.mkdir(parents=True, exist_ok=True)
- log = [f"# Phase B-x Test 1 — Macro predictability\n", f"_timestamp: {datetime.now.isoformat}_\n\n"]
+ log = [f"# identification diagnostic Test 1 — Macro predictability\n", f"_timestamp: {datetime.now.isoformat}_\n\n"]
 
  # 1) bilateral shock 시계열
  print("[1] KR-CN bilateral 연도별 aggregate")

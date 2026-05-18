@@ -1,6 +1,6 @@
 # ============================================================================
-# Phase B-x diagnostics -- single-shot runner
-# PAP v4.0 § 2.2 Tests 1, 1 v2, 1b, 3 + first-stage F
+# identification diagnostic diagnostics -- single-shot runner
+# § 2.2 Tests 1, 1 v2, 1b, 3 + first-stage F
 # usage: powershell -ExecutionPolicy Bypass -File run_phase_bx_all.ps1
 # ============================================================================
 $ErrorActionPreference = "Continue"
@@ -19,7 +19,7 @@ $ts = Get-Date -Format "yyyy-MM-ddTHH:mm:ss"
 
 Write-Host ""
 Write-Host "================================================================" -ForegroundColor Cyan
-Write-Host " Phase B-x diagnostics ($ts)" -ForegroundColor Cyan
+Write-Host " identification diagnostic diagnostics ($ts)" -ForegroundColor Cyan
 Write-Host "================================================================" -ForegroundColor Cyan
 
 $scripts = @(

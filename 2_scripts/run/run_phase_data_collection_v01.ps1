@@ -3,7 +3,7 @@
  Phase 0 + Phase 1 데이터 수집 일괄 실행.
 
 .DESCRIPTION
- PAP v4.0 § 7 의 Phase A-B 진입 전 차단 데이터 4 source 수집:
+ § 7 의 Phase A-B 진입 전 차단 데이터 4 source 수집:
  - Phase 0: WEO Historical xlsx 배치
  - Phase 1.1: 시군구 centroid (GitHub southkorea-maps)
  - Phase 1.2: ECOS 신규 시리즈 3개 (200Y007, 401Y014, 401Y015)

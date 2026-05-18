@@ -1,7 +1,7 @@
 """뉴 논문 폴더 → trade_mortality_korea/4_documentation/ 정리 통합.
 
 분류 logic:
- - PAP_*.md, *reference_*.md, pap_*.md → 4_documentation/PAP/
+ - PAP_*.md, *reference_*.md, pap_*.md → 4_documentation/pre-analysis plan/
  - reference_library_*.md, REFERENCE_LIBRARY_*.md, paper_summaries/ → 4_documentation/reference_library/
  - stage*_plan*.md, stage*_for_review*.md, section*_writing*.md → 4_documentation/stage_plans/
  - panel_construction_*.md, mediator_panel_*.md, *pipeline*.md → 4_documentation/pipeline_docs/
@@ -22,7 +22,7 @@ DST_ROOT = Path(r"C:\Users\82103\Downloads\trade_mortality_korea\4_documentation
 
 # Sub-folder 별 매칭 rule (filename keyword)
 RULES = [
- ("PAP", lambda name: (
+ ("pre-analysis plan", lambda name: (
  name.startswith("PAP_") or name.startswith("pap_") or
  name.startswith("PAP_v3.4_reference") or name == "research_proposal.md"
 )),
@@ -66,7 +66,7 @@ def main -> int:
  print(f" destination: {DST_ROOT}")
 
  # Sub-folder 생성
- sub_folders = ["PAP", "reference_library", "stage_plans",
+ sub_folders = ["pre-analysis plan", "reference_library", "stage_plans",
  "pipeline_docs", "status_reports",
  "crosswalks_paper", "misc"]
  for sub in sub_folders:

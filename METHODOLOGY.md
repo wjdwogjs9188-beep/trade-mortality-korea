@@ -55,7 +55,7 @@
 | KSIC 연계표 | 통계청 8/9/10/11차 | 공식 | ✅ |
 | HS6 → KSIC | UN CPC21 매개 | 공식 | 31,384 매핑 |
 
-**핵심 결정 (2026-04-30):** 사망 사인은 KOSIS 104항목 코드를 신뢰하지 않고 **ICD-10 raw에서 직접 추출**. 이전 v3.x에서 코드 069="drug" / 029="alcohol" 라벨 mislabel 확인됨.
+**핵심 결정 (2026-04-30):** 사망 사인은 KOSIS 104항목 코드를 신뢰하지 않고 **ICD-10 raw에서 직접 추출**. 이전 earlier version에서 코드 069="drug" / 029="alcohol" 라벨 mislabel 확인됨.
 
 ---
 
@@ -155,7 +155,7 @@ Z_r^{CW} = Σ_j (L_rj,1995 / L_r,1995) × (ΔX_j^{CN→World} / L_j,1995)
 | 4 | 회귀 + 5-layer 추론 | regression_log.csv |
 | 5 | 이질성 + mechanism | by_geography.csv |
 | 6 | Robustness battery | robustness_log.csv |
-| 7 | 논문 v4.0 작성 | 7_paper/v4.0.md |
+| 7 | 논문 1.0 작성 | 7_paper/1.0.md |
 
 ---
 

@@ -1,6 +1,6 @@
 """Stage 4A — Trade Data Collection via UN Comtrade API (v2, self-contained).
 
-이전 v3.x 의 03/04/05/06 스크립트 통합 버전. lib/ 의존성 제거.
+이전 earlier version 의 03/04/05/06 스크립트 통합 버전. lib/ 의존성 제거.
 
 3 데이터 set:
  1. KR <- CN (M) + KR -> CN (X): main treatment IV

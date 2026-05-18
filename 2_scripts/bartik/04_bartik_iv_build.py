@@ -1,6 +1,6 @@
 """
 Phase 2-B Step 5b — Bartik IV build (z_x_h, ADH-8 + KR-CN bilateral)
-======================================================================== 목표: PAP v4.0 § 4.1 Bartik IV 구성 z_x_h = Σ_k (s_{h,k,1994} × ΔM_{country→CN, k, 2000-2010} / E_{h, 1994}) 산업 단위: KSIC 9차 2-digit (22 industries, manufacturing only) Pipeline:
+======================================================================== 목표: § 4.1 Bartik IV 구성 z_x_h = Σ_k (s_{h,k,1994} × ΔM_{country→CN, k, 2000-2010} / E_{h, 1994}) 산업 단위: KSIC 9차 2-digit (22 industries, manufacturing only) Pipeline:
 1. baseline_shares_1994_ksic9_2digit.parquet (h × KSIC9_2 → s, employment)
 2. HS6 → KIET3 (KIET60_to_HS6.xlsx)
 3. KIET3 → KSIC 9차 → KSIC 9차 2-digit (KIET60_to_KSIC_v2.xlsx, forward-fill)

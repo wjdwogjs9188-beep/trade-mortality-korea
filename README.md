@@ -33,7 +33,7 @@ trade_mortality_korea/
 │   ├── build_panel/         mortality / population / mediator panels
 │   ├── crosswalks/          KSIC ↔ HS6 mapping
 │   ├── data_collection/     Comtrade, KOSIS, HIRA fetchers
-│   ├── identification/      Phase B-x diagnostics + reduced-form spec
+│   ├── identification/      identification diagnostic diagnostics + reduced-form spec
 │   ├── lib/                 shared modules (io, log, icd10, validate)
 │   ├── mechanism/           DGHP mediator decomposition
 │   ├── mortality/           ICD-10 ↔ outcome group mappings

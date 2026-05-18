@@ -371,7 +371,7 @@ def main -> None:
  log.append(f"- spec: z_bil^{{1999}} on z_adh^{{1999}}, n = {len(fs)}")
  log.append(f"- HC1 F = {F_hc1:.2f}")
  log.append(f"- cluster-sido F = {F_cl:.2f}")
- log.append(f"- 1994 baseline reference (Phase B-x cluster-sido): F = 19.65")
+ log.append(f"- 1994 baseline reference (identification diagnostic cluster-sido): F = 19.65")
  if F_cl > 19.65:
  log.append(f"- ✅ 1999 baseline strengthens instrument relevance: F = {F_cl:.2f} > 19.65 "
  f"(improvement {(F_cl/19.65-1)*100:+.1f}%)")

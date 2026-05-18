@@ -2,7 +2,7 @@
 
 Source: 8_submission/paper_v01_submission/03_mediators/z_m_education_baseline_sensitivity.parquet
 This file already contains 1985 / 1990 / 1995 baseline distances and z-scores
-(produced in Phase Bx). paper § 6.4 anchor: Pearson(1985, 1990) = 0.989,
+(produced in identification diagnostic). paper § 6.4 anchor: Pearson(1985, 1990) = 0.989,
 Pearson(1990, 1995) = 1.000, Pearson(1985, 1995) = 0.989.
 
 Output: m5_z_education_pre.parquet

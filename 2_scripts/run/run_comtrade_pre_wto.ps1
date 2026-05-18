@@ -1,7 +1,7 @@
 ﻿<#
 .SYNOPSIS Comtrade KR-CN bilateral 1995-1999 추가 호출 (pre-WTO).
 .DESCRIPTION
- PAP v4.0 § 2.2 Test 2 (pre-WTO lead orthogonality) 용 1995-1999 trade.
+ § 2.2 Test 2 (pre-WTO lead orthogonality) 용 1995-1999 trade.
  기존 2000-2024 (50 files) 와 동일 naming convention.
 .NOTES
  선결:.env 의 COMTRADE_API_KEY (4-way 로테이션 활용)
