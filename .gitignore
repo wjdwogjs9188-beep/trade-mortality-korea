@@ -106,8 +106,8 @@ desktop.ini
 !.env.example
 
 # Local IDE/agent settings (per-machine)
-.claude/settings.local.json
-.claude/
+.local_agent/
+*.local.json
 
 # Local cache / personal scripts
 *.local.*
